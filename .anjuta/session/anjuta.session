@@ -1,16 +1,15 @@
 
 [Anjuta]
 Maximized=1
-Geometry=1272x723+1680+24
+Geometry=1672x1021+0+0
 
 [File Loader]
-Files=file:///home/esdras/player/src/main-notebook.cc#40%%%file:///home/esdras/player/src/main-notebook.h#36%%%file:///home/esdras/player/src/main-window.cc#17%%%file:///home/esdras/player/src/main-window.h#24
+Files=file:///home/esdras/dev/player/src/main-notebook.cc#1%%%file:///home/esdras/dev/player/src/Makefile.am#1%%%file:///home/esdras/dev/player/src/Makefile.in#1%%%file:///home/esdras/dev/player/config.guess#164%%%file:///home/esdras/dev/player/Debug/config.status#1%%%file:///home/esdras/dev/player/Debug/Makefile#22
 
 [Document Manager]
 bookmarks=<?xml version="1.0" encoding="UTF-8"?>\n<bookmarks><bookmark title="MainNotebook" uri="file:///home/esdras/player/src/main-notebook.cc" line="24"/></bookmarks>\n
 
 [Execution]
-Program arguments=
 Program uri=file:///home/esdras/player/Debug/src/player
 Run in terminal=2
 Working directories=file:///home/esdras/player

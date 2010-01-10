@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="3.5" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{108FD3C4-1B4F-46D6-AD39-B5866E35B82C}</ProjectGuid>
+    <Compiler>
+      <Compiler ctype="GppCompiler" />
+    </Compiler>
+    <Language>CPP</Language>
+    <Target>Bin</Target>
+    <Packages>
+      <Packages>
+        <Package file="/usr/lib/pkgconfig/gstreamer-0.10.pc" name="GStreamer" IsProject="false" />
+        <Package file="/usr/lib/pkgconfig/gtkmm-2.4.pc" name="gtkmm" IsProject="false" />
+      </Packages>
+    </Packages>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineSymbols>DEBUG MONODEVELOP</DefineSymbols>
+    <SourceDirectory>.</SourceDirectory>
+    <OutputName>player</OutputName>
+    <CompileTarget>Bin</CompileTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release</OutputPath>
+    <DefineSymbols>MONODEVELOP</DefineSymbols>
+    <SourceDirectory>.</SourceDirectory>
+    <OptimizationLevel>3</OptimizationLevel>
+    <OutputName>player</OutputName>
+    <CompileTarget>Bin</CompileTarget>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="src\main-notebook.cc" />
+    <Compile Include="src\main-window.cc" />
+    <Compile Include="src\main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\main-notebook.h" />
+    <None Include="src\main-window.h" />
+  </ItemGroup>
+</Project>
