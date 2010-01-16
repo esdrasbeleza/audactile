@@ -25,11 +25,18 @@
 #include <gtkmm.h>
 #include <iostream>
 #include "main-window.h"
+#include "base/music.h"
 
 int main (int argc, char *argv[])
 {
     Gtk::Main kit(argc, argv);
     MainWindow window;
     Gtk::Main::run(window);
+
+
+
+    Music* teste = new Music("/tmp/teste.mp3");
+    std::cout << teste->get_artist().c_str() << "\n";
+    
     return 0;
 }

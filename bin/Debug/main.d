@@ -780,4 +780,5 @@
  /usr/include/gtkmm-2.4/gtkmm/actiongroup.h \
  /usr/include/gtkmm-2.4/gtkmm/viewport.h \
  /home/esdras/dev/player/src/main-window.h \
- /home/esdras/dev/player/src/main-notebook.h
+ /home/esdras/dev/player/src/widgets/main-notebook.h \
+ /home/esdras/dev/player/src/base/music.h

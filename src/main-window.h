@@ -22,7 +22,7 @@
 #include <gtkmm.h>
 #include <gtkmm/window.h>
 #include <math.h>
-#include "main-notebook.h"
+#include "widgets/main-notebook.h"
 
 class MainWindow : public Gtk::Window 
 {
