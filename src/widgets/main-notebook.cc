@@ -23,12 +23,15 @@ MainNotebook::MainNotebook() {
 	//set_border_width(10);
 	set_tab_pos(Gtk::POS_LEFT);
 
-		
-	Library* libraryTree = Gtk::manage(new Library());
+	Gtk::ScrolledWindow* library_tree_container = Gtk::manage(new Gtk::ScrolledWindow());	
+	Library* library_tree = Gtk::manage(new Library());
+	library_tree_container->add(*library_tree);
+	library_tree_container->set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
+	
 	Gtk::Label* testLabel2 = Gtk::manage(new Gtk::Label("Test label 2"));
 	Gtk::Label* testLabel3 = Gtk::manage(new Gtk::Label("Test label 3"));
 	
-	append_page(*libraryTree, "Collection");
+	append_page(*library_tree_container, "Collection");
 	append_page(*testLabel2, "Context");
 	append_page(*testLabel3, "Playlists");
 	
