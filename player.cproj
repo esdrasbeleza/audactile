@@ -41,11 +41,13 @@
     <Compile Include="src\main.cpp" />
     <Compile Include="src\widgets\main-notebook.cc" />
     <Compile Include="src\base\music.cc" />
+    <Compile Include="src\widgets\library.cc" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\main-window.h" />
     <None Include="src\widgets\main-notebook.h" />
     <None Include="src\base\music.h" />
+    <None Include="src\widgets\library.h" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="src\widgets\" />

@@ -20,17 +20,16 @@
 #include "main-notebook.h"
 
 MainNotebook::MainNotebook() {
-	set_border_width(10);
+	//set_border_width(10);
 	set_tab_pos(Gtk::POS_LEFT);
 
 		
-	Gtk::Label* testLabel1 = Gtk::manage(new Gtk::Label("Test label 1"));
+	Library* libraryTree = Gtk::manage(new Library());
 	Gtk::Label* testLabel2 = Gtk::manage(new Gtk::Label("Test label 2"));
 	Gtk::Label* testLabel3 = Gtk::manage(new Gtk::Label("Test label 3"));
 	
-
-	append_page(*testLabel1, "Context");
-	append_page(*testLabel2, "Collection");
+	append_page(*libraryTree, "Collection");
+	append_page(*testLabel2, "Context");
 	append_page(*testLabel3, "Playlists");
 	
 	// For each page, set it the label angle for 90 degrees

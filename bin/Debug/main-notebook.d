@@ -1,6 +1,6 @@
 /home/esdras/dev/player/bin/Debug/main-notebook.o: \
- /home/esdras/dev/player/src/main-notebook.cc \
- /home/esdras/dev/player/src/main-notebook.h \
+ /home/esdras/dev/player/src/widgets/main-notebook.cc \
+ /home/esdras/dev/player/src/widgets/main-notebook.h \
  /usr/include/gtkmm-2.4/gtkmm.h /usr/include/glibmm-2.4/glibmm.h \
  /usr/lib/glibmm-2.4/include/glibmmconfig.h \
  /usr/include/glibmm-2.4/glibmm/arrayhandle.h \
@@ -17,6 +17,7 @@
  /usr/include/glib-2.0/glib/gatomic.h \
  /usr/include/glib-2.0/glib/gbacktrace.h \
  /usr/include/glib-2.0/glib/gbase64.h \
+ /usr/include/glib-2.0/glib/gbitlock.h \
  /usr/include/glib-2.0/glib/gbookmarkfile.h \
  /usr/include/glib-2.0/glib/gcache.h /usr/include/glib-2.0/glib/glist.h \
  /usr/include/glib-2.0/glib/gmem.h /usr/include/glib-2.0/glib/gslice.h \
@@ -49,6 +50,8 @@
  /usr/include/glib-2.0/glib/gthreadpool.h \
  /usr/include/glib-2.0/glib/gtimer.h /usr/include/glib-2.0/glib/gtree.h \
  /usr/include/glib-2.0/glib/gurifuncs.h \
+ /usr/include/glib-2.0/glib/gvarianttype.h \
+ /usr/include/glib-2.0/glib/gvariant.h \
  /usr/include/glibmm-2.4/glibmm/wrap.h \
  /usr/include/glib-2.0/glib-object.h \
  /usr/include/glib-2.0/gobject/gboxed.h \
@@ -108,11 +111,12 @@
  /usr/include/glibmm-2.4/glibmm/value_basictypes.h \
  /usr/include/glibmm-2.4/glibmm/quark.h \
  /usr/include/glibmm-2.4/glibmm/debug.h \
+ /usr/include/glibmm-2.4/glibmm/balancedtree.h \
+ /usr/include/glibmm-2.4/glibmm/error.h \
+ /usr/include/glibmm-2.4/glibmm/exception.h \
  /usr/include/glibmm-2.4/glibmm/checksum.h \
  /usr/include/glibmm-2.4/glibmm/class.h \
  /usr/include/glibmm-2.4/glibmm/convert.h \
- /usr/include/glibmm-2.4/glibmm/error.h \
- /usr/include/glibmm-2.4/glibmm/exception.h \
  /usr/include/glibmm-2.4/glibmm/date.h \
  /usr/include/glibmm-2.4/glibmm/dispatcher.h \
  /usr/include/glibmm-2.4/glibmm/main.h \
@@ -179,6 +183,10 @@
  /usr/include/glib-2.0/gio/goutputstream.h \
  /usr/include/glib-2.0/gio/gcancellable.h \
  /usr/include/glib-2.0/gio/gcontenttype.h \
+ /usr/include/glib-2.0/gio/gconverter.h \
+ /usr/include/glib-2.0/gio/gconverterinputstream.h \
+ /usr/include/glib-2.0/gio/gconverteroutputstream.h \
+ /usr/include/glib-2.0/gio/gcharsetconverter.h \
  /usr/include/glib-2.0/gio/gdatainputstream.h \
  /usr/include/glib-2.0/gio/gdataoutputstream.h \
  /usr/include/glib-2.0/gio/gdrive.h \
@@ -227,35 +235,52 @@
  /usr/include/glib-2.0/gio/gsrvtarget.h \
  /usr/include/glib-2.0/gio/gthemedicon.h /usr/include/glib-2.0/gio/gvfs.h \
  /usr/include/glib-2.0/gio/gvolume.h \
+ /usr/include/glib-2.0/gio/gzlibcompressor.h \
+ /usr/include/glib-2.0/gio/gzlibdecompressor.h \
  /usr/include/giomm-2.4/giomm/fileenumerator.h \
  /usr/include/giomm-2.4/giomm/fileinfo.h \
  /usr/include/giomm-2.4/giomm/fileinputstream.h \
  /usr/include/giomm-2.4/giomm/seekable.h \
+ /usr/include/giomm-2.4/giomm/fileiostream.h \
+ /usr/include/giomm-2.4/giomm/iostream.h \
  /usr/include/giomm-2.4/giomm/filemonitor.h \
  /usr/include/giomm-2.4/giomm/fileoutputstream.h \
  /usr/include/giomm-2.4/giomm/mountoperation.h \
+ /usr/include/giomm-2.4/giomm/drive.h \
+ /usr/include/giomm-2.4/giomm/mount.h \
  /usr/include/giomm-2.4/giomm/error.h \
  /usr/include/giomm-2.4/giomm/datainputstream.h \
  /usr/include/giomm-2.4/giomm/enums.h \
  /usr/include/giomm-2.4/giomm/dataoutputstream.h \
  /usr/include/giomm-2.4/giomm/desktopappinfo.h \
- /usr/include/giomm-2.4/giomm/drive.h \
- /usr/include/giomm-2.4/giomm/mount.h \
- /usr/include/giomm-2.4/giomm/volume.h \
  /usr/include/giomm-2.4/giomm/emblemedicon.h \
  /usr/include/giomm-2.4/giomm/emblem.h \
  /usr/include/giomm-2.4/giomm/fileicon.h \
  /usr/include/giomm-2.4/giomm/loadableicon.h \
- /usr/include/giomm-2.4/giomm/fileiostream.h \
- /usr/include/giomm-2.4/giomm/iostream.h \
  /usr/include/giomm-2.4/giomm/filenamecompleter.h \
+ /usr/include/giomm-2.4/giomm/inetaddress.h \
+ /usr/include/giomm-2.4/giomm/inetsocketaddress.h \
+ /usr/include/giomm-2.4/giomm/socketaddress.h \
+ /usr/include/giomm-2.4/giomm/socketconnectable.h \
+ /usr/include/giomm-2.4/giomm/socketaddressenumerator.h \
  /usr/include/giomm-2.4/giomm/init.h \
  /usr/include/giomm-2.4/giomm/wrap_init.h \
+ /usr/include/giomm-2.4/giomm/initable.h \
  /usr/include/giomm-2.4/giomm/memoryinputstream.h \
  /usr/include/giomm-2.4/giomm/memoryoutputstream.h \
+ /usr/include/giomm-2.4/giomm/networkaddress.h \
+ /usr/include/giomm-2.4/giomm/networkservice.h \
+ /usr/include/giomm-2.4/giomm/resolver.h \
+ /usr/include/giomm-2.4/giomm/srvtarget.h \
+ /usr/include/giomm-2.4/giomm/socket.h \
+ /usr/include/giomm-2.4/giomm/socketclient.h \
+ /usr/include/giomm-2.4/giomm/socketconnection.h \
+ /usr/include/giomm-2.4/giomm/tcpconnection.h \
  /usr/include/giomm-2.4/giomm/themedicon.h \
+ /usr/include/giomm-2.4/giomm/unixconnection.h \
  /usr/include/giomm-2.4/giomm/unixinputstream.h \
  /usr/include/giomm-2.4/giomm/unixoutputstream.h \
+ /usr/include/giomm-2.4/giomm/volume.h \
  /usr/include/giomm-2.4/giomm/volumemonitor.h \
  /usr/include/gdkmm-2.4/gdkmm.h /usr/include/gdkmm-2.4/gdkmm/types.h \
  /usr/include/gtk-2.0/gdk/gdk.h \
@@ -438,11 +463,13 @@
  /usr/include/atk-1.0/atk/atknoopobject.h \
  /usr/include/atk-1.0/atk/atknoopobjectfactory.h \
  /usr/include/atk-1.0/atk/atkobjectfactory.h \
+ /usr/include/atk-1.0/atk/atkplug.h \
  /usr/include/atk-1.0/atk/atkregistry.h \
  /usr/include/atk-1.0/atk/atkobjectfactory.h \
  /usr/include/atk-1.0/atk/atkrelation.h \
  /usr/include/atk-1.0/atk/atkrelationset.h \
  /usr/include/atk-1.0/atk/atkselection.h \
+ /usr/include/atk-1.0/atk/atksocket.h \
  /usr/include/atk-1.0/atk/atkstateset.h \
  /usr/include/atk-1.0/atk/atkstreamablecontent.h \
  /usr/include/atk-1.0/atk/atktable.h /usr/include/atk-1.0/atk/atkmisc.h \
@@ -481,6 +508,7 @@
  /usr/include/gtk-2.0/gtk/gtkcellrendererpixbuf.h \
  /usr/include/gtk-2.0/gtk/gtkcellrendererprogress.h \
  /usr/include/gtk-2.0/gtk/gtkcellrendererspin.h \
+ /usr/include/gtk-2.0/gtk/gtkcellrendererspinner.h \
  /usr/include/gtk-2.0/gtk/gtkcellrenderertoggle.h \
  /usr/include/gtk-2.0/gtk/gtkcellview.h \
  /usr/include/gtk-2.0/gtk/gtkcheckbutton.h \
@@ -507,7 +535,6 @@
  /usr/include/gtk-2.0/gtk/gtkliststore.h \
  /usr/include/gtk-2.0/gtk/gtktreemodelfilter.h \
  /usr/include/gtk-2.0/gtk/gtkcomboboxentry.h \
- /usr/include/gtk-2.0/gtk/gtkcurve.h \
  /usr/include/gtk-2.0/gtk/gtkdrawingarea.h \
  /usr/include/gtk-2.0/gtk/gtkeventbox.h \
  /usr/include/gtk-2.0/gtk/gtkexpander.h \
@@ -519,8 +546,7 @@
  /usr/include/gtk-2.0/gtk/gtkfilechooserdialog.h \
  /usr/include/gtk-2.0/gtk/gtkfilechooserwidget.h \
  /usr/include/gtk-2.0/gtk/gtkfontbutton.h \
- /usr/include/gtk-2.0/gtk/gtkfontsel.h \
- /usr/include/gtk-2.0/gtk/gtkgamma.h /usr/include/gtk-2.0/gtk/gtkgc.h \
+ /usr/include/gtk-2.0/gtk/gtkfontsel.h /usr/include/gtk-2.0/gtk/gtkgc.h \
  /usr/include/gtk-2.0/gtk/gtkhandlebox.h \
  /usr/include/gtk-2.0/gtk/gtkhbbox.h /usr/include/gtk-2.0/gtk/gtkhpaned.h \
  /usr/include/gtk-2.0/gtk/gtkpaned.h /usr/include/gtk-2.0/gtk/gtkhruler.h \
@@ -539,7 +565,6 @@
  /usr/include/gtk-2.0/gtk/gtkimcontextsimple.h \
  /usr/include/gtk-2.0/gtk/gtkimmulticontext.h \
  /usr/include/gtk-2.0/gtk/gtkinfobar.h \
- /usr/include/gtk-2.0/gtk/gtkinputdialog.h \
  /usr/include/gtk-2.0/gtk/gtkinvisible.h \
  /usr/include/gtk-2.0/gtk/gtklayout.h \
  /usr/include/gtk-2.0/gtk/gtklinkbutton.h \
@@ -548,10 +573,12 @@
  /usr/include/gtk-2.0/gtk/gtktoolbutton.h \
  /usr/include/gtk-2.0/gtk/gtktoolitem.h \
  /usr/include/gtk-2.0/gtk/gtktooltips.h \
+ /usr/include/gtk-2.0/gtk/gtksizegroup.h \
  /usr/include/gtk-2.0/gtk/gtkmessagedialog.h \
  /usr/include/gtk-2.0/gtk/gtkmodules.h \
  /usr/include/gtk-2.0/gtk/gtkmountoperation.h \
  /usr/include/gtk-2.0/gtk/gtknotebook.h \
+ /usr/include/gtk-2.0/gtk/gtkoffscreenwindow.h \
  /usr/include/gtk-2.0/gtk/gtkorientable.h \
  /usr/include/gtk-2.0/gtk/gtkpagesetup.h \
  /usr/include/gtk-2.0/gtk/gtkpapersize.h \
@@ -582,8 +609,8 @@
  /usr/include/gtk-2.0/gtk/gtkseparatormenuitem.h \
  /usr/include/gtk-2.0/gtk/gtkseparatortoolitem.h \
  /usr/include/gtk-2.0/gtk/gtkshow.h \
- /usr/include/gtk-2.0/gtk/gtksizegroup.h \
  /usr/include/gtk-2.0/gtk/gtkspinbutton.h \
+ /usr/include/gtk-2.0/gtk/gtkspinner.h \
  /usr/include/gtk-2.0/gtk/gtkstatusbar.h \
  /usr/include/gtk-2.0/gtk/gtkstatusicon.h \
  /usr/include/gtk-2.0/gtk/gtkstock.h /usr/include/gtk-2.0/gtk/gtktable.h \
@@ -595,6 +622,8 @@
  /usr/include/gtk-2.0/gtk/gtktextview.h \
  /usr/include/gtk-2.0/gtk/gtktoolbar.h \
  /usr/include/gtk-2.0/gtk/gtkpixmap.h \
+ /usr/include/gtk-2.0/gtk/gtktoolitemgroup.h \
+ /usr/include/gtk-2.0/gtk/gtktoolpalette.h \
  /usr/include/gtk-2.0/gtk/gtktoolshell.h \
  /usr/include/gtk-2.0/gtk/gtktestutils.h \
  /usr/include/gtk-2.0/gtk/gtktreednd.h \
@@ -612,8 +641,10 @@
  /usr/include/gtk-2.0/gtk/gtktext.h /usr/include/gtk-2.0/gtk/gtktree.h \
  /usr/include/gtk-2.0/gtk/gtktreeitem.h \
  /usr/include/gtk-2.0/gtk/gtkclist.h /usr/include/gtk-2.0/gtk/gtkcombo.h \
- /usr/include/gtk-2.0/gtk/gtkctree.h \
+ /usr/include/gtk-2.0/gtk/gtkctree.h /usr/include/gtk-2.0/gtk/gtkcurve.h \
  /usr/include/gtk-2.0/gtk/gtkfilesel.h \
+ /usr/include/gtk-2.0/gtk/gtkgamma.h \
+ /usr/include/gtk-2.0/gtk/gtkinputdialog.h \
  /usr/include/gtk-2.0/gtk/gtkitemfactory.h \
  /usr/include/gtk-2.0/gtk/gtklist.h \
  /usr/include/gtk-2.0/gtk/gtklistitem.h \
@@ -638,6 +669,7 @@
  /usr/include/gtkmm-2.4/gtkmm/aspectframe.h \
  /usr/include/gtkmm-2.4/gtkmm/frame.h \
  /usr/include/gtkmm-2.4/gtkmm/assistant.h \
+ /usr/include/gtkmm-2.4/gtkmm/border.h \
  /usr/include/gtkmm-2.4/gtkmm/builder.h \
  /usr/include/gtkmm-2.4/gtkmm/cellview.h \
  /usr/include/gtkmm-2.4/gtkmm/celllayout.h \
@@ -662,6 +694,7 @@
  /usr/include/gtkmm-2.4/gtkmm/cellrenderercombo.h \
  /usr/include/gtkmm-2.4/gtkmm/cellrendererprogress.h \
  /usr/include/gtkmm-2.4/gtkmm/cellrendererspin.h \
+ /usr/include/gtkmm-2.4/gtkmm/cellrendererspinner.h \
  /usr/include/gtkmm-2.4/gtkmm/colorbutton.h \
  /usr/include/gtkmm-2.4/gtkmm/colorselection.h \
  /usr/include/gtkmm-2.4/gtkmm/combo.h \
@@ -678,6 +711,7 @@
  /usr/include/gtkmm-2.4/gtkmm/separatormenuitem.h \
  /usr/include/gtkmm-2.4/gtkmm/entrycompletion.h \
  /usr/include/gtkmm-2.4/gtkmm/image.h \
+ /usr/include/gtkmm-2.4/gtkmm/entrybuffer.h \
  /usr/include/gtkmm-2.4/gtkmm/combobox.h \
  /usr/include/gtkmm-2.4/gtkmm/treeview.h \
  /usr/include/gtkmm-2.4/gtkmm/treeviewcolumn.h \
@@ -720,6 +754,7 @@
  /usr/include/gtkmm-2.4/gtkmm/menubar.h \
  /usr/include/gtkmm-2.4/gtkmm/messagedialog.h \
  /usr/include/gtkmm-2.4/gtkmm/notebook.h \
+ /usr/include/gtkmm-2.4/gtkmm/offscreenwindow.h \
  /usr/include/gtkmm-2.4/gtkmm/paned.h \
  /usr/include/gtkmm-2.4/gtkmm/pagesetup.h \
  /usr/include/gtkmm-2.4/gtkmm/papersize.h \
@@ -740,6 +775,7 @@
  /usr/include/gtkmm-2.4/gtkmm/toolbutton.h \
  /usr/include/gtkmm-2.4/gtkmm/toolitem.h \
  /usr/include/gtkmm-2.4/gtkmm/tooltips.h \
+ /usr/include/gtkmm-2.4/gtkmm/sizegroup.h \
  /usr/include/gtkmm-2.4/gtkmm/range.h \
  /usr/include/gtkmm-2.4/gtkmm/recentaction.h \
  /usr/include/gtkmm-2.4/gtkmm/recentchooser.h \
@@ -757,8 +793,8 @@
  /usr/include/gtkmm-2.4/gtkmm/separatortoolitem.h \
  /usr/include/gtkmm-2.4/gtkmm/settings.h \
  /usr/include/gtkmm-2.4/gtkmm/toolbar.h \
- /usr/include/gtkmm-2.4/gtkmm/sizegroup.h \
  /usr/include/gtkmm-2.4/gtkmm/spinbutton.h \
+ /usr/include/gtkmm-2.4/gtkmm/spinner.h \
  /usr/include/gtkmm-2.4/gtkmm/statusbar.h \
  /usr/include/gtkmm-2.4/gtkmm/statusicon.h \
  /usr/include/gtkmm-2.4/gtkmm/stock.h \
@@ -772,6 +808,10 @@
  /usr/include/gtkmm-2.4/gtkmm/textiter.h \
  /usr/include/gtkmm-2.4/gtkmm/textattributes.h \
  /usr/include/gtkmm-2.4/gtkmm/textview.h \
+ /usr/include/gtkmm-2.4/gtkmm/toolpalette.h \
+ /usr/include/gtkmm-2.4/gtkmm/orientable.h \
+ /usr/include/gtkmm-2.4/gtkmm/toolitemgroup.h \
+ /usr/include/gtkmm-2.4/gtkmm/toolshell.h \
  /usr/include/gtkmm-2.4/gtkmm/menutoolbutton.h \
  /usr/include/gtkmm-2.4/gtkmm/treemodelfilter.h \
  /usr/include/gtkmm-2.4/gtkmm/treemodelsort.h \
@@ -779,4 +819,5 @@
  /usr/include/gtkmm-2.4/gtkmm/treestore.h \
  /usr/include/gtkmm-2.4/gtkmm/uimanager.h \
  /usr/include/gtkmm-2.4/gtkmm/actiongroup.h \
- /usr/include/gtkmm-2.4/gtkmm/viewport.h
+ /usr/include/gtkmm-2.4/gtkmm/viewport.h \
+ /home/esdras/dev/player/src/widgets/library.h

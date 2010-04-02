@@ -35,8 +35,8 @@ int main (int argc, char *argv[])
 
 
 
-    Music* teste = new Music("/tmp/teste.mp3");
-    std::cout << teste->get_artist().c_str() << "\n";
+    //Music* teste = new Music("/tmp/teste.mp3");
+    //std::cout << teste->get_artist().c_str() << "\n";
     
     return 0;
 }

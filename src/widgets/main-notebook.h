@@ -19,6 +19,7 @@
 #ifndef _MAIN_NOTEBOOK_H_
 #define _MAIN_NOTEBOOK_H_
 #include <gtkmm.h>
+#include "library.h"
 
 class MainNotebook : public Gtk::Notebook 
 {
