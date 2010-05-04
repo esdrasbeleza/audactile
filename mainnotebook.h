@@ -4,6 +4,8 @@
 #include <QTabWidget>
 #include <QTreeWidget>
 #include <QLabel>
+#include <QHeaderView>
+#include "widgets/collectiontreewidget.h"
 
 class MainNotebook : public QTabWidget
 {

@@ -7,7 +7,9 @@ TARGET = Player
 TEMPLATE = app
 SOURCES += main.cpp \
     mainwindow.cpp \
-    mainnotebook.cpp
+    mainnotebook.cpp \
+    widgets/collectiontreewidget.cpp
 HEADERS += mainwindow.h \
-    mainnotebook.h
+    mainnotebook.h \
+    widgets/collectiontreewidget.h
 FORMS += 
