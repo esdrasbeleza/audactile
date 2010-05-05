@@ -13,3 +13,4 @@ HEADERS += mainwindow.h \
     mainnotebook.h \
     widgets/collectiontreewidget.h
 FORMS += 
+OTHER_FILES += Ideas.txt
