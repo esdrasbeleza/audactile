@@ -9,9 +9,10 @@ class CollectionTreeWidget : public QTreeWidget
 {
 public:
     CollectionTreeWidget();
-    void addNewArtist(QString artist);
-    void addNewAlbum(QString artist, QString album);
-
+    void addArtist(QString artist);
+    void addAlbum(QString artist, QString album);
+private:
+    QStringList toColumns(QString string);
 };
 
 #endif // COLLECTIONTREEWIDGET_H
