@@ -2,6 +2,9 @@
 
 PlayerBar::PlayerBar()
 {
+    setAllowedAreas(Qt::TopToolBarArea|Qt::BottomToolBarArea);
+    setIconSize(QSize(36, 36));
+
     QToolButton* playButton = new QToolButton();
     QToolButton* pauseButton = new QToolButton();
     QToolButton* exitButton = new QToolButton();

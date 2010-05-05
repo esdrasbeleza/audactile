@@ -10,11 +10,11 @@
  </data>
  <data>
   <variable>RunConfiguration0-Executable</variable>
-  <value type="QString"></value>
+  <value type="QString">/home/esdras/dev/Player/Player</value>
  </data>
  <data>
   <variable>RunConfiguration0-RunConfiguration.name</variable>
-  <value type="QString">Custom Executable</value>
+  <value type="QString">Player</value>
  </data>
  <data>
   <variable>RunConfiguration0-UseTerminal</variable>
@@ -26,11 +26,11 @@
  </data>
  <data>
   <variable>RunConfiguration0-UserName</variable>
-  <value type="QString"></value>
+  <value type="QString">Player</value>
  </data>
  <data>
   <variable>RunConfiguration0-UserSetName</variable>
-  <value type="bool">false</value>
+  <value type="bool">true</value>
  </data>
  <data>
   <variable>RunConfiguration0-WorkingDirectory</variable>
@@ -64,7 +64,7 @@
    <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString">Debug</value>
    <valuelist key="abstractProcess.Environment" type="QVariantList">
     <value type="QString">ANT_HOME=/usr/share/java/apache-ant</value>
-    <value type="QString">DBUS_SESSION_BUS_ADDRESS=unix:abstract=/tmp/dbus-TO8kxFvB0X,guid=46c4218ed618eb93c2ba46aa0000013a</value>
+    <value type="QString">DBUS_SESSION_BUS_ADDRESS=unix:abstract=/tmp/dbus-ZgnYcR3B4y,guid=a211efba0bda3bc51395b0e600000023</value>
     <value type="QString">DERBY_HOME=/opt/java/db</value>
     <value type="QString">DESKTOP_SESSION=gnome</value>
     <value type="QString">DISPLAY=:0.0</value>
@@ -72,8 +72,8 @@
     <value type="QString">GDM_KEYBOARD_LAYOUT=br</value>
     <value type="QString">GDM_LANG=en_GB.UTF-8</value>
     <value type="QString">GNOME_DESKTOP_SESSION_ID=this-is-deprecated</value>
-    <value type="QString">GNOME_KEYRING_CONTROL=/tmp/keyring-7MvmD8</value>
-    <value type="QString">GNOME_KEYRING_PID=9748</value>
+    <value type="QString">GNOME_KEYRING_CONTROL=/tmp/keyring-RNcyhi</value>
+    <value type="QString">GNOME_KEYRING_PID=3205</value>
     <value type="QString">GTK_MODULES=canberra-gtk-module</value>
     <value type="QString">GTK_RC_FILES=/etc/gtk/gtkrc:/home/esdras/.gtkrc-1.2-gnome2</value>
     <value type="QString">G_BROKEN_FILENAMES=1</value>
@@ -98,24 +98,24 @@
     <value type="QString">PYTHONPATH=:/usr/lib/openoffice/basis-link/program/</value>
     <value type="QString">QTDIR=/usr/share/qt</value>
     <value type="QString">QT_XFT=true</value>
-    <value type="QString">SESSION_MANAGER=local/atlantico2388l:@/tmp/.ICE-unix/9766,unix/atlantico2388l:/tmp/.ICE-unix/9766</value>
+    <value type="QString">SESSION_MANAGER=local/atlantico2388l:@/tmp/.ICE-unix/3223,unix/atlantico2388l:/tmp/.ICE-unix/3223</value>
     <value type="QString">SHELL=/bin/bash</value>
     <value type="QString">SHLVL=0</value>
-    <value type="QString">SSH_AGENT_PID=9785</value>
-    <value type="QString">SSH_AUTH_SOCK=/tmp/keyring-7MvmD8/ssh</value>
+    <value type="QString">SSH_AGENT_PID=3242</value>
+    <value type="QString">SSH_AUTH_SOCK=/tmp/keyring-RNcyhi/ssh</value>
     <value type="QString">USER=esdras</value>
     <value type="QString">USERNAME=esdras</value>
     <value type="QString">WINDOWPATH=7</value>
-    <value type="QString">XAUTHORITY=/var/run/gdm/auth-for-esdras-LrjE5M/database</value>
+    <value type="QString">XAUTHORITY=/var/run/gdm/auth-for-esdras-oY71qA/database</value>
     <value type="QString">XDG_CACHE_HOME=/home/esdras/.cache</value>
     <value type="QString">XDG_CONFIG_DIRS=/etc/xdg</value>
     <value type="QString">XDG_CONFIG_HOME=/home/esdras/.config</value>
     <value type="QString">XDG_DATA_DIRS=/usr/share:/usr/local/share</value>
     <value type="QString">XDG_DATA_HOME=/home/esdras/.local/share</value>
-    <value type="QString">XDG_SESSION_COOKIE=c716e7e608b41a1da3227a744b714a6e-1272974497.905660-1230076482</value>
+    <value type="QString">XDG_SESSION_COOKIE=c716e7e608b41a1da3227a744b714a6e-1273060054.214709-197115186</value>
    </valuelist>
    <valuelist key="abstractProcess.arguments" type="QVariantList">
-    <value type="QString">/home/esdras/dev/player/Player.pro</value>
+    <value type="QString">/home/esdras/dev/Player/Player.pro</value>
     <value type="QString">-r</value>
     <value type="QString">CONFIG+=debug</value>
     <value type="QString">-spec</value>
@@ -123,7 +123,7 @@
    </valuelist>
    <value key="abstractProcess.command" type="QString">/usr/bin/qmake</value>
    <value key="abstractProcess.enabled" type="bool">false</value>
-   <value key="abstractProcess.workingDirectory" type="QString">/home/esdras/dev/player</value>
+   <value key="abstractProcess.workingDirectory" type="QString">/home/esdras/dev/Player</value>
    <valuelist key="qmakeArgs" type="QVariantList">
     <value type="QString">-spec</value>
     <value type="QString">/usr/share/qt/mkspecs/linux-g++</value>
@@ -136,7 +136,7 @@
    <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString">Debug</value>
    <valuelist key="abstractProcess.Environment" type="QVariantList">
     <value type="QString">ANT_HOME=/usr/share/java/apache-ant</value>
-    <value type="QString">DBUS_SESSION_BUS_ADDRESS=unix:abstract=/tmp/dbus-TO8kxFvB0X,guid=46c4218ed618eb93c2ba46aa0000013a</value>
+    <value type="QString">DBUS_SESSION_BUS_ADDRESS=unix:abstract=/tmp/dbus-ZgnYcR3B4y,guid=a211efba0bda3bc51395b0e600000023</value>
     <value type="QString">DERBY_HOME=/opt/java/db</value>
     <value type="QString">DESKTOP_SESSION=gnome</value>
     <value type="QString">DISPLAY=:0.0</value>
@@ -144,8 +144,8 @@
     <value type="QString">GDM_KEYBOARD_LAYOUT=br</value>
     <value type="QString">GDM_LANG=en_GB.UTF-8</value>
     <value type="QString">GNOME_DESKTOP_SESSION_ID=this-is-deprecated</value>
-    <value type="QString">GNOME_KEYRING_CONTROL=/tmp/keyring-7MvmD8</value>
-    <value type="QString">GNOME_KEYRING_PID=9748</value>
+    <value type="QString">GNOME_KEYRING_CONTROL=/tmp/keyring-RNcyhi</value>
+    <value type="QString">GNOME_KEYRING_PID=3205</value>
     <value type="QString">GTK_MODULES=canberra-gtk-module</value>
     <value type="QString">GTK_RC_FILES=/etc/gtk/gtkrc:/home/esdras/.gtkrc-1.2-gnome2</value>
     <value type="QString">G_BROKEN_FILENAMES=1</value>
@@ -170,21 +170,21 @@
     <value type="QString">PYTHONPATH=:/usr/lib/openoffice/basis-link/program/</value>
     <value type="QString">QTDIR=/usr/share/qt</value>
     <value type="QString">QT_XFT=true</value>
-    <value type="QString">SESSION_MANAGER=local/atlantico2388l:@/tmp/.ICE-unix/9766,unix/atlantico2388l:/tmp/.ICE-unix/9766</value>
+    <value type="QString">SESSION_MANAGER=local/atlantico2388l:@/tmp/.ICE-unix/3223,unix/atlantico2388l:/tmp/.ICE-unix/3223</value>
     <value type="QString">SHELL=/bin/bash</value>
     <value type="QString">SHLVL=0</value>
-    <value type="QString">SSH_AGENT_PID=9785</value>
-    <value type="QString">SSH_AUTH_SOCK=/tmp/keyring-7MvmD8/ssh</value>
+    <value type="QString">SSH_AGENT_PID=3242</value>
+    <value type="QString">SSH_AUTH_SOCK=/tmp/keyring-RNcyhi/ssh</value>
     <value type="QString">USER=esdras</value>
     <value type="QString">USERNAME=esdras</value>
     <value type="QString">WINDOWPATH=7</value>
-    <value type="QString">XAUTHORITY=/var/run/gdm/auth-for-esdras-LrjE5M/database</value>
+    <value type="QString">XAUTHORITY=/var/run/gdm/auth-for-esdras-oY71qA/database</value>
     <value type="QString">XDG_CACHE_HOME=/home/esdras/.cache</value>
     <value type="QString">XDG_CONFIG_DIRS=/etc/xdg</value>
     <value type="QString">XDG_CONFIG_HOME=/home/esdras/.config</value>
     <value type="QString">XDG_DATA_DIRS=/usr/share:/usr/local/share</value>
     <value type="QString">XDG_DATA_HOME=/home/esdras/.local/share</value>
-    <value type="QString">XDG_SESSION_COOKIE=c716e7e608b41a1da3227a744b714a6e-1272974497.905660-1230076482</value>
+    <value type="QString">XDG_SESSION_COOKIE=c716e7e608b41a1da3227a744b714a6e-1273060054.214709-197115186</value>
    </valuelist>
    <value key="abstractProcess.IgnoreReturnValue" type="bool">false</value>
    <valuelist key="abstractProcess.arguments" type="QVariantList">
@@ -192,7 +192,7 @@
    </valuelist>
    <value key="abstractProcess.command" type="QString">/usr/bin/make</value>
    <value key="abstractProcess.enabled" type="bool">true</value>
-   <value key="abstractProcess.workingDirectory" type="QString">/home/esdras/dev/player</value>
+   <value key="abstractProcess.workingDirectory" type="QString">/home/esdras/dev/Player</value>
   </valuemap>
  </data>
  <data>
@@ -201,7 +201,7 @@
    <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString">Debug</value>
    <valuelist key="abstractProcess.Environment" type="QVariantList">
     <value type="QString">ANT_HOME=/usr/share/java/apache-ant</value>
-    <value type="QString">DBUS_SESSION_BUS_ADDRESS=unix:abstract=/tmp/dbus-TO8kxFvB0X,guid=46c4218ed618eb93c2ba46aa0000013a</value>
+    <value type="QString">DBUS_SESSION_BUS_ADDRESS=unix:abstract=/tmp/dbus-ZgnYcR3B4y,guid=a211efba0bda3bc51395b0e600000023</value>
     <value type="QString">DERBY_HOME=/opt/java/db</value>
     <value type="QString">DESKTOP_SESSION=gnome</value>
     <value type="QString">DISPLAY=:0.0</value>
@@ -209,8 +209,8 @@
     <value type="QString">GDM_KEYBOARD_LAYOUT=br</value>
     <value type="QString">GDM_LANG=en_GB.UTF-8</value>
     <value type="QString">GNOME_DESKTOP_SESSION_ID=this-is-deprecated</value>
-    <value type="QString">GNOME_KEYRING_CONTROL=/tmp/keyring-7MvmD8</value>
-    <value type="QString">GNOME_KEYRING_PID=9748</value>
+    <value type="QString">GNOME_KEYRING_CONTROL=/tmp/keyring-RNcyhi</value>
+    <value type="QString">GNOME_KEYRING_PID=3205</value>
     <value type="QString">GTK_MODULES=canberra-gtk-module</value>
     <value type="QString">GTK_RC_FILES=/etc/gtk/gtkrc:/home/esdras/.gtkrc-1.2-gnome2</value>
     <value type="QString">G_BROKEN_FILENAMES=1</value>
@@ -235,21 +235,21 @@
     <value type="QString">PYTHONPATH=:/usr/lib/openoffice/basis-link/program/</value>
     <value type="QString">QTDIR=/usr/share/qt</value>
     <value type="QString">QT_XFT=true</value>
-    <value type="QString">SESSION_MANAGER=local/atlantico2388l:@/tmp/.ICE-unix/9766,unix/atlantico2388l:/tmp/.ICE-unix/9766</value>
+    <value type="QString">SESSION_MANAGER=local/atlantico2388l:@/tmp/.ICE-unix/3223,unix/atlantico2388l:/tmp/.ICE-unix/3223</value>
     <value type="QString">SHELL=/bin/bash</value>
     <value type="QString">SHLVL=0</value>
-    <value type="QString">SSH_AGENT_PID=9785</value>
-    <value type="QString">SSH_AUTH_SOCK=/tmp/keyring-7MvmD8/ssh</value>
+    <value type="QString">SSH_AGENT_PID=3242</value>
+    <value type="QString">SSH_AUTH_SOCK=/tmp/keyring-RNcyhi/ssh</value>
     <value type="QString">USER=esdras</value>
     <value type="QString">USERNAME=esdras</value>
     <value type="QString">WINDOWPATH=7</value>
-    <value type="QString">XAUTHORITY=/var/run/gdm/auth-for-esdras-LrjE5M/database</value>
+    <value type="QString">XAUTHORITY=/var/run/gdm/auth-for-esdras-oY71qA/database</value>
     <value type="QString">XDG_CACHE_HOME=/home/esdras/.cache</value>
     <value type="QString">XDG_CONFIG_DIRS=/etc/xdg</value>
     <value type="QString">XDG_CONFIG_HOME=/home/esdras/.config</value>
     <value type="QString">XDG_DATA_DIRS=/usr/share:/usr/local/share</value>
     <value type="QString">XDG_DATA_HOME=/home/esdras/.local/share</value>
-    <value type="QString">XDG_SESSION_COOKIE=c716e7e608b41a1da3227a744b714a6e-1272974497.905660-1230076482</value>
+    <value type="QString">XDG_SESSION_COOKIE=c716e7e608b41a1da3227a744b714a6e-1273060054.214709-197115186</value>
    </valuelist>
    <value key="abstractProcess.IgnoreReturnValue" type="bool">true</value>
    <valuelist key="abstractProcess.arguments" type="QVariantList">
@@ -258,7 +258,7 @@
    </valuelist>
    <value key="abstractProcess.command" type="QString">/usr/bin/make</value>
    <value key="abstractProcess.enabled" type="bool">true</value>
-   <value key="abstractProcess.workingDirectory" type="QString">/home/esdras/dev/player</value>
+   <value key="abstractProcess.workingDirectory" type="QString">/home/esdras/dev/Player</value>
    <value key="cleanConfig" type="bool">true</value>
    <valuelist key="makeargs" type="QVariantList">
     <value type="QString">clean</value>
