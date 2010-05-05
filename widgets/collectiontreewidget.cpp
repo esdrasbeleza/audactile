@@ -1,11 +1,7 @@
 #include "collectiontreewidget.h"
 
 
-/*
- * TODO:
- * - Criar metodo de adicao de musica
- * - Criar metodos de remocao
- */
+// TODO: cleanup
 
 CollectionTreeWidget::CollectionTreeWidget()
 {
@@ -24,6 +20,19 @@ CollectionTreeWidget::CollectionTreeWidget()
     addAlbum("Artista 3", "Album 2");
     addMusic("Artista 2", "Album 1 do artista 2", "Musica 1");
     addMusic("Artista 2", "Album 1 do artista 2", "Musica 2");
+    addMusic("Artista 4", "Album 1 do artista 4", "Musica 1");
+    addMusic("Artista 4", "Album 1 do artista 4", "Musica 2");
+    addMusic("Artista 4", "Album 1 do artista 4", "Musica 3");
+    addMusic("Artista 4", "Album 2 do artista 4", "Musica 1");
+    addMusic("Artista 4", "Album 2 do artista 4", "Musica 2");
+    addMusic("Artista 4", "Album 2 do artista 4", "Musica 3");
+    addAlbum("Artista 5", "Album 1");
+    addAlbum("Artista 5", "Album 2");
+    removeAlbum("Artista 3", "Album 1");
+    removeMusic("Artista 5", "Album 2 do artista 4", "Musica 3");
+    removeMusic("Artista 4", "Album 2 do artista 4", "Musica 3");
+
+    cleanUp(NULL, CollectionTreeWidget::LevelNone);
 }
 
 QStringList CollectionTreeWidget::toColumns(QString string) {
@@ -57,10 +66,17 @@ QTreeWidgetItem* CollectionTreeWidget::addArtist(QString artist) {
     }
 }
 
+bool CollectionTreeWidget::removeArtist(QString artist) {
+    QList<QTreeWidgetItem*> artistList = findItems(artist, Qt::MatchExactly, 0);
+    if (!artistList.isEmpty()) {
+        delete artistList.first();
+        return true;
+    }
+    return false;
+}
+
 
 QTreeWidgetItem* CollectionTreeWidget::addAlbum(QString artist, QString album) {
-    qDebug("Adding album");
-
     // Looks for the artist
     QTreeWidgetItem* newAlbumNode; // The node with the album, whether it exists or not
     QTreeWidgetItem* artistItem;
@@ -68,9 +84,7 @@ QTreeWidgetItem* CollectionTreeWidget::addAlbum(QString artist, QString album) {
 
     // Look for album
     for (int i = 0; i < artistItem->childCount(); i++) {
-        qDebug("Iterating!");
         if (artistItem->child(i)->text(0) == album) {
-            qDebug("Album found!");
             newAlbumNode = artistItem->child(i);
             return newAlbumNode;
         }
@@ -83,17 +97,34 @@ QTreeWidgetItem* CollectionTreeWidget::addAlbum(QString artist, QString album) {
     newAlbumNode->setIcon(0, QIcon::fromTheme("media-cdrom"));
 
     artistItem->addChild(newAlbumNode);
-    sortItems(0,Qt::AscendingOrder);
-
-    qDebug("Album added");
+    artistItem->sortChildren(0, Qt::AscendingOrder);
 
     return newAlbumNode;
 }
 
 
-QTreeWidgetItem* CollectionTreeWidget::addMusic(QString artist, QString album, QString music) {
-    qDebug("Adding music");
+bool CollectionTreeWidget::removeAlbum(QString artist, QString album) {
+    QList<QTreeWidgetItem*> artistList = findItems(artist, Qt::MatchExactly, 0);
+    // If we have no artist, we have no album.
+    if (artistList.isEmpty()) {
+        return false;
+    }
 
+    // Looks for the artist
+    QTreeWidgetItem* artistItem = artistList.first();
+    // Look for album
+    for (int i = 0; i < artistItem->childCount(); i++) {
+        if (artistItem->child(i)->text(0) == album) {
+            delete artistItem->child(i);
+            cleanUp(artistItem, CollectionTreeWidget::LevelArtist);
+            return true;
+        }
+    }
+    return false;
+}
+
+
+QTreeWidgetItem* CollectionTreeWidget::addMusic(QString artist, QString album, QString music) {
     // Looks for the album
     QTreeWidgetItem* newMusicNode; // The node with the music, whether it exists or not
     QTreeWidgetItem* albumItem = addAlbum(artist, album);
@@ -113,8 +144,50 @@ QTreeWidgetItem* CollectionTreeWidget::addMusic(QString artist, QString album, Q
     newMusicNode->setIcon(0, QIcon::fromTheme("sound"));
 
     albumItem->addChild(newMusicNode);
-    sortItems(0, Qt::AscendingOrder);
+    albumItem->sortChildren(0, Qt::AscendingOrder);
 
-    qDebug("Music added.");
     return newMusicNode;
+}
+
+bool CollectionTreeWidget::removeMusic(QString artist, QString album, QString music) {
+    QList<QTreeWidgetItem*> artistList = findItems(artist, Qt::MatchExactly, 0);
+    // If we have no artist, we have no album and no music.
+    if (artistList.isEmpty()) {
+        return false;
+    }
+
+    // Looks for the artist
+    QTreeWidgetItem* artistItem = artistList.first();
+    QTreeWidgetItem* albumItem = NULL;
+    // Look for album
+    for (int i = 0; i < artistItem->childCount(); i++) {
+        if (artistItem->child(i)->text(0) == album) {
+            albumItem = artistItem->child(i);
+        }
+    }
+
+    // If album is null, we have nothing to do here
+    if (albumItem != NULL) {
+        for (int i = 0; i < albumItem->childCount(); i++) {
+            if (albumItem->child(i)->text(0) == music) {
+                delete albumItem->child(i);
+                cleanUp(albumItem, CollectionTreeWidget::LevelAlbum);
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
+void CollectionTreeWidget::cleanUp(QTreeWidgetItem* parent = NULL, CollectionTreeWidget::TreeLevel level = CollectionTreeWidget::LevelNone) {
+    // If parent is null, process all artists and its children nodes
+    if (parent == NULL) {
+      cleanUp(invisibleRootItem(), CollectionTreeWidget::LevelNone);
+    }
+
+    // if we have a parent, process it
+    else {
+    }
+
 }
