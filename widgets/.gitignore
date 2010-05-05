@@ -1,0 +1,5 @@
+# Ignore .o files
+*.o
+# Ignore executable file
+Player
+
