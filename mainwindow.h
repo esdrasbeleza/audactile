@@ -4,6 +4,7 @@
 #include <QtGui/QMainWindow>
 #include <QHBoxLayout>
 #include "mainnotebook.h"
+#include "widgets/playerbar.h"
 
 class MainWindow : public QMainWindow
 {
