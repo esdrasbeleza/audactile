@@ -1,0 +1,5 @@
+- Filesystem will be monitored.
+- If file changes,
+    1) Find database for file, and verify if artist/album/music name still exists.
+    2) Update database
+    3) Update tree
