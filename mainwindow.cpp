@@ -3,6 +3,8 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
+
+
     // Creates the horizontal layout where we'll put our notebook
     QWidget* middleWidget = new QWidget();
     QHBoxLayout *horizontalLayout = new QHBoxLayout();

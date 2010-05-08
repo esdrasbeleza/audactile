@@ -2,6 +2,7 @@
 # Project created by QtCreator 2010-05-03T16:01:44
 # -------------------------------------------------
 QT += sql \
+    phonon \
     webkit
 TARGET = Player
 TEMPLATE = app

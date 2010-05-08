@@ -3,6 +3,12 @@
 
 #include <QToolBar>
 #include <QToolButton>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QLabel>
+#include <phonon/SeekSlider>
+#include <phonon/VolumeSlider>
+
 
 class PlayerBar : public QToolBar
 {
