@@ -3,27 +3,28 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
-
+    setWindowTitle("Nameless player! :(");
 
     // Creates the horizontal layout where we'll put our notebook
-    QWidget* middleWidget = new QWidget();
-    QHBoxLayout *horizontalLayout = new QHBoxLayout();
-    MainNotebook *mainNotebook = new MainNotebook();
-    QLabel *label2 = new QLabel(tr("Test label 2"));
-    horizontalLayout->addWidget(mainNotebook, 1, Qt::AlignLeft);
-    horizontalLayout->addWidget(label2, 1, Qt::AlignLeft);
-    middleWidget->setLayout(horizontalLayout);
+    QSplitter* middleSplitter = new QSplitter();
+    MainNotebook* mainNotebook = new MainNotebook();
+    mainNotebook->setMinimumWidth(200);
+    PlaylistWidget* playlistWidget = new PlaylistWidget();
+    middleSplitter->addWidget(mainNotebook);
+    middleSplitter->addWidget(playlistWidget);
+    middleSplitter->setStretchFactor(0, 1);
+    middleSplitter->setStretchFactor(1, 3);
 
     // Create a vertical layout
     QWidget *mainVerticalWidget = new QWidget();
     QVBoxLayout *verticalLayout = new QVBoxLayout();
 
-    middleWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    //verticalLayout->addWidget(playerbar, 1, Qt::AlignLeft);
-    verticalLayout->addWidget(middleWidget);
+
+    verticalLayout->addWidget(middleSplitter);
     mainVerticalWidget->setLayout(verticalLayout);
     setCentralWidget(mainVerticalWidget);
 
+    // Includes our toolbar with more widgets, friendly called PlayerBar
     PlayerBar *playerbar = new PlayerBar();
     addToolBar(playerbar);
 }

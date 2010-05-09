@@ -2,9 +2,10 @@
 #define MAINWINDOW_H
 
 #include <QtGui/QMainWindow>
-#include <QHBoxLayout>
+#include <QSplitter>
 #include "mainnotebook.h"
 #include "widgets/playerbar.h"
+#include "widgets/playlistwidget.h"
 
 class MainWindow : public QMainWindow
 {
