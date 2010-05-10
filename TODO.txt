@@ -1,6 +1,7 @@
 - Make file selector widget work properly.
 
 - Make file selector list only media files supported by Phonon.
+  http://stackoverflow.com/questions/2599852/qfiledialog-filter-from-mime-types
 
 - Separate widget classes into a subfolders structure that remembers the
   manner the widgets are shown.
