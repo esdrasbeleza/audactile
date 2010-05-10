@@ -13,7 +13,7 @@ MainWindow::MainWindow(QWidget *parent)
     middleSplitter->addWidget(mainNotebook);
     middleSplitter->addWidget(playlistWidget);
     middleSplitter->setStretchFactor(0, 1);
-    middleSplitter->setStretchFactor(1, 3);
+    middleSplitter->setStretchFactor(1, 4);
 
     // Create a vertical layout
     QWidget *mainVerticalWidget = new QWidget();

@@ -18,4 +18,5 @@ HEADERS += mainwindow.h \
     widgets/playerbar.h \
     widgets/playlistwidget.h
 FORMS += 
-OTHER_FILES += Ideas.txt
+OTHER_FILES += Ideas.txt \
+    Ideas.txt

@@ -1,0 +1,29 @@
+- Make file selector widget work properly.
+
+- Make file selector list only media files supported by Phonon.
+
+- Separate widget classes into a subfolders structure that remembers the
+  manner the widgets are shown.
+
+
+- Cleanup function for collection
+
+- Filesystem will be monitored. --- QFileSystemWatcher!
+- If file changes,
+    1) Find database for file, and verify if artist/album/music name still exists.
+    2) Update database
+    3) Update tree
+
+- Tabs support in order to allow user to handle multiple playlists
+
+- Rating system
+
+- Last.fm support
+
+- Streaming support
+
+- Remote file support, like over ssh shares
+
+- Edit tags
+
+
