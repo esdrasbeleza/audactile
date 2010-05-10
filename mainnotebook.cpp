@@ -10,17 +10,7 @@ MainNotebook::MainNotebook()
 
     // Widget of the Files tab
     // TODO: put this into a separate class
-    QDir dir;
-    QString musicLocation = QDesktopServices::storageLocation(QDesktopServices::MusicLocation);
-    if (musicLocation.isEmpty() || !dir.exists(musicLocation)) { musicLocation = QDir::homePath(); }
-    qDebug(musicLocation.toLatin1());
-
-    QFileSystemModel *fsWidgetModel = new QFileSystemModel();
-    fsWidgetModel->setRootPath(musicLocation);
-    QListView* filesystemWidget = new QListView();
-    filesystemWidget->setModel(fsWidgetModel);
-    filesystemWidget->setRootIndex(fsWidgetModel->index(musicLocation));
-
+    FilesystemWidget* filesystemWidget = new FilesystemWidget();
 
 
     // Creates a label test widget

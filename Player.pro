@@ -11,12 +11,15 @@ SOURCES += main.cpp \
     mainnotebook.cpp \
     widgets/collectiontreewidget.cpp \
     widgets/playerbar.cpp \
-    widgets/playlistwidget.cpp
+    widgets/playlistwidget.cpp \
+    widgets/filesystemwidget.cpp
 HEADERS += mainwindow.h \
     mainnotebook.h \
     widgets/collectiontreewidget.h \
     widgets/playerbar.h \
-    widgets/playlistwidget.h
+    widgets/playlistwidget.h \
+    widgets/filesystemwidget.h
 FORMS += 
 OTHER_FILES += Ideas.txt \
-    Ideas.txt
+    Ideas.txt \
+    TODO.txt
