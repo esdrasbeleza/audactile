@@ -6,22 +6,22 @@ QT += sql \
     webkit
 TARGET = Player
 TEMPLATE = app
-SOURCES += main.cpp \
-    mainwindow.cpp \
-    mainnotebook.cpp \
-    widgets/collectiontreewidget.cpp \
-    widgets/playerbar.cpp \
-    widgets/playlistwidget.cpp \
-    widgets/filesystemwidget.cpp \
-    playlist/playlistitem.cpp
-HEADERS += mainwindow.h \
-    mainnotebook.h \
-    widgets/collectiontreewidget.h \
-    widgets/playerbar.h \
-    widgets/playlistwidget.h \
-    widgets/filesystemwidget.h \
-    playlist/playlistitem.h
+SOURCES += src/mainwindow/mainnotebook/collection/collectiontreewidget.cpp \
+    src/mainwindow/mainnotebook/filesystem/filesystemwidget.cpp \
+    src/mainwindow/mainnotebook/mainnotebook.cpp \
+    src/mainwindow/playlist/playlistwidget.cpp \
+    src/mainwindow/playlist/playlistitem.cpp \
+    src/mainwindow/playerbar.cpp \
+    src/mainwindow/mainwindow.cpp \
+    src/mainwindow/mainwidget.cpp \
+    src/main.cpp
+HEADERS += src/mainwindow/mainnotebook/collection/collectiontreewidget.h \
+    src/mainwindow/mainnotebook/filesystem/filesystemwidget.h \
+    src/mainwindow/mainnotebook/mainnotebook.h \
+    src/mainwindow/playlist/playlistwidget.h \
+    src/mainwindow/playlist/playlistitem.h \
+    src/mainwindow/playerbar.h \
+    src/mainwindow/mainwindow.h \
+    src/mainwindow/mainwidget.h
 FORMS += 
-OTHER_FILES += Ideas.txt \
-    Ideas.txt \
-    TODO.txt
+OTHER_FILES += TODO.txt

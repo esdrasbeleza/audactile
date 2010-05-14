@@ -5,8 +5,8 @@
 #include <QTreeWidget>
 #include <QLabel>
 #include <QHeaderView>
-#include "widgets/filesystemwidget.h"
-#include "widgets/collectiontreewidget.h"
+#include "filesystem/filesystemwidget.h"
+#include "collection/collectiontreewidget.h"
 
 class MainNotebook : public QTabWidget
 {

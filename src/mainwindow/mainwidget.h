@@ -3,7 +3,7 @@
 #include <QWidget>
 #include <QHBoxLayout>
 #include <QLabel>
-#include "mainnotebook.h"
+#include "mainnotebook/mainnotebook.h"
 
 class MainWidget : public QWidget
 {

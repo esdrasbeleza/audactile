@@ -3,9 +3,10 @@
 
 #include <QtGui/QMainWindow>
 #include <QSplitter>
-#include "mainnotebook.h"
-#include "widgets/playerbar.h"
-#include "widgets/playlistwidget.h"
+#include "mainnotebook/mainnotebook.h"
+#include "playlist/playlistwidget.h"
+#include "playerbar.h"
+
 
 class MainWindow : public QMainWindow
 {

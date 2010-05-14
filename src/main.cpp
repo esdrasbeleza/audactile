@@ -1,5 +1,5 @@
 #include <QtGui/QApplication>
-#include "mainwindow.h"
+#include "mainwindow/mainwindow.h"
 
 
 int main(int argc, char *argv[])
