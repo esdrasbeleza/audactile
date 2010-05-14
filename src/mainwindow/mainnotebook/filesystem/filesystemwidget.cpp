@@ -10,13 +10,22 @@ FilesystemWidget::FilesystemWidget()
     connect(goUpAction, SIGNAL(triggered()), this, SLOT(goUp()));
     fsToolbar->addAction(goUpAction);
 
-    goHomeAction = new QAction(QIcon::fromTheme("go-home"), tr("Go up"), this);
+    goHomeAction = new QAction(QIcon::fromTheme("go-home"), tr("Go to the home folder"), this);
     connect(goHomeAction, SIGNAL(triggered()), this, SLOT(goHome()));
     fsToolbar->addAction(goHomeAction);
+
+    // TODO: use placeholderText in Qt 4.7.
+    QLineEdit* filterEdit = new QLineEdit();
+    QLabel* filterLabel = new QLabel(tr("Filter:"));
+    fsToolbar->addWidget(filterLabel);
+    fsToolbar->addWidget(filterEdit);
+    connect(filterEdit, SIGNAL(textChanged(QString)), this, SLOT(setNameFilter(QString)));
 
 
     // Create the filesystem view
     fsWidgetModel = new QFileSystemModel();
+    fsWidgetModel->setNameFilterDisables(false);
+    fsWidgetModel->setFilter(QDir::AllEntries|QDir::NoDotAndDotDot);
     fsListView = new QListView();
     fsListView->setModel(fsWidgetModel);
 
@@ -42,18 +51,22 @@ void FilesystemWidget::goUp() {
     updateWidget();
 }
 
-
-void FilesystemWidget::goHome() {
-    startLocation = QDesktopServices::storageLocation(QDesktopServices::MusicLocation);
-    if (startLocation.isEmpty() || !dir.exists(startLocation)) {
-        dir = QDir::homePath();
+void FilesystemWidget::setNameFilter(QString filter) {
+    QStringList filterList;
+    if (!filter.isEmpty()) {
+        filter = "*" + filter + "*";
+        filterList = QStringList(filter);
     }
     else {
-        dir = startLocation;
+        filterList = QStringList();
     }
+   fsWidgetModel->setNameFilters(filterList);
+}
 
+
+void FilesystemWidget::goHome() {
+    dir = QDir::homePath();
     updateWidget();
-
 }
 
 void FilesystemWidget::pathChanged(QString newPath) {

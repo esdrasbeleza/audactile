@@ -8,6 +8,8 @@
 #include <QToolBar>
 #include <QToolButton>
 #include <QAction>
+#include <QLineEdit>
+#include <QLabel>
 #include <phonon/BackendCapabilities>
 
 
@@ -24,6 +26,7 @@ private slots:
     void goHome();    
     void pathChanged(QString newPath);
     void doubleClickAt(QModelIndex modelIndex);
+    void setNameFilter(QString filter);
 
 private:
     QDir dir;
