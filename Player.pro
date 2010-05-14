@@ -25,3 +25,5 @@ HEADERS += src/mainwindow/mainnotebook/collection/collectiontreewidget.h \
     src/mainwindow/mainwidget.h
 FORMS += 
 OTHER_FILES += TODO.txt
+CONFIG += link_pkgconfig
+PKGCONFIG += taglib
