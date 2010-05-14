@@ -11,9 +11,9 @@ FilesystemWidget::FilesystemWidget()
     }
 
     // Create the toolbar
-    QToolBar* fsToolbar = new QToolBar();
+    QToolBar *fsToolbar = new QToolBar();
     fsToolbar->setMovable(false);
-    QToolButton* homeButton = new QToolButton();
+    QToolButton *homeButton = new QToolButton();
     homeButton->setIcon(QIcon::fromTheme("go-home"));
 
     goUpAction = new QAction(QIcon::fromTheme("go-up"), tr("Go up"), this);
@@ -30,7 +30,7 @@ FilesystemWidget::FilesystemWidget()
     fsListView->setRootIndex(fsWidgetModel->index(dir.absolutePath()));
 
     // Create a new horizontal box
-    QVBoxLayout* vlayout = new QVBoxLayout();
+    QVBoxLayout *vlayout = new QVBoxLayout();
     vlayout->addWidget(fsToolbar);
     vlayout->addWidget(fsListView);
 

@@ -6,10 +6,10 @@ MainWindow::MainWindow(QWidget *parent)
     setWindowTitle("Nameless player! :(");
 
     // Creates the horizontal layout where we'll put our notebook
-    QSplitter* middleSplitter = new QSplitter();
-    MainNotebook* mainNotebook = new MainNotebook();
+    QSplitter *middleSplitter = new QSplitter();
+    MainNotebook *mainNotebook = new MainNotebook();
     mainNotebook->setMinimumWidth(200);
-    PlaylistWidget* playlistWidget = new PlaylistWidget();
+    PlaylistWidget *playlistWidget = new PlaylistWidget();
     middleSplitter->addWidget(mainNotebook);
     middleSplitter->addWidget(playlistWidget);
     middleSplitter->setStretchFactor(0, 1);

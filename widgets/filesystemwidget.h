@@ -25,7 +25,7 @@ private:
     QFileSystemModel *fsWidgetModel;
     QListView *fsListView;
 
-    QAction* goUpAction;
+    QAction *goUpAction;
 };
 
 #endif // FILESYSTEMWIDGET_H

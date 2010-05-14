@@ -10,7 +10,7 @@ MainNotebook::MainNotebook()
 
     // Widget of the Files tab
     // TODO: put this into a separate class
-    FilesystemWidget* filesystemWidget = new FilesystemWidget();
+    FilesystemWidget *filesystemWidget = new FilesystemWidget();
 
 
     // Creates a label test widget

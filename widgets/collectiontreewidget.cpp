@@ -43,7 +43,7 @@ QStringList CollectionTreeWidget::toColumns(QString string) {
 }
 
 
-QTreeWidgetItem* CollectionTreeWidget::addArtist(QString artist) {
+QTreeWidgetItem *CollectionTreeWidget::addArtist(QString artist) {
     QList<QTreeWidgetItem*> artistList = findItems(artist, Qt::MatchExactly, 0);
     if (artistList.isEmpty()) {
         QTreeWidgetItem *item = new QTreeWidgetItem((QTreeWidget*)0, toColumns(artist));
@@ -76,10 +76,10 @@ bool CollectionTreeWidget::removeArtist(QString artist) {
 }
 
 
-QTreeWidgetItem* CollectionTreeWidget::addAlbum(QString artist, QString album) {
+QTreeWidgetItem *CollectionTreeWidget::addAlbum(QString artist, QString album) {
     // Looks for the artist
-    QTreeWidgetItem* newAlbumNode; // The node with the album, whether it exists or not
-    QTreeWidgetItem* artistItem;
+    QTreeWidgetItem *newAlbumNode; // The node with the album, whether it exists or not
+    QTreeWidgetItem *artistItem;
     artistItem = addArtist(artist);
 
     // Look for album
@@ -111,7 +111,7 @@ bool CollectionTreeWidget::removeAlbum(QString artist, QString album) {
     }
 
     // Looks for the artist
-    QTreeWidgetItem* artistItem = artistList.first();
+    QTreeWidgetItem *artistItem = artistList.first();
     // Look for album
     for (int i = 0; i < artistItem->childCount(); i++) {
         if (artistItem->child(i)->text(0) == album) {
@@ -124,10 +124,10 @@ bool CollectionTreeWidget::removeAlbum(QString artist, QString album) {
 }
 
 
-QTreeWidgetItem* CollectionTreeWidget::addMusic(QString artist, QString album, QString music) {
+QTreeWidgetItem *CollectionTreeWidget::addMusic(QString artist, QString album, QString music) {
     // Looks for the album
-    QTreeWidgetItem* newMusicNode; // The node with the music, whether it exists or not
-    QTreeWidgetItem* albumItem = addAlbum(artist, album);
+    QTreeWidgetItem *newMusicNode; // The node with the music, whether it exists or not
+    QTreeWidgetItem *albumItem = addAlbum(artist, album);
 
     // Look for music
     for (int i = 0; i < albumItem->childCount(); i++) {
@@ -157,8 +157,8 @@ bool CollectionTreeWidget::removeMusic(QString artist, QString album, QString mu
     }
 
     // Looks for the artist
-    QTreeWidgetItem* artistItem = artistList.first();
-    QTreeWidgetItem* albumItem = NULL;
+    QTreeWidgetItem *artistItem = artistList.first();
+    QTreeWidgetItem *albumItem = NULL;
     // Look for album
     for (int i = 0; i < artistItem->childCount(); i++) {
         if (artistItem->child(i)->text(0) == album) {
@@ -180,7 +180,7 @@ bool CollectionTreeWidget::removeMusic(QString artist, QString album, QString mu
     return false;
 }
 
-void CollectionTreeWidget::cleanUp(QTreeWidgetItem* parent = NULL, CollectionTreeWidget::TreeLevel level = CollectionTreeWidget::LevelNone) {
+void CollectionTreeWidget::cleanUp(QTreeWidgetItem *parent = NULL, CollectionTreeWidget::TreeLevel level = CollectionTreeWidget::LevelNone) {
     // If parent is null, process all artists and its children nodes
     if (parent == NULL) {
       cleanUp(invisibleRootItem(), CollectionTreeWidget::LevelNone);
