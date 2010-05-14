@@ -11,6 +11,7 @@
 #include <QLineEdit>
 #include <QLabel>
 #include <phonon/BackendCapabilities>
+#include "../../playlist/playlistitem.h"
 
 
 class FilesystemWidget : public QWidget

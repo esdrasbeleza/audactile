@@ -91,7 +91,7 @@ void FilesystemWidget::doubleClickAt(QModelIndex modelIndex) {
     
     // If it's a file, we must add it to playlist
     else {
-        // TODO: add file
+        PlaylistItem *newItem = PlaylistItem(fsWidgetModel->filePath(modelIndex));
     }
 }
 
