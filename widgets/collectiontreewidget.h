@@ -7,6 +7,7 @@
 
 class CollectionTreeWidget : public QTreeWidget
 {
+
 public:
     CollectionTreeWidget();
     QTreeWidgetItem* addArtist(QString artist);

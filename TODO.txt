@@ -1,9 +1,12 @@
 - Fix window manager problems
 
 
-- Make file selector widget work properly.
+- Make file selector widget work properly:
+    - Make file selector widget show buttons to go home
+    - Make double click in directory work
+    - Handle when directory is updated
 
-- Make file selector widget show buttons to go home, music, up...
+
 
 - Make file selector list only media files supported by Phonon.
   http://stackoverflow.com/questions/2599852/qfiledialog-filter-from-mime-types
