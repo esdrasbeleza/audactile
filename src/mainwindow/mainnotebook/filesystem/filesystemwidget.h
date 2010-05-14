@@ -35,7 +35,9 @@ private:
     QListView *fsListView;
     QAction *goUpAction;
     QAction *goHomeAction;
+    QLineEdit* filterEdit;
     QStringList* getPhononExtensions();
+    void setNameFilter();
 };
 
 #endif // FILESYSTEMWIDGET_H

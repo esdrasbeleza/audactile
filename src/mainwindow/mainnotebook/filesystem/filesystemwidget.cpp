@@ -15,7 +15,7 @@ FilesystemWidget::FilesystemWidget()
     fsToolbar->addAction(goHomeAction);
 
     // TODO: use placeholderText in Qt 4.7.
-    QLineEdit* filterEdit = new QLineEdit();
+    filterEdit = new QLineEdit();
     QLabel* filterLabel = new QLabel(tr("Filter:"));
     fsToolbar->addWidget(filterLabel);
     fsToolbar->addWidget(filterEdit);
@@ -25,7 +25,7 @@ FilesystemWidget::FilesystemWidget()
     // Create the filesystem view
     fsWidgetModel = new QFileSystemModel();
     fsWidgetModel->setNameFilterDisables(false);
-    fsWidgetModel->setFilter(QDir::AllEntries|QDir::NoDotAndDotDot);
+    fsWidgetModel->setFilter(QDir::AllDirs|QDir::Files|QDir::NoDotAndDotDot);
     fsListView = new QListView();
     fsListView->setModel(fsWidgetModel);
 
@@ -49,6 +49,11 @@ FilesystemWidget::FilesystemWidget()
 void FilesystemWidget::goUp() {
     dir.cdUp();
     updateWidget();
+}
+
+
+void FilesystemWidget::setNameFilter() {
+    setNameFilter(filterEdit->text());
 }
 
 void FilesystemWidget::setNameFilter(QString filter) {
@@ -94,6 +99,7 @@ void FilesystemWidget::doubleClickAt(QModelIndex modelIndex) {
 void FilesystemWidget::updateWidget() {
     fsWidgetModel->setRootPath(dir.absolutePath());
     fsListView->setRootIndex(fsWidgetModel->index(dir.absolutePath()));
+    setNameFilter();
 }
 
 
