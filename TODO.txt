@@ -2,7 +2,6 @@
 
 - Make it play. Wtf?
 
-
 - Make toolbar work
     - Make buttons play/pause, stop, next, previous work
     - Make slider work properly
@@ -10,6 +9,10 @@
 
 - Make file selector widget work properly:
     - Add music to playlist using drag and drop
+
+- Show song duration in playlist
+
+- Icons in tab
 
 - Save current playlist/settings --> QSettings!
 
@@ -22,7 +25,6 @@
 - Separate widget classes into a subfolders structure that remembers the
   manner the widgets are shown.
 
-
 - Cleanup function for collection
 
 - Filesystem will be monitored. --- QFileSystemWatcher!
@@ -32,6 +34,8 @@
     3) Update tree
 
 - Tabs support in order to allow user to handle multiple playlists
+   (below files/collection?)
+
 
 - Rating system
 
