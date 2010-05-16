@@ -1,10 +1,7 @@
 - Fix window manager problems
 
-- Make it play. Wtf?
-
 - Make toolbar work
     - Make buttons play/pause, stop, next, previous work
-    - Make slider work properly
     - Update timers according to slider
 
 - Make file selector widget work properly:
@@ -20,10 +17,10 @@
 - Make file selector list only media files supported by Phonon.
   http://stackoverflow.com/questions/2599852/qfiledialog-filter-from-mime-types
 
-- Make file selector allow file filters by extension
+- Make long music titles be shown in a marquee
+  http://rohityadav.wordpress.com/2009/06/08/the-ticker-that-stopped-ticking/#more-33
 
-- Separate widget classes into a subfolders structure that remembers the
-  manner the widgets are shown.
+- Make file selector allow file filters by extension
 
 - Cleanup function for collection
 

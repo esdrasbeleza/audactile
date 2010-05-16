@@ -22,7 +22,6 @@ public:
 
 public slots:
     void tick();
-    void resetPosition();
     void updateSongInformation(QString newSongInformation);
 
 private:

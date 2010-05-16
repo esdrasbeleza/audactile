@@ -110,17 +110,9 @@ void PlayerBar::tick() {
         mins = (cur / 1000) / 60;
         currentSongPosition->setText(QString::number(mins) + ":" + qStr.sprintf("%02d", secs));
     }
-    else {
-        resetPosition();
-    }
+
 }
 
-void PlayerBar::resetPosition() {
-    currentSongPosition->setText(tr("--:--"));
-    remainingSongPosition->setText(tr("--:--"));
-    currentSongInfo->clear();
-    songPositionSlider->setDisabled(true);
-}
 
 
 void PlayerBar::updateSongInformation(QString newSongInformation) {

@@ -10,6 +10,8 @@ MainWindow::MainWindow(QWidget *parent)
     // Our Phonon MediaObject
     mediaObject = new Phonon::MediaObject(this);
     mediaObject->setTickInterval(1000);
+    audioOutput = new Phonon::AudioOutput(Phonon::MusicCategory, this);
+    Phonon::createPath(mediaObject, audioOutput);
 
 
     // Creates the horizontal layout where we'll put our notebook

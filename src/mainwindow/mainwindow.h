@@ -4,6 +4,8 @@
 #include <QtGui/QMainWindow>
 #include <QSplitter>
 #include "mainnotebook/mainnotebook.h"
+#include <phonon/MediaObject>
+#include <phonon/AudioOutput>
 #include "playlist/playlistwidget.h"
 #include "playerbar.h"
 
@@ -16,6 +18,7 @@ public:
     MainWindow(QWidget *parent = 0);
     PlaylistWidget *playlistWidget;
     Phonon::MediaObject *mediaObject;
+    Phonon::AudioOutput *audioOutput;
 
 };
 
