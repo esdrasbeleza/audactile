@@ -1,9 +1,9 @@
 #include "playlistitem.h"
 
-PlaylistItem::PlaylistItem(QString _filePath)
+PlaylistItem::PlaylistItem(QString itemFilePath)
 {
-    filePath = _filePath;
-    taglibFileRef =  FileRef(filePath.toAscii());
+    filePath = itemFilePath;
+    taglibFileRef =  TagLib::FileRef(filePath.toAscii());
 
     // Set tags using taglib
     artist = QString(taglibFileRef.tag()->artist().toCString(true));

@@ -5,7 +5,6 @@
 #include <taglib/tag.h>
 #include <taglib/fileref.h>
 
-using namespace TagLib;
 
 class PlaylistItem : public QTreeWidgetItem
 {
@@ -19,7 +18,7 @@ private:
     QString album;
     QString duration;
 
-    FileRef taglibFileRef;
+    TagLib::FileRef taglibFileRef;
 };
 
 #endif // PLAYLISTITEM_H

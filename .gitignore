@@ -3,3 +3,6 @@
 # Ignore executable file
 Player
 
+# Igore IDE user files
+Player.pro.user
+
