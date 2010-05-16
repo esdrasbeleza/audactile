@@ -53,6 +53,8 @@ void PlaylistWidget::playSong(QModelIndex index) {
     item->setBold();
     mainMediaObject->setCurrentSource(item->getFilePath());
     mainMediaObject->play();
+
+    emitSongInformationUpdated();
 }
 
 
@@ -68,11 +70,18 @@ void PlaylistWidget::removeBold() {
 }
 
 void PlaylistWidget::fileChanged() {
-    qDebug("fileChanged()");
     if (nextSong != NULL) {
         currentSong->removeBold();
         currentSong = nextSong;
         nextSong = NULL;
     }
     currentSong->setBold();
+
+    emitSongInformationUpdated();
+}
+
+
+void PlaylistWidget::emitSongInformationUpdated() {
+    QString songInfo = QString(currentSong->getSongInfo());
+    emit songInformationUpdated(songInfo);
 }

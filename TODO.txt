@@ -1,16 +1,23 @@
 - Fix window manager problems
 
+- Make it play. Wtf?
+
+
+- Make toolbar work
+    - Make buttons play/pause, stop, next, previous work
+    - Make slider work properly
+    - Update timers according to slider
 
 - Make file selector widget work properly:
-    - Add music to playlist
+    - Add music to playlist using drag and drop
+
+- Save current playlist/settings --> QSettings!
 
 
 - Make file selector list only media files supported by Phonon.
   http://stackoverflow.com/questions/2599852/qfiledialog-filter-from-mime-types
 
-- Make file selector allow file filters:
-  - Search by name
-  - Filter by extension
+- Make file selector allow file filters by extension
 
 - Separate widget classes into a subfolders structure that remembers the
   manner the widgets are shown.

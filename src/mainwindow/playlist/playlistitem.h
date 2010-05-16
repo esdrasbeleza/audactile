@@ -9,12 +9,15 @@
 
 class PlaylistItem : public QTreeWidgetItem
 {
+
 public:
     PlaylistItem(QString);
     QString getFilePath();
     QString getArtist();
     void setBold();
     void removeBold();
+    QString getSongInfo();
+
 
 private:
     QString filePath;

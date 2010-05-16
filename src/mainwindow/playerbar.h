@@ -11,6 +11,8 @@
 #include <phonon/VolumeSlider>
 
 
+using namespace Phonon;
+
 class PlayerBar : public QToolBar
 {
     Q_OBJECT
@@ -20,11 +22,15 @@ public:
 
 public slots:
     void tick();
+    void resetPosition();
+    void updateSongInformation(QString newSongInformation);
 
 private:
     Phonon::MediaObject *mainMediaObject;
     QLabel *currentSongPosition;
     QLabel *remainingSongPosition;
+    QLabel *currentSongInfo;
+    SeekSlider *songPositionSlider;
 };
 
 #endif // PLAYERBAR_H

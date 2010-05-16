@@ -26,19 +26,45 @@ PlayerBar::PlayerBar(QWidget *parent, Phonon::MediaObject *mediaObject)
 
     // Horizontal box with current song position labels
     QWidget *songPositionLabelsWidget = new QWidget(this);
-    QHBoxLayout *songPositionLabelsHBox = new QHBoxLayout(this);
+    QHBoxLayout *songPositionLabelsHBox = new QHBoxLayout(songPositionLabelsWidget);
     currentSongPosition = new QLabel(tr("--:--"));
     remainingSongPosition = new QLabel(tr("--:--"));
+    currentSongInfo = new QLabel(tr(""));
+
+    // Define song info to be bold
+    QFont songInfoFont = currentSongInfo->font();
+    songInfoFont.setBold(true);
+    songInfoFont.setPointSize(songInfoFont.pointSize() + 2);
+    currentSongInfo->setFont(songInfoFont);
+
+    // Add labels
     songPositionLabelsHBox->addWidget(currentSongPosition, 1, Qt::AlignLeft);
+    songPositionLabelsHBox->addWidget(currentSongInfo, 1, Qt::AlignCenter);
     songPositionLabelsHBox->addWidget(remainingSongPosition, 1, Qt::AlignRight);
     songPositionLabelsWidget->setLayout(songPositionLabelsHBox);
 
 
 
     // Vertical box with slider and current song time labels
-    QWidget *songPositionWidget = new QWidget(this);
-    QVBoxLayout *songPositionVBox = new QVBoxLayout(this);
-    SeekSlider *songPositionSlider = new SeekSlider(mainMediaObject, this);
+    QFrame *songPositionWidget = new QFrame(this);
+    songPositionWidget->setFrameShadow(QFrame::Sunken);
+    songPositionWidget->setFrameShape(QFrame::StyledPanel);
+    songPositionWidget->setMidLineWidth(4);
+    
+    // Set background for song position widget
+    QPalette palette = songPositionWidget->palette();
+    QLinearGradient songPositionBgGradient(0, 0, 0, songPositionLabelsWidget->height());
+    songPositionBgGradient.setColorAt(0, QColor(250,250,230));
+    songPositionBgGradient.setColorAt(1, QColor(220,220,200));
+    palette.setBrush(songPositionLabelsWidget->backgroundRole(), QBrush(songPositionBgGradient));
+    palette.setColor(songPositionLabelsWidget->foregroundRole(), QColor(100,100,100));
+    songPositionWidget->setPalette(palette);
+    songPositionWidget->setAutoFillBackground(true);
+
+
+
+    QVBoxLayout *songPositionVBox = new QVBoxLayout(songPositionWidget);
+    songPositionSlider = new SeekSlider(mainMediaObject, this);
     songPositionSlider->setOrientation(Qt::Horizontal);
     songPositionVBox->addWidget(songPositionLabelsWidget);
     songPositionVBox->addWidget(songPositionSlider);
@@ -67,7 +93,36 @@ PlayerBar::PlayerBar(QWidget *parent, Phonon::MediaObject *mediaObject)
 
 
 void PlayerBar::tick() {
-    qDebug("tick");
-    currentSongPosition->setText(QString((int)(mainMediaObject->currentTime()/1000)));
-    remainingSongPosition->setText(QString((int)(mainMediaObject->remainingTime()/1000)));
+    int secs, mins;
+    QString qStr;
+
+    qint64 rem = mainMediaObject->remainingTime();
+    if (rem > 0) {
+        songPositionSlider->setEnabled(true);
+
+        secs = (rem / 1000) % 60;
+        mins = (rem / 1000) / 60;
+        remainingSongPosition->setText("-" + QString::number(mins) + ":" + qStr.sprintf("%02d", secs));
+
+
+        qint64 cur = mainMediaObject->currentTime();
+        secs = (cur / 1000) % 60;
+        mins = (cur / 1000) / 60;
+        currentSongPosition->setText(QString::number(mins) + ":" + qStr.sprintf("%02d", secs));
+    }
+    else {
+        resetPosition();
+    }
+}
+
+void PlayerBar::resetPosition() {
+    currentSongPosition->setText(tr("--:--"));
+    remainingSongPosition->setText(tr("--:--"));
+    currentSongInfo->clear();
+    songPositionSlider->setDisabled(true);
+}
+
+
+void PlayerBar::updateSongInformation(QString newSongInformation) {
+    currentSongInfo->setText(newSongInformation);
 }

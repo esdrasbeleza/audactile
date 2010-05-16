@@ -22,8 +22,6 @@ PlaylistItem::PlaylistItem(QString itemFilePath)
     setText(1, album);
     setText(2, artist);
 
-    qDebug("Artist: " + artist.toLatin1());
-
 
     // TODO: use phonon to get duration.
 }
@@ -34,6 +32,10 @@ QString PlaylistItem::getFilePath() {
 
 QString PlaylistItem::getArtist() {
     return artist;
+}
+
+QString PlaylistItem::getSongInfo() {
+    return artist + " - " + title;
 }
 
 void PlaylistItem::setBold() {
@@ -51,3 +53,4 @@ void PlaylistItem::removeBold() {
         setFont(i, itemFont);
     }
 }
+

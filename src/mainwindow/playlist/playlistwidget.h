@@ -16,6 +16,9 @@ private slots:
     void removeBold();
     void fileChanged();
 
+signals:
+    void songInformationUpdated(QString newSongInformation);
+
 public:
     PlaylistWidget(QWidget *parent, Phonon::MediaObject *mediaObject);
     Phonon::MediaObject *mainMediaObject;
@@ -23,6 +26,7 @@ public:
 private:
     PlaylistItem* currentSong;
     PlaylistItem* nextSong;
+    void emitSongInformationUpdated();
 };
 
 #endif // PLAYLISTWIDGET_H
