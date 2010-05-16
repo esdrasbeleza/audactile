@@ -11,6 +11,7 @@
 #include <QLineEdit>
 #include <QLabel>
 #include <phonon/BackendCapabilities>
+#include "../../mainwindow.h"
 #include "../../playlist/playlistitem.h"
 
 
@@ -19,7 +20,7 @@ class FilesystemWidget : public QWidget
     Q_OBJECT
 
 public:
-    FilesystemWidget();
+    FilesystemWidget(QWidget *parent);
 
 private slots:
     void updateWidget();

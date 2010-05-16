@@ -4,12 +4,17 @@
 #include <QTreeWidgetItem>
 #include <taglib/tag.h>
 #include <taglib/fileref.h>
+#include <phonon/MediaSource>
 
 
 class PlaylistItem : public QTreeWidgetItem
 {
 public:
     PlaylistItem(QString);
+    QString getFilePath();
+    QString getArtist();
+    void setBold();
+    void removeBold();
 
 private:
     QString filePath;
@@ -18,7 +23,10 @@ private:
     QString album;
     QString duration;
 
+    // TagLib references
     TagLib::FileRef taglibFileRef;
+
+
 };
 
 #endif // PLAYLISTITEM_H

@@ -11,7 +11,7 @@
 class MainNotebook : public QTabWidget
 {
 public:
-    MainNotebook();
+    MainNotebook(QWidget *parent);
 };
 
 #endif // MAINNOTEBOOK_H

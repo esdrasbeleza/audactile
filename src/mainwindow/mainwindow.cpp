@@ -3,13 +3,20 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
+    setObjectName("MainWindow");
     setWindowTitle("Nameless player! :(");
+
+
+    // Our Phonon MediaObject
+    mediaObject = new Phonon::MediaObject(this);
+    mediaObject->setTickInterval(1000);
+
 
     // Creates the horizontal layout where we'll put our notebook
     QSplitter *middleSplitter = new QSplitter();
-    MainNotebook *mainNotebook = new MainNotebook();
+    MainNotebook *mainNotebook = new MainNotebook(this);
     mainNotebook->setMinimumWidth(200);
-    PlaylistWidget *playlistWidget = new PlaylistWidget();
+    playlistWidget = new PlaylistWidget(this, mediaObject);
     middleSplitter->addWidget(mainNotebook);
     middleSplitter->addWidget(playlistWidget);
     middleSplitter->setStretchFactor(0, 1);
@@ -25,11 +32,8 @@ MainWindow::MainWindow(QWidget *parent)
     setCentralWidget(mainVerticalWidget);
 
     // Includes our toolbar with more widgets, friendly called PlayerBar
-    PlayerBar *playerbar = new PlayerBar();
+    PlayerBar *playerbar = new PlayerBar(this, mediaObject);
+    connect(mediaObject, SIGNAL(tick(qint64)), playerbar, SLOT(tick()));
     addToolBar(playerbar);
 }
 
-MainWindow::~MainWindow()
-{
-
-}

@@ -1,7 +1,8 @@
 #include "mainnotebook.h"
 
-MainNotebook::MainNotebook()
+MainNotebook::MainNotebook(QWidget *parent)
 {
+    setParent(parent);
     setTabPosition(QTabWidget::West);
 
 
@@ -9,8 +10,7 @@ MainNotebook::MainNotebook()
     CollectionTreeWidget *collectionWidget = new CollectionTreeWidget();
 
     // Widget of the Files tab
-    // TODO: put this into a separate class
-    FilesystemWidget *filesystemWidget = new FilesystemWidget();
+    FilesystemWidget *filesystemWidget = new FilesystemWidget(this);
 
 
     // Creates a label test widget

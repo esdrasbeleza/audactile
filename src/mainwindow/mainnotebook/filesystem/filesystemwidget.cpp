@@ -1,7 +1,9 @@
 #include "filesystemwidget.h"
 
-FilesystemWidget::FilesystemWidget()
+FilesystemWidget::FilesystemWidget(QWidget *parent)
 {
+    setParent(parent);
+
     // Create the toolbar
     QToolBar *fsToolbar = new QToolBar();
     fsToolbar->setMovable(false);
@@ -92,6 +94,11 @@ void FilesystemWidget::doubleClickAt(QModelIndex modelIndex) {
     // If it's a file, we must add it to playlist
     else {
         PlaylistItem *newItem = new PlaylistItem(fsWidgetModel->filePath(modelIndex));
+        // this <-- main notebook <-- main widget
+        MainWindow *mWindow = (MainWindow*)parentWidget()->parentWidget()->parentWidget();
+        PlaylistWidget *playlistWidget = mWindow->findChild<PlaylistWidget *>("PlaylistWidget");
+        playlistWidget->addTopLevelItem(newItem);
+
     }
 }
 

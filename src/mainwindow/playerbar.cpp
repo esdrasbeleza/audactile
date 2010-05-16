@@ -2,10 +2,12 @@
 
 using namespace Phonon;
 
-PlayerBar::PlayerBar()
+PlayerBar::PlayerBar(QWidget *parent, Phonon::MediaObject *mediaObject)
 {
     setAllowedAreas(Qt::TopToolBarArea|Qt::BottomToolBarArea);
     setIconSize(QSize(36, 36));
+
+    mainMediaObject = mediaObject;
 
     // Buttons
     QToolButton *playButton = new QToolButton();
@@ -23,27 +25,27 @@ PlayerBar::PlayerBar()
     exitButton->setIcon(QIcon::fromTheme("exit"));
 
     // Horizontal box with current song position labels
-    QWidget *songPositionLabelsWidget = new QWidget();
-    QHBoxLayout *songPositionLabelsHBox = new QHBoxLayout();
-    QLabel *currentSongPosition = new QLabel(tr("--:--"));
-    QLabel *pendingSongPosition = new QLabel(tr("--:--"));
+    QWidget *songPositionLabelsWidget = new QWidget(this);
+    QHBoxLayout *songPositionLabelsHBox = new QHBoxLayout(this);
+    currentSongPosition = new QLabel(tr("--:--"));
+    remainingSongPosition = new QLabel(tr("--:--"));
     songPositionLabelsHBox->addWidget(currentSongPosition, 1, Qt::AlignLeft);
-    songPositionLabelsHBox->addWidget(pendingSongPosition, 1, Qt::AlignRight);
+    songPositionLabelsHBox->addWidget(remainingSongPosition, 1, Qt::AlignRight);
     songPositionLabelsWidget->setLayout(songPositionLabelsHBox);
 
 
 
     // Vertical box with slider and current song time labels
-    QWidget *songPositionWidget = new QWidget();
-    QVBoxLayout *songPositionVBox = new QVBoxLayout();
-    SeekSlider *songPositionSlider = new SeekSlider();
+    QWidget *songPositionWidget = new QWidget(this);
+    QVBoxLayout *songPositionVBox = new QVBoxLayout(this);
+    SeekSlider *songPositionSlider = new SeekSlider(mainMediaObject, this);
     songPositionSlider->setOrientation(Qt::Horizontal);
     songPositionVBox->addWidget(songPositionLabelsWidget);
     songPositionVBox->addWidget(songPositionSlider);
     songPositionWidget->setLayout(songPositionVBox);
 
     // Volume button
-    QToolButton *volumeSliderButton = new QToolButton();
+    QToolButton *volumeSliderButton = new QToolButton(this);
     volumeSliderButton->setIcon(QIcon::fromTheme("audio-volume-high"));
 
     addWidget(playButton);
@@ -60,4 +62,12 @@ PlayerBar::PlayerBar()
     addWidget(exitButton);
 
     show();
+}
+
+
+
+void PlayerBar::tick() {
+    qDebug("tick");
+    currentSongPosition->setText(QString((int)(mainMediaObject->currentTime()/1000)));
+    remainingSongPosition->setText(QString((int)(mainMediaObject->remainingTime()/1000)));
 }

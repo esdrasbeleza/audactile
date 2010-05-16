@@ -14,7 +14,9 @@ class MainWindow : public QMainWindow
 
 public:
     MainWindow(QWidget *parent = 0);
-    ~MainWindow();
+    PlaylistWidget *playlistWidget;
+    Phonon::MediaObject *mediaObject;
+
 };
 
 #endif // MAINWINDOW_H

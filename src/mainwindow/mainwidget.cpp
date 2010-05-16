@@ -6,7 +6,7 @@ MainWidget::MainWidget()
     QHBoxLayout *layout = new QHBoxLayout();
 
     // Add the notebook
-    layout->addWidget(new MainNotebook());
+    layout->addWidget(new MainNotebook(this));
 
     // Create a test label.
     QLabel *label = new QLabel(tr("Test label"));
