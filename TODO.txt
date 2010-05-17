@@ -1,15 +1,13 @@
-- Fix window manager problems
-
 - Make toolbar work
     - Make buttons play/pause, stop, next, previous work
-    - Update timers according to slider
+
 
 - Make file selector widget work properly:
     - Add music to playlist using drag and drop
 
 - Show song duration in playlist
 
-- Icons in tab
+- Icons in tabs
 
 - Save current playlist/settings --> QSettings!
 
