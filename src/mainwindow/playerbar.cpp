@@ -8,14 +8,15 @@ PlayerBar::PlayerBar(QWidget *parent, Phonon::MediaObject *mediaObject)
     setIconSize(QSize(36, 36));
 
     mainMediaObject = mediaObject;
+    setParent(parent);
 
     // Buttons
-    QToolButton *playButton = new QToolButton();
-    QToolButton *stopButton = new QToolButton();
-    QToolButton *exitButton = new QToolButton();
-    QToolButton *nextButton = new QToolButton();
-    QToolButton *prevButton = new QToolButton();
-    QToolButton *prefButton = new QToolButton();
+    playButton = new QToolButton();
+    stopButton = new QToolButton();
+    exitButton = new QToolButton();
+    nextButton = new QToolButton();
+    prevButton = new QToolButton();
+    prefButton = new QToolButton();
 
     playButton->setIcon(QIcon::fromTheme("media-playback-start"));
     stopButton->setIcon(QIcon::fromTheme("media-playback-stop"));
@@ -23,6 +24,10 @@ PlayerBar::PlayerBar(QWidget *parent, Phonon::MediaObject *mediaObject)
     prevButton->setIcon(QIcon::fromTheme("media-skip-backward"));
     prefButton->setIcon(QIcon::fromTheme("preferences-other"));
     exitButton->setIcon(QIcon::fromTheme("exit"));
+
+    stopButton->setDisabled(true);
+
+    connect(playButton, SIGNAL(clicked()), this, SLOT(handlePlayButton()));
 
     // Horizontal box with current song position labels
     QWidget *songPositionLabelsWidget = new QWidget(this);
@@ -113,6 +118,43 @@ void PlayerBar::tick() {
 
 }
 
+
+void PlayerBar::handleState(Phonon::State newState, Phonon::State oldState) {
+    // Handle play button
+    if (newState == Phonon::PlayingState) {
+        playButton->setIcon(QIcon::fromTheme("media-playback-pause"));
+    }
+    else if (newState == Phonon::StoppedState) {
+        playButton->setIcon(QIcon::fromTheme("media-playback-start"));
+    }
+    else if (newState == Phonon::PausedState) {
+        playButton->setIcon(QIcon::fromTheme("media-playback-start"));
+    }
+
+    // Handle stop button
+    if (newState == Phonon::StoppedState) {
+        stopButton->setDisabled(true);
+    }
+    else {
+        stopButton->setEnabled(true);
+    }
+}
+
+
+void PlayerBar::handlePlayButton() {
+    if (mainMediaObject->state() == Phonon::PlayingState) {
+        mainMediaObject->pause();
+    }
+    else {
+        if (mainMediaObject->currentSource().type() != MediaSource::Empty) {
+           qDebug("Play!");
+           mainMediaObject->play();
+        }
+        else {
+            qDebug("Playlist is empty!");
+        }
+    }
+}
 
 
 void PlayerBar::updateSongInformation(QString newSongInformation) {

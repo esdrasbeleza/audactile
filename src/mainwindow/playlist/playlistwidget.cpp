@@ -80,8 +80,15 @@ void PlaylistWidget::fileChanged() {
     emitSongInformationUpdated();
 }
 
-
 void PlaylistWidget::emitSongInformationUpdated() {
     QString songInfo = QString(currentSong->getSongInfo());
     emit songInformationUpdated(songInfo);
+}
+
+void PlaylistWidget::addSong(PlaylistItem *newItem) {
+    if (mainMediaObject->currentSource().type() == Phonon::MediaSource::Empty) {
+        qDebug("First item added: " + newItem->getFilePath().toUtf8());
+        mainMediaObject->setCurrentSource(newItem->getFilePath());
+    }
+    addTopLevelItem(newItem);
 }

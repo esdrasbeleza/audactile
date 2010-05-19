@@ -97,7 +97,7 @@ void FilesystemWidget::doubleClickAt(QModelIndex modelIndex) {
         // this <-- main notebook <-- main widget
         MainWindow *mWindow = (MainWindow*)parentWidget()->parentWidget()->parentWidget();
         PlaylistWidget *playlistWidget = mWindow->findChild<PlaylistWidget *>("PlaylistWidget");
-        playlistWidget->addTopLevelItem(newItem);
+        playlistWidget->addSong(newItem);
 
     }
 }

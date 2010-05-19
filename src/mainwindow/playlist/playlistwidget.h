@@ -22,6 +22,7 @@ signals:
 public:
     PlaylistWidget(QWidget *parent, Phonon::MediaObject *mediaObject);
     Phonon::MediaObject *mainMediaObject;
+    void addSong(PlaylistItem *newItem);
 
 private:
     PlaylistItem* currentSong;

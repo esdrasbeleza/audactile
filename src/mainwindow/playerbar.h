@@ -23,6 +23,8 @@ public:
 public slots:
     void tick();
     void updateSongInformation(QString newSongInformation);
+    void handleState(Phonon::State oldState, Phonon::State newState);
+    void handlePlayButton();
 
 private:
     Phonon::MediaObject *mainMediaObject;
@@ -30,6 +32,14 @@ private:
     QLabel *remainingSongPosition;
     QLabel *currentSongInfo;
     SeekSlider *songPositionSlider;
+
+    QToolButton *playButton;
+    QToolButton *stopButton;
+    QToolButton *exitButton;
+    QToolButton *nextButton;
+    QToolButton *prevButton;
+    QToolButton *prefButton;
+
 };
 
 #endif // PLAYERBAR_H
