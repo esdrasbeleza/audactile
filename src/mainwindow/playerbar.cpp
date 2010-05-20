@@ -110,16 +110,21 @@ void PlayerBar::updateSongPosition() {
     int secs, mins;
     QString qStr;
 
+    /*
+     * Get the remaining time. If we have more than 1000 ms, we
+     * can update the time. The last second must not update the
+     * playerbar, since after that the timer will become "--:--".
+     */
     qint64 rem = mainMediaObject->remainingTime();
-    if (rem > 0) {
+    if (rem > 1000) {
+        qint64 cur = mainMediaObject->currentTime();
+
         songPositionSlider->setEnabled(true);
 
         secs = (rem / 1000) % 60;
         mins = (rem / 1000) / 60;
         remainingSongPosition->setText("-" + QString::number(mins) + ":" + qStr.sprintf("%02d", secs));
 
-
-        qint64 cur = mainMediaObject->currentTime();
         secs = (cur / 1000) % 60;
         mins = (cur / 1000) / 60;
         currentSongPosition->setText(QString::number(mins) + ":" + qStr.sprintf("%02d", secs));
