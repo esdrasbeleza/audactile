@@ -21,10 +21,11 @@ public:
     PlayerBar(QWidget *parent, Phonon::MediaObject *mediaObject);
 
 public slots:
-    void tick();
+    void updateSongPosition();
     void updateSongInformation(QString newSongInformation);
     void handleState(Phonon::State oldState, Phonon::State newState);
     void handlePlayButton();
+    void resetDisplay();
 
 private:
     Phonon::MediaObject *mainMediaObject;

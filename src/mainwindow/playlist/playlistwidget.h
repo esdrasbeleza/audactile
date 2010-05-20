@@ -12,12 +12,14 @@ class PlaylistWidget : public QTreeWidget
 
 private slots:
     void playSong(QModelIndex index);
+    void handleStateChange(Phonon::State newState);
     void enqueueNextSong();
     void removeBold();
     void fileChanged();
 
 signals:
     void songInformationUpdated(QString newSongInformation);
+
 
 public:
     PlaylistWidget(QWidget *parent, Phonon::MediaObject *mediaObject);

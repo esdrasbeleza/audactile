@@ -94,10 +94,14 @@ void FilesystemWidget::doubleClickAt(QModelIndex modelIndex) {
     // If it's a file, we must add it to playlist
     else {
         PlaylistItem *newItem = new PlaylistItem(fsWidgetModel->filePath(modelIndex));
-        // this <-- main notebook <-- main widget
-        MainWindow *mWindow = (MainWindow*)parentWidget()->parentWidget()->parentWidget();
-        PlaylistWidget *playlistWidget = mWindow->findChild<PlaylistWidget *>("PlaylistWidget");
-        playlistWidget->addSong(newItem);
+
+        // Find root widget (main window) and get playlist widget.
+        QWidget *widget = this;
+        while (widget->metaObject()->className() != MainWindow::staticMetaObject.className()) {
+            widget = widget->parentWidget();
+        }
+        MainWindow *mWindow = (MainWindow*)widget;
+        mWindow->playlistWidget->addSong(newItem);
 
     }
 }

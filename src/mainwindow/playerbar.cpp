@@ -92,12 +92,17 @@ PlayerBar::PlayerBar(QWidget *parent, Phonon::MediaObject *mediaObject)
     addSeparator();
     addWidget(exitButton);
 
+    // Signals from media source
+    connect(mainMediaObject, SIGNAL(tick(qint64)), this, SLOT(updateSongPosition()));
+    connect(mainMediaObject, SIGNAL(stateChanged(Phonon::State,Phonon::State)), this, SLOT(handleState(Phonon::State,Phonon::State)));
+    connect(mainMediaObject, SIGNAL(finished()), this, SLOT(resetDisplay()));
+
     show();
 }
 
 
 
-void PlayerBar::tick() {
+void PlayerBar::updateSongPosition() {
     int secs, mins;
     QString qStr;
 
@@ -132,7 +137,8 @@ void PlayerBar::handleState(Phonon::State newState, Phonon::State oldState) {
     }
 
     // Handle stop button
-    if (newState == Phonon::StoppedState) {
+    if (newState <= Phonon::StoppedState) {
+        qDebug("Stopped state");
         stopButton->setDisabled(true);
     }
     else {
@@ -147,16 +153,25 @@ void PlayerBar::handlePlayButton() {
     }
     else {
         if (mainMediaObject->currentSource().type() != MediaSource::Empty) {
-           qDebug("Play!");
            mainMediaObject->play();
         }
         else {
             qDebug("Playlist is empty!");
         }
     }
+    updateSongPosition();
 }
 
 
 void PlayerBar::updateSongInformation(QString newSongInformation) {
+    qDebug("updateSongInformation: " + newSongInformation.toUtf8());
     currentSongInfo->setText(newSongInformation);
+}
+
+void PlayerBar::resetDisplay() {
+    qDebug("resetDisplay");
+    currentSongPosition->setText(tr("--:--"));
+    remainingSongPosition->setText(tr("--:--"));
+    currentSongInfo->setText(tr(""));
+    mainMediaObject->stop();
 }

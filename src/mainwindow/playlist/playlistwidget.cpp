@@ -38,15 +38,15 @@ PlaylistWidget::PlaylistWidget(QWidget *parent, Phonon::MediaObject *mediaObject
     connect(this, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(playSong(QModelIndex)));
     connect(mainMediaObject, SIGNAL(aboutToFinish()), this, SLOT(enqueueNextSong()));
     connect(mainMediaObject, SIGNAL(finished()), this, SLOT(removeBold()));
+    connect(mainMediaObject, SIGNAL(stateChanged(Phonon::State,Phonon::State)), this, SLOT(handleStateChange(Phonon::State)));
     connect(mainMediaObject, SIGNAL(currentSourceChanged(Phonon::MediaSource)), this, SLOT(fileChanged()));
 }
 
 
 void PlaylistWidget::playSong(QModelIndex index) {
     qDebug("playSong");
-    PlaylistItem* item = static_cast<PlaylistItem *>(index.internalPointer());
+    PlaylistItem *item = static_cast<PlaylistItem *>(index.internalPointer());
     if (currentSong != NULL) {
-        qDebug("Current song is not null");
         currentSong->removeBold();
     }
     currentSong = item;
@@ -59,6 +59,7 @@ void PlaylistWidget::playSong(QModelIndex index) {
 
 
 void PlaylistWidget::enqueueNextSong() {
+    qDebug("enqueueNextSong");
     nextSong = (PlaylistItem*)itemBelow(currentSong);
     if (nextSong != NULL) {
         mainMediaObject->enqueue(nextSong->getFilePath());
@@ -70,25 +71,41 @@ void PlaylistWidget::removeBold() {
 }
 
 void PlaylistWidget::fileChanged() {
+    qDebug("fileChanged");
     if (nextSong != NULL) {
         currentSong->removeBold();
         currentSong = nextSong;
         nextSong = NULL;
     }
-    currentSong->setBold();
 
-    emitSongInformationUpdated();
+}
+
+void PlaylistWidget::handleStateChange(Phonon::State newState) {
+    if (newState > Phonon::StoppedState) {
+        qDebug("Asking to update song information after changing to state " + QString::number(newState).toUtf8());
+        currentSong->setBold();
+        emitSongInformationUpdated();
+    }
+    else {
+        if (currentSong != NULL) {
+            currentSong->removeBold();
+        }
+    }
 }
 
 void PlaylistWidget::emitSongInformationUpdated() {
+    qDebug("emitSongInformationUpdated");
     QString songInfo = QString(currentSong->getSongInfo());
     emit songInformationUpdated(songInfo);
 }
 
 void PlaylistWidget::addSong(PlaylistItem *newItem) {
+    qDebug("addSong");
     if (mainMediaObject->currentSource().type() == Phonon::MediaSource::Empty) {
         qDebug("First item added: " + newItem->getFilePath().toUtf8());
-        mainMediaObject->setCurrentSource(newItem->getFilePath());
+        currentSong = newItem;
+        mainMediaObject->enqueue(newItem->getFilePath());
     }
     addTopLevelItem(newItem);
 }
+
