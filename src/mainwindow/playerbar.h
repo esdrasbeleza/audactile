@@ -25,7 +25,8 @@ public slots:
     void updateSongInformation(QString newSongInformation);
     void handleState(Phonon::State oldState, Phonon::State newState);
     void handlePlayButton();
-    void resetDisplay();
+    void handleStopButton();
+    void finish();
 
 private:
     Phonon::MediaObject *mainMediaObject;
@@ -40,6 +41,8 @@ private:
     QToolButton *nextButton;
     QToolButton *prevButton;
     QToolButton *prefButton;
+
+    void resetDisplay();
 
 };
 

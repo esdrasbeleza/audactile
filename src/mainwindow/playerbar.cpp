@@ -27,7 +27,9 @@ PlayerBar::PlayerBar(QWidget *parent, Phonon::MediaObject *mediaObject)
 
     stopButton->setDisabled(true);
 
+    // Signals from buttons
     connect(playButton, SIGNAL(clicked()), this, SLOT(handlePlayButton()));
+    connect(stopButton, SIGNAL(clicked()), this, SLOT(handleStopButton()));
 
     // Horizontal box with current song position labels
     QWidget *songPositionLabelsWidget = new QWidget(this);
@@ -95,7 +97,7 @@ PlayerBar::PlayerBar(QWidget *parent, Phonon::MediaObject *mediaObject)
     // Signals from media source
     connect(mainMediaObject, SIGNAL(tick(qint64)), this, SLOT(updateSongPosition()));
     connect(mainMediaObject, SIGNAL(stateChanged(Phonon::State,Phonon::State)), this, SLOT(handleState(Phonon::State,Phonon::State)));
-    connect(mainMediaObject, SIGNAL(finished()), this, SLOT(resetDisplay()));
+    connect(mainMediaObject, SIGNAL(finished()), this, SLOT(finish()));
 
     show();
 }
@@ -163,6 +165,14 @@ void PlayerBar::handlePlayButton() {
 }
 
 
+void PlayerBar::handleStopButton() {
+    if (mainMediaObject->state() > Phonon::StoppedState) {
+        resetDisplay();
+        mainMediaObject->stop();
+    }
+}
+
+
 void PlayerBar::updateSongInformation(QString newSongInformation) {
     qDebug("updateSongInformation: " + newSongInformation.toUtf8());
     currentSongInfo->setText(newSongInformation);
@@ -173,5 +183,9 @@ void PlayerBar::resetDisplay() {
     currentSongPosition->setText(tr("--:--"));
     remainingSongPosition->setText(tr("--:--"));
     currentSongInfo->setText(tr(""));
+}
+
+void PlayerBar::finish() {
+    resetDisplay();
     mainMediaObject->stop();
 }
