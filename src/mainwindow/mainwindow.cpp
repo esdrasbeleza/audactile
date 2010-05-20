@@ -36,6 +36,8 @@ MainWindow::MainWindow(QWidget *parent)
     // Includes our toolbar with more widgets, friendly called PlayerBar
     PlayerBar *playerbar = new PlayerBar(this, mediaObject);
     connect(playlistWidget, SIGNAL(songInformationUpdated(QString)), playerbar, SLOT(updateSongInformation(QString)));
+    connect(playerbar, SIGNAL(nextButtonClicked()), playlistWidget, SLOT(playNextSong()));
+    connect(playerbar, SIGNAL(previousButtonClicked()), playlistWidget, SLOT(playPreviousSong()));
     addToolBar(playerbar);
 }
 

@@ -26,7 +26,13 @@ public slots:
     void handleState(Phonon::State oldState, Phonon::State newState);
     void handlePlayButton();
     void handleStopButton();
+    void handleNextButton();
+    void handlePreviousButton();
     void finish();
+
+signals:
+    void nextButtonClicked();
+    void previousButtonClicked();
 
 private:
     Phonon::MediaObject *mainMediaObject;
@@ -39,7 +45,7 @@ private:
     QToolButton *stopButton;
     QToolButton *exitButton;
     QToolButton *nextButton;
-    QToolButton *prevButton;
+    QToolButton *previousButton;
     QToolButton *prefButton;
 
     void resetDisplay();

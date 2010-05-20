@@ -15,13 +15,13 @@ PlayerBar::PlayerBar(QWidget *parent, Phonon::MediaObject *mediaObject)
     stopButton = new QToolButton();
     exitButton = new QToolButton();
     nextButton = new QToolButton();
-    prevButton = new QToolButton();
+    previousButton = new QToolButton();
     prefButton = new QToolButton();
 
     playButton->setIcon(QIcon::fromTheme("media-playback-start"));
     stopButton->setIcon(QIcon::fromTheme("media-playback-stop"));
     nextButton->setIcon(QIcon::fromTheme("media-skip-forward"));
-    prevButton->setIcon(QIcon::fromTheme("media-skip-backward"));
+    previousButton->setIcon(QIcon::fromTheme("media-skip-backward"));
     prefButton->setIcon(QIcon::fromTheme("preferences-other"));
     exitButton->setIcon(QIcon::fromTheme("exit"));
 
@@ -30,6 +30,8 @@ PlayerBar::PlayerBar(QWidget *parent, Phonon::MediaObject *mediaObject)
     // Signals from buttons
     connect(playButton, SIGNAL(clicked()), this, SLOT(handlePlayButton()));
     connect(stopButton, SIGNAL(clicked()), this, SLOT(handleStopButton()));
+    connect(nextButton, SIGNAL(clicked()), this, SLOT(handleNextButton()));
+    connect(previousButton, SIGNAL(clicked()), this, SLOT(handlePreviousButton()));
 
     // Horizontal box with current song position labels
     QWidget *songPositionLabelsWidget = new QWidget(this);
@@ -84,7 +86,7 @@ PlayerBar::PlayerBar(QWidget *parent, Phonon::MediaObject *mediaObject)
     addWidget(playButton);
     addWidget(stopButton);
     addSeparator();
-    addWidget(prevButton);
+    addWidget(previousButton);
     addWidget(nextButton);
     addSeparator();
     addWidget(songPositionWidget);
@@ -162,6 +164,15 @@ void PlayerBar::handlePlayButton() {
         }
     }
     updateSongPosition();
+}
+
+
+void PlayerBar::handlePreviousButton() {
+    emit previousButtonClicked();
+}
+
+void PlayerBar::handleNextButton() {
+    emit nextButtonClicked();
 }
 
 

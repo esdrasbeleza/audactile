@@ -16,6 +16,8 @@ private slots:
     void enqueueNextSong();
     void removeBold();
     void fileChanged();
+    void playNextSong();
+    void playPreviousSong();
 
 signals:
     void songInformationUpdated(QString newSongInformation);

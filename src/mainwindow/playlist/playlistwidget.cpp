@@ -58,6 +58,23 @@ void PlaylistWidget::playSong(QModelIndex index) {
 }
 
 
+void PlaylistWidget::playPreviousSong() {
+    qDebug("playPreviousSong");
+    QModelIndex index = indexAbove(indexFromItem(currentSong));
+    if (index.isValid()) {
+       playSong(index);
+    }
+}
+
+void PlaylistWidget::playNextSong() {
+    qDebug("playNextSong");
+    QModelIndex index = indexBelow(indexFromItem(currentSong));
+    if (index.isValid()) {
+       playSong(index);
+    }
+}
+
+
 void PlaylistWidget::enqueueNextSong() {
     qDebug("enqueueNextSong");
     nextSong = (PlaylistItem*)itemBelow(currentSong);
