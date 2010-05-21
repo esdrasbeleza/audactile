@@ -2,7 +2,7 @@
 
 using namespace Phonon;
 
-PlayerBar::PlayerBar(QWidget *parent, Phonon::MediaObject *mediaObject)
+PlayerBar::PlayerBar(QWidget *parent, Phonon::MediaObject *mediaObject, Phonon::AudioOutput *audioOutput)
 {
     setAllowedAreas(Qt::TopToolBarArea|Qt::BottomToolBarArea);
     setIconSize(QSize(36, 36));
@@ -23,7 +23,7 @@ PlayerBar::PlayerBar(QWidget *parent, Phonon::MediaObject *mediaObject)
     nextButton->setIcon(QIcon::fromTheme("media-skip-forward"));
     previousButton->setIcon(QIcon::fromTheme("media-skip-backward"));
     prefButton->setIcon(QIcon::fromTheme("preferences-other"));
-    exitButton->setIcon(QIcon::fromTheme("exit"));
+    exitButton->setIcon(QIcon::fromTheme("application-exit"));
 
     stopButton->setDisabled(true);
 
@@ -32,6 +32,13 @@ PlayerBar::PlayerBar(QWidget *parent, Phonon::MediaObject *mediaObject)
     connect(stopButton, SIGNAL(clicked()), this, SLOT(handleStopButton()));
     connect(nextButton, SIGNAL(clicked()), this, SLOT(handleNextButton()));
     connect(previousButton, SIGNAL(clicked()), this, SLOT(handlePreviousButton()));
+
+    // Vertical box with slider and current song time labels
+    QFrame *songPositionWidget = new QFrame(this);
+    songPositionWidget->setFrameShadow(QFrame::Sunken);
+    songPositionWidget->setFrameShape(QFrame::StyledPanel);
+    songPositionWidget->setMidLineWidth(4);
+
 
     // Horizontal box with current song position labels
     QWidget *songPositionLabelsWidget = new QWidget(this);
@@ -52,17 +59,10 @@ PlayerBar::PlayerBar(QWidget *parent, Phonon::MediaObject *mediaObject)
     songPositionLabelsHBox->addWidget(remainingSongPosition, 1, Qt::AlignRight);
     songPositionLabelsWidget->setLayout(songPositionLabelsHBox);
 
-
-
-    // Vertical box with slider and current song time labels
-    QFrame *songPositionWidget = new QFrame(this);
-    songPositionWidget->setFrameShadow(QFrame::Sunken);
-    songPositionWidget->setFrameShape(QFrame::StyledPanel);
-    songPositionWidget->setMidLineWidth(4);
     
     // Set background for song position widget
     QPalette palette = songPositionWidget->palette();
-    QLinearGradient songPositionBgGradient(0, 0, 0, songPositionLabelsWidget->height());
+    QLinearGradient songPositionBgGradient(1.0, 1.0, 1.0, 40.0);
     songPositionBgGradient.setColorAt(0, QColor(250,250,230));
     songPositionBgGradient.setColorAt(1, QColor(220,220,200));
     palette.setBrush(songPositionLabelsWidget->backgroundRole(), QBrush(songPositionBgGradient));
@@ -80,8 +80,9 @@ PlayerBar::PlayerBar(QWidget *parent, Phonon::MediaObject *mediaObject)
     songPositionWidget->setLayout(songPositionVBox);
 
     // Volume button
-    QToolButton *volumeSliderButton = new QToolButton(this);
-    volumeSliderButton->setIcon(QIcon::fromTheme("audio-volume-high"));
+    Phonon::VolumeSlider *volumeSlider = new Phonon::VolumeSlider(audioOutput, this);
+    volumeSlider->setMaximumWidth((int)floor(0.2*(window()->width())));
+
 
     addWidget(playButton);
     addWidget(stopButton);
@@ -91,9 +92,9 @@ PlayerBar::PlayerBar(QWidget *parent, Phonon::MediaObject *mediaObject)
     addSeparator();
     addWidget(songPositionWidget);
     addSeparator();
-    addWidget(prefButton);
-    addWidget(volumeSliderButton);
+    addWidget(volumeSlider);
     addSeparator();
+    addWidget(prefButton);
     addWidget(exitButton);
 
     // Signals from media source
