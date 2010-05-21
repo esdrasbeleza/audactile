@@ -5,7 +5,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
     setObjectName("MainWindow");
     setWindowTitle("Audactile");
-
+    setMinimumWidth(800);
 
     // Our Phonon MediaObject
     mediaObject = new Phonon::MediaObject(this);
@@ -34,7 +34,7 @@ MainWindow::MainWindow(QWidget *parent)
     setCentralWidget(mainVerticalWidget);
 
     // Includes our toolbar with more widgets, friendly called PlayerBar
-    PlayerBar *playerbar = new PlayerBar(this, mediaObject);
+    PlayerBar *playerbar = new PlayerBar(this, mediaObject, audioOutput);
     connect(playlistWidget, SIGNAL(songInformationUpdated(QString)), playerbar, SLOT(updateSongInformation(QString)));
     connect(playerbar, SIGNAL(nextButtonClicked()), playlistWidget, SLOT(playNextSong()));
     connect(playerbar, SIGNAL(previousButtonClicked()), playlistWidget, SLOT(playPreviousSong()));

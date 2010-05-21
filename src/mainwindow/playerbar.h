@@ -6,6 +6,7 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QLabel>
+#include <cmath>
 #include <phonon/MediaObject>
 #include <phonon/SeekSlider>
 #include <phonon/VolumeSlider>
@@ -18,7 +19,7 @@ class PlayerBar : public QToolBar
     Q_OBJECT
 
 public:
-    PlayerBar(QWidget *parent, Phonon::MediaObject *mediaObject);
+    PlayerBar(QWidget *parent, Phonon::MediaObject *mediaObject, Phonon::AudioOutput *audioOutput);
 
 public slots:
     void updateSongPosition();
@@ -36,6 +37,7 @@ signals:
 
 private:
     Phonon::MediaObject *mainMediaObject;
+    Phonon::AudioOutput *audioOutput;
     QLabel *currentSongPosition;
     QLabel *remainingSongPosition;
     QLabel *currentSongInfo;
