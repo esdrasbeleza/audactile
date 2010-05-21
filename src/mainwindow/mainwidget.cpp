@@ -1,5 +1,7 @@
 #include "mainwidget.h"
 
+
+/// @brief Constructor
 MainWidget::MainWidget()
 {
     // Creates the horizontal layout where we'll put our notebook

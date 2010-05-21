@@ -1,5 +1,8 @@
 #include "mainwindow.h"
 
+/// @brief Construtor.
+/// 
+/// @param parent Parent widget
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {

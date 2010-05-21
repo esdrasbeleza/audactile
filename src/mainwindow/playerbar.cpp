@@ -2,6 +2,11 @@
 
 using namespace Phonon;
 
+/// @brief Audactile's main toolbar class.
+/// 
+/// @param parent Parent widget
+/// @param mediaObject MediaObject that will handle the files
+/// @param audioOutput AudioOutput that will be linked to MediaObject
 PlayerBar::PlayerBar(QWidget *parent, Phonon::MediaObject *mediaObject, Phonon::AudioOutput *audioOutput)
 {
     setAllowedAreas(Qt::TopToolBarArea|Qt::BottomToolBarArea);
@@ -107,6 +112,7 @@ PlayerBar::PlayerBar(QWidget *parent, Phonon::MediaObject *mediaObject, Phonon::
 
 
 
+/// @brief Update current song position and remaining song time on playerbar.
 void PlayerBar::updateSongPosition() {
     int secs, mins;
     QString qStr;
@@ -134,6 +140,10 @@ void PlayerBar::updateSongPosition() {
 }
 
 
+/// @brief Handle the state change in the MediaObject.
+/// 
+/// @param newState New state
+/// @param oldState Old state
 void PlayerBar::handleState(Phonon::State newState, Phonon::State oldState) {
     // Handle play button
     if (newState == Phonon::PlayingState) {
@@ -157,6 +167,7 @@ void PlayerBar::handleState(Phonon::State newState, Phonon::State oldState) {
 }
 
 
+/// @brief Callback for play button
 void PlayerBar::handlePlayButton() {
     if (mainMediaObject->state() == Phonon::PlayingState) {
         mainMediaObject->pause();
@@ -173,15 +184,18 @@ void PlayerBar::handlePlayButton() {
 }
 
 
+/// @brief Callback for previous button
 void PlayerBar::handlePreviousButton() {
     emit previousButtonClicked();
 }
 
+/// @brief Callback for next button
 void PlayerBar::handleNextButton() {
     emit nextButtonClicked();
 }
 
 
+/// @brief Callback for stop button
 void PlayerBar::handleStopButton() {
     if (mainMediaObject->state() > Phonon::StoppedState) {
         resetDisplay();
@@ -190,11 +204,15 @@ void PlayerBar::handleStopButton() {
 }
 
 
+/// @brief Update the song information in the bar
+/// 
+/// @param newSongInformation
 void PlayerBar::updateSongInformation(QString newSongInformation) {
     qDebug("updateSongInformation: " + newSongInformation.toUtf8());
     currentSongInfo->setText(newSongInformation);
 }
 
+/// @brief Reset information to its initial state
 void PlayerBar::resetDisplay() {
     qDebug("resetDisplay");
     currentSongPosition->setText(tr("--:--"));
@@ -202,6 +220,7 @@ void PlayerBar::resetDisplay() {
     currentSongInfo->setText(tr(""));
 }
 
+/// @brief Commands to execute when the music ends
 void PlayerBar::finish() {
     resetDisplay();
     mainMediaObject->stop();

@@ -3,6 +3,7 @@
 
 // TODO: cleanup
 
+/// @brief Constructor
 CollectionTreeWidget::CollectionTreeWidget()
 {
     setColumnCount(2);

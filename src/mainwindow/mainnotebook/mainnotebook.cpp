@@ -1,10 +1,12 @@
 #include "mainnotebook.h"
 
+/// @brief Construtor
+/// 
+/// @param parent Parent widget
 MainNotebook::MainNotebook(QWidget *parent)
 {
     setParent(parent);
     setTabPosition(QTabWidget::West);
-
 
     // Widget of the Collection tab
     CollectionTreeWidget *collectionWidget = new CollectionTreeWidget();
