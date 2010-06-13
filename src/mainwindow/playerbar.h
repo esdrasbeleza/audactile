@@ -29,6 +29,7 @@ public slots:
     void handleStopButton();
     void handleNextButton();
     void handlePreviousButton();
+    void exitApplication();
     void finish();
 
 signals:

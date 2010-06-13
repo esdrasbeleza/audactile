@@ -37,6 +37,7 @@ PlayerBar::PlayerBar(QWidget *parent, Phonon::MediaObject *mediaObject, Phonon::
     connect(stopButton, SIGNAL(clicked()), this, SLOT(handleStopButton()));
     connect(nextButton, SIGNAL(clicked()), this, SLOT(handleNextButton()));
     connect(previousButton, SIGNAL(clicked()), this, SLOT(handlePreviousButton()));
+    connect(exitButton, SIGNAL(clicked()), this, SLOT(exitApplication()));
 
     // Vertical box with slider and current song time labels
     QFrame *songPositionWidget = new QFrame(this);
@@ -224,4 +225,10 @@ void PlayerBar::resetDisplay() {
 void PlayerBar::finish() {
     resetDisplay();
     mainMediaObject->stop();
+}
+
+
+/// @brief Quit application
+void PlayerBar::exitApplication() {
+    exit(0);
 }
