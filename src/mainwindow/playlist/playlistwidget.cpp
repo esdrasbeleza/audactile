@@ -49,7 +49,7 @@ PlaylistWidget::PlaylistWidget(QWidget *parent, Phonon::MediaObject *mediaObject
 
 
 void PlaylistWidget::playSong(QModelIndex index) {
-    qDebug("playSong");
+    qDebug("playSong ");
     PlaylistItem *item = static_cast<PlaylistItem *>(index.internalPointer());
     if (currentSong != NULL) {
         currentSong->removeBold();
@@ -57,6 +57,7 @@ void PlaylistWidget::playSong(QModelIndex index) {
     currentSong = item;
     item->setBold();
     mainMediaObject->setCurrentSource(item->getFileUrl());
+    qDebug("Playing " + item->getFileUrl().toString().toUtf8());
     mainMediaObject->play();
 
     emitSongInformationUpdated();
