@@ -8,14 +8,19 @@
  * - more columns, like rating
  */
 
-PlaylistWidget::PlaylistWidget(QWidget *parent, Phonon::MediaObject *mediaObject)
+PlaylistWidget::PlaylistWidget(QWidget *parent, Phonon::MediaObject *mediaObject) : QTreeWidget(parent)
 {
-    setParent(parent);
     setObjectName("PlaylistWidget");
     setColumnCount(4);
 
     currentSong = NULL;
     nextSong = NULL;
+
+    setSelectionMode(QAbstractItemView::ExtendedSelection);
+
+    // Allow drop to use drag and drop
+    setAcceptDrops(true);
+    setDragEnabled(true);
 
     // Phonon MediaObject
     mainMediaObject = mediaObject;
@@ -126,3 +131,89 @@ void PlaylistWidget::addSong(PlaylistItem *newItem) {
     addTopLevelItem(newItem);
 }
 
+void PlaylistWidget::addSong(QString filePath) {
+    qDebug("addSong");
+    PlaylistItem *newItem = new PlaylistItem(filePath);
+    addSong(newItem);
+}
+
+
+void PlaylistWidget::dragEnterEvent(QDragEnterEvent *event) {
+    qDebug("dragEnterEvent ");
+
+
+    if (event->mimeData()->hasFormat("text/uri-list")) {
+        qDebug("Accepted!");
+        event->setDropAction(Qt::MoveAction);
+        event->accept();
+
+    } else {
+        qDebug("Ignored!");
+        event->ignore();
+    }
+}
+
+void PlaylistWidget::dragMoveEvent(QDragMoveEvent *event)
+{
+    qDebug("dragMoveEvent");
+    event->setDropAction(Qt::MoveAction);
+    event->accept();
+}
+
+// This code is not working :(
+//
+void PlaylistWidget::mousePressEvent(QMouseEvent *event) {
+    qDebug("mousePressEvent");
+
+//    QList<QTreeWidgetItem *> itemList = selectedItems();
+//    QByteArray itemData;
+//    QDataStream dataStream(&itemData, QIODevice::WriteOnly);
+//    foreach (QTreeWidgetItem *item, itemList) {
+//        item->write(dataStream);
+//        qDebug("Written metadata for " + item->text(0).toUtf8());
+//    }
+//    QMimeData *mimeData = new QMimeData;
+//    mimeData->setData("application/x-dnditemdata", itemData);
+
+    // By pass this for the original handler
+    QTreeWidget::mousePressEvent(event);
+}
+
+
+void PlaylistWidget::dropEvent(QDropEvent *event) {
+    qDebug("dropEvent ");
+
+    if (event->mimeData()->hasFormat("text/uri-list")) {
+        qDebug("Parsing uri-list");
+        QList<QUrl> urlList = event->mimeData()->urls();
+        foreach (QUrl url, urlList) {
+            qDebug("Trying to add new file: " + QFileInfo(url.path()).absoluteFilePath().toAscii());
+            addSong(QFileInfo(url.path()).absoluteFilePath());
+        }
+    }
+
+
+    // This code is not working :(
+    //
+    //    if (event->mimeData()->hasFormat("application/x-dnditemdata")) {
+    //        QByteArray itemData = event->mimeData()->data("application/x-dnditemdata");
+    //        QDataStream dataStream(&itemData, QIODevice::ReadOnly);
+    //
+    //        QList<QTreeWidgetItem *> itemList;
+    //        while (!dataStream.atEnd()) {
+    //            QTreeWidgetItem* newItem;
+    //            newItem->read(dataStream);
+    //            itemList.append(newItem);
+    //        }
+    //        qDebug("New items: " + QString::number(itemList.size()).toUtf8());
+    //
+    //        if (event->source() == this) {
+    //            event->setDropAction(Qt::MoveAction);
+    //            event->accept();
+    //        } else {
+    //            event->acceptProposedAction();
+    //        }
+    //    } else {
+    //        event->ignore();
+    //    }
+}

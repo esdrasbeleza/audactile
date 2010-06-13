@@ -3,6 +3,9 @@
 
 #include <QTreeWidget>
 #include <QHeaderView>
+#include <QDropEvent>
+#include <QUrl>
+#include <QFileInfo>
 #include <phonon/MediaObject>
 #include "playlistitem.h"
 
@@ -27,11 +30,20 @@ public:
     PlaylistWidget(QWidget *parent, Phonon::MediaObject *mediaObject);
     Phonon::MediaObject *mainMediaObject;
     void addSong(PlaylistItem *newItem);
+    void addSong(QString filePath);
+
 
 private:
     PlaylistItem* currentSong;
     PlaylistItem* nextSong;
     void emitSongInformationUpdated();
+
+    // Drag and drop events
+    void dragEnterEvent(QDragEnterEvent *event);
+    void dropEvent(QDropEvent *event);
+    void mousePressEvent(QMouseEvent *event);
+    void dragMoveEvent(QDragMoveEvent *event);
+
 };
 
 #endif // PLAYLISTWIDGET_H
