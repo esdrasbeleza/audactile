@@ -56,7 +56,7 @@ void PlaylistWidget::playSong(QModelIndex index) {
     }
     currentSong = item;
     item->setBold();
-    mainMediaObject->setCurrentSource(item->getFilePath());
+    mainMediaObject->setCurrentSource(item->getFileUrl());
     mainMediaObject->play();
 
     emitSongInformationUpdated();
@@ -84,7 +84,7 @@ void PlaylistWidget::enqueueNextSong() {
     qDebug("enqueueNextSong");
     nextSong = (PlaylistItem*)itemBelow(currentSong);
     if (nextSong != NULL) {
-        mainMediaObject->enqueue(nextSong->getFilePath());
+        mainMediaObject->enqueue(nextSong->getFileUrl());
     }
 }
 
@@ -124,16 +124,16 @@ void PlaylistWidget::emitSongInformationUpdated() {
 void PlaylistWidget::addSong(PlaylistItem *newItem) {
     qDebug("addSong");
     if (mainMediaObject->currentSource().type() == Phonon::MediaSource::Empty) {
-        qDebug("First item added: " + newItem->getFilePath().toUtf8());
+        qDebug("First item added");
         currentSong = newItem;
-        mainMediaObject->enqueue(newItem->getFilePath());
+        mainMediaObject->enqueue(newItem->getFileUrl());
     }
     addTopLevelItem(newItem);
 }
 
-void PlaylistWidget::addSong(QString filePath) {
+void PlaylistWidget::addSong(QUrl url) {
     qDebug("addSong");
-    PlaylistItem *newItem = new PlaylistItem(filePath);
+    PlaylistItem *newItem = new PlaylistItem(url);
     addSong(newItem);
 }
 
@@ -187,8 +187,8 @@ void PlaylistWidget::dropEvent(QDropEvent *event) {
         qDebug("Parsing uri-list");
         QList<QUrl> urlList = event->mimeData()->urls();
         foreach (QUrl url, urlList) {
-            qDebug("Trying to add new file: " + QFileInfo(url.path()).absoluteFilePath().toAscii());
-            addSong(QFileInfo(url.path()).absoluteFilePath());
+            qDebug("Trying to add new file: " + url.path().toUtf8());
+            addSong(url);
         }
     }
 

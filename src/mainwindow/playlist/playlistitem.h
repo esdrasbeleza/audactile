@@ -2,6 +2,8 @@
 #define PLAYLISTITEM_H
 
 #include <QTreeWidgetItem>
+#include <QFileInfo>
+#include <QUrl>
 #include <taglib/tag.h>
 #include <taglib/fileref.h>
 #include <phonon/MediaSource>
@@ -12,7 +14,8 @@ class PlaylistItem : public QTreeWidgetItem
 
 public:
     PlaylistItem(QString);
-    QString getFilePath();
+    PlaylistItem(QUrl url);
+    QUrl getFileUrl();
     QString getArtist();
     void setBold();
     void removeBold();
@@ -20,6 +23,7 @@ public:
 
 
 private:
+    QUrl fileUrl;
     QString filePath;
     QString artist;
     QString title;

@@ -3,15 +3,13 @@
 PlaylistItem::PlaylistItem(QString itemFilePath)
 {
     filePath = itemFilePath;
-    taglibFileRef =  TagLib::FileRef(filePath.toUtf8());
+    fileUrl = QUrl().fromLocalFile(filePath);
 
     // Set tags using taglib
+    taglibFileRef =  TagLib::FileRef(filePath.toUtf8());
     artist = QString(taglibFileRef.tag()->artist().toCString());
     album  = QString(taglibFileRef.tag()->album().toCString());
     title  = QString(taglibFileRef.tag()->title().toCString());
-
-    // Set Phonon MediaSource atributes
-
 
     if (artist.isEmpty()) artist = "Undefined";
     if (album.isEmpty())  album  = "Undefined";
@@ -26,8 +24,31 @@ PlaylistItem::PlaylistItem(QString itemFilePath)
     // TODO: use phonon to get duration.
 }
 
-QString PlaylistItem::getFilePath() {
-    return filePath;
+PlaylistItem::PlaylistItem(QUrl url) {
+    filePath = QFileInfo(url.path()).absoluteFilePath();
+    fileUrl = url;
+
+
+    // Set tags using taglib
+//    taglibFileRef =  TagLib::FileRef(filePath.toUtf8());
+//    artist = QString(taglibFileRef.tag()->artist().toCString());
+//    album  = QString(taglibFileRef.tag()->album().toCString());
+//    title  = QString(taglibFileRef.tag()->title().toCString());
+
+    if (artist.isEmpty()) artist = "Undefined";
+    if (album.isEmpty())  album  = "Undefined";
+    if (title.isEmpty())  title  = "Undefined";
+
+
+    setText(0, title);
+    setText(1, album);
+    setText(2, artist);
+}
+
+
+
+QUrl PlaylistItem::getFileUrl() {
+    return fileUrl;
 }
 
 QString PlaylistItem::getArtist() {

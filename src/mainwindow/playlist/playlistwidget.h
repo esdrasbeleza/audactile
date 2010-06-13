@@ -30,7 +30,7 @@ public:
     PlaylistWidget(QWidget *parent, Phonon::MediaObject *mediaObject);
     Phonon::MediaObject *mainMediaObject;
     void addSong(PlaylistItem *newItem);
-    void addSong(QString filePath);
+    void addSong(QUrl url);
 
 
 private:
