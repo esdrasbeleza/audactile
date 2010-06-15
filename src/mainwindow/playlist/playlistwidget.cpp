@@ -147,12 +147,13 @@ void PlaylistWidget::dragEnterEvent(QDragEnterEvent *event) {
         qDebug("Accepted!");
         event->setDropAction(Qt::MoveAction);
         event->accept();
-
-    } else {
+    }
+    else {
         qDebug("Ignored!");
         event->ignore();
     }
 }
+
 
 void PlaylistWidget::dragMoveEvent(QDragMoveEvent *event)
 {
@@ -161,23 +162,33 @@ void PlaylistWidget::dragMoveEvent(QDragMoveEvent *event)
     event->accept();
 }
 
-// This code is not working :(
-//
-void PlaylistWidget::mousePressEvent(QMouseEvent *event) {
-    qDebug("mousePressEvent");
 
-//    QList<QTreeWidgetItem *> itemList = selectedItems();
-//    QByteArray itemData;
-//    QDataStream dataStream(&itemData, QIODevice::WriteOnly);
-//    foreach (QTreeWidgetItem *item, itemList) {
-//        item->write(dataStream);
-//        qDebug("Written metadata for " + item->text(0).toUtf8());
-//    }
-//    QMimeData *mimeData = new QMimeData;
-//    mimeData->setData("application/x-dnditemdata", itemData);
+void PlaylistWidget::mouseMoveEvent(QMouseEvent *event)
+{
+    // if not left button - return
+    if (!(event->buttons() & Qt::LeftButton)) return;
 
-    // By pass this for the original handler
-    QTreeWidget::mousePressEvent(event);
+    // if no item selected, return (else it would crash)
+    if (currentItem() == NULL) return;
+
+    QDrag *drag = new QDrag(this);
+    QMimeData *mimeData = new QMimeData;
+
+    // construct list of QUrls
+    // other widgets accept this mime type, we can drop to them
+    QList<QUrl> list;
+
+    foreach (QTreeWidgetItem *currentItem, selectedItems()) {
+        PlaylistItem *playlistCurrentItem = static_cast<PlaylistItem *>(currentItem);
+        list.append(playlistCurrentItem->getFileUrl());
+    }
+
+    // mime stuff
+    mimeData->setUrls(list);
+    drag->setMimeData(mimeData);
+
+    // start drag
+    drag->exec(Qt::CopyAction | Qt::MoveAction);
 }
 
 
@@ -193,28 +204,4 @@ void PlaylistWidget::dropEvent(QDropEvent *event) {
         }
     }
 
-
-    // This code is not working :(
-    //
-    //    if (event->mimeData()->hasFormat("application/x-dnditemdata")) {
-    //        QByteArray itemData = event->mimeData()->data("application/x-dnditemdata");
-    //        QDataStream dataStream(&itemData, QIODevice::ReadOnly);
-    //
-    //        QList<QTreeWidgetItem *> itemList;
-    //        while (!dataStream.atEnd()) {
-    //            QTreeWidgetItem* newItem;
-    //            newItem->read(dataStream);
-    //            itemList.append(newItem);
-    //        }
-    //        qDebug("New items: " + QString::number(itemList.size()).toUtf8());
-    //
-    //        if (event->source() == this) {
-    //            event->setDropAction(Qt::MoveAction);
-    //            event->accept();
-    //        } else {
-    //            event->acceptProposedAction();
-    //        }
-    //    } else {
-    //        event->ignore();
-    //    }
 }
