@@ -189,6 +189,10 @@ void PlaylistWidget::mouseMoveEvent(QMouseEvent *event)
 
     // start drag
     drag->exec(Qt::CopyAction | Qt::MoveAction);
+    /*
+     * TODO: verify return of the function above and
+     * remove original selected items if they were moved.
+     */
 }
 
 
