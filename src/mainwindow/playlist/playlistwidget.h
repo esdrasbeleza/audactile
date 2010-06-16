@@ -21,7 +21,7 @@ private slots:
     void fileChanged();
     void playNextSong();
     void playPreviousSong();
-    void dndActionChanged(Qt::DropAction newAction);
+//    void dndActionChanged(Qt::DropAction newAction);
 
 signals:
     void songInformationUpdated(QString newSongInformation);
@@ -30,8 +30,8 @@ signals:
 public:
     PlaylistWidget(QWidget *parent, Phonon::MediaObject *mediaObject);
     Phonon::MediaObject *mainMediaObject;
-    void addSong(PlaylistItem *newItem, int index = -1);
-    void addSong(QUrl url, int index = -1);
+    int addSong(PlaylistItem *newItem, int index = -1);
+    int addSong(QUrl url, int index = -1);
 
 
 private:
@@ -42,10 +42,11 @@ private:
     void emitSongInformationUpdated();
 
     // Drag and drop events
-    void dragEnterEvent(QDragEnterEvent *event);
     void dropEvent(QDropEvent *event);
-    void dragMoveEvent(QDragMoveEvent *event);
-    void mouseMoveEvent(QMouseEvent *event);
+    Qt::DropActions supportedDropActions() const;
+
+    // Override addChild
+
 
 };
 

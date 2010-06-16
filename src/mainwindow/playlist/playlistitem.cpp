@@ -43,12 +43,10 @@ PlaylistItem::PlaylistItem(QUrl url) {
     if (album.isEmpty())  album  = "Undefined";
     if (title.isEmpty())  title  = "Undefined";
 
-
     setText(0, title);
     setText(1, album);
     setText(2, artist);
 }
-
 
 
 QUrl PlaylistItem::getFileUrl() {
