@@ -21,6 +21,10 @@ PlaylistWidget::PlaylistWidget(QWidget *parent, Phonon::MediaObject *mediaObject
     // Allow drop to use drag and drop
     setAcceptDrops(true);
     setDragEnabled(true);
+    setDropIndicatorShown(true);
+
+    // Alternate row colors are good
+    setAlternatingRowColors(true);
 
     // Phonon MediaObject
     mainMediaObject = mediaObject;
@@ -122,21 +126,27 @@ void PlaylistWidget::emitSongInformationUpdated() {
     emit songInformationUpdated(songInfo);
 }
 
-void PlaylistWidget::addSong(PlaylistItem *newItem) {
+void PlaylistWidget::addSong(PlaylistItem *newItem, int index) {
     qDebug("addSong");
     if (mainMediaObject->currentSource().type() == Phonon::MediaSource::Empty) {
         qDebug("First item added");
         currentSong = newItem;
         mainMediaObject->enqueue(newItem->getFileUrl());
     }
-    addTopLevelItem(newItem);
+    if (index == -1) {
+        addTopLevelItem(newItem);
+    }
+    else {
+        insertTopLevelItem(index, newItem);
+    }
 }
 
-void PlaylistWidget::addSong(QUrl url) {
+void PlaylistWidget::addSong(QUrl url, int index) {
     qDebug("addSong");
     PlaylistItem *newItem = new PlaylistItem(url);
-    addSong(newItem);
+    addSong(newItem, index);
 }
+
 
 
 void PlaylistWidget::dragEnterEvent(QDragEnterEvent *event) {
@@ -157,21 +167,27 @@ void PlaylistWidget::dragEnterEvent(QDragEnterEvent *event) {
 
 void PlaylistWidget::dragMoveEvent(QDragMoveEvent *event)
 {
-    qDebug("dragMoveEvent");
-    event->setDropAction(Qt::MoveAction);
-    event->accept();
+    //qDebug("dragMoveEvent");
+    if (event->mimeData()->hasFormat("text/uri-list")) {
+        qDebug("Moving...");
+        event->accept();
+
+    }
 }
 
 
 void PlaylistWidget::mouseMoveEvent(QMouseEvent *event)
 {
+    qDebug("mouseMoveEvent");
+
     // if not left button - return
     if (!(event->buttons() & Qt::LeftButton)) return;
 
     // if no item selected, return (else it would crash)
     if (currentItem() == NULL) return;
 
-    QDrag *drag = new QDrag(this);
+    drag = new QDrag(this);
+    connect(drag, SIGNAL(actionChanged(Qt::DropAction)), this, SLOT(dndActionChanged(Qt::DropAction)));
     QMimeData *mimeData = new QMimeData;
 
     // construct list of QUrls
@@ -188,11 +204,17 @@ void PlaylistWidget::mouseMoveEvent(QMouseEvent *event)
     drag->setMimeData(mimeData);
 
     // start drag
+    qDebug("Starting drag");
     drag->exec(Qt::CopyAction | Qt::MoveAction);
-    /*
-     * TODO: verify return of the function above and
-     * remove original selected items if they were moved.
-     */
+
+    // Remove items after moving them
+    qDebug("Removing original items");
+    if (dndAction == Qt::MoveAction) {
+        foreach (QTreeWidgetItem *currentItem, selectedItems()) {
+            PlaylistItem *playlistCurrentItem = static_cast<PlaylistItem *>(currentItem);
+            delete playlistCurrentItem;
+        }
+    }
 }
 
 
@@ -204,8 +226,20 @@ void PlaylistWidget::dropEvent(QDropEvent *event) {
         QList<QUrl> urlList = event->mimeData()->urls();
         foreach (QUrl url, urlList) {
             qDebug("Trying to add new file: " + url.path().toUtf8());
-            addSong(url);
+            addSong(url, indexOfTopLevelItem(itemAt(event->pos())));
         }
     }
 
+}
+
+
+void PlaylistWidget::dndActionChanged(Qt::DropAction newAction) {
+    qDebug("dndActionChanged()");
+    dndAction = newAction;
+    if (newAction == Qt::MoveAction) {
+        qDebug("Move action");
+    }
+    else if (newAction == Qt::CopyAction) {
+        qDebug("Copy action");
+    }
 }
