@@ -22,7 +22,7 @@ PlaylistWidget::PlaylistWidget(QWidget *parent, Phonon::MediaObject *mediaObject
     setAcceptDrops(true);
     setDragEnabled(true);
     setDropIndicatorShown(true);
-    setDragDropMode(QAbstractItemView::InternalMove);
+    //setDragDropMode(QAbstractItemView::InternalMove);
 
     // Alternate row colors are good
     setAlternatingRowColors(true);
@@ -151,91 +151,101 @@ int PlaylistWidget::addSong(QUrl url, int index) {
 }
 
 
-//
-//void PlaylistWidget::dragEnterEvent(QDragEnterEvent *event) {
-//    qDebug("dragEnterEvent ");
-//
-//
-//    if (event->mimeData()->hasFormat("text/uri-list")) {
-//        qDebug("Accepted!");
-//        event->setDropAction(Qt::MoveAction);
-//        event->accept();
-//    }
-//    else {
-//        qDebug("Ignored!");
-//        event->ignore();
-//    }
-//}
-//
-//
-//void PlaylistWidget::dragMoveEvent(QDragMoveEvent *event)
-//{
-//    //qDebug("dragMoveEvent");
-//    if (event->mimeData()->hasFormat("text/uri-list")) {
-//        qDebug("Moving...");
-//        event->accept();
-//    }
-//}
-//
-//
-//void PlaylistWidget::mouseMoveEvent(QMouseEvent *event)
-//{
-//    qDebug("mouseMoveEvent");
-//
-//    // if not left button - return
-//    if (!(event->buttons() & Qt::LeftButton)) return;
-//
-//    // if no item selected, return (else it would crash)
-//    if (currentItem() == NULL) return;
-//
-//    drag = new QDrag(this);
-//    connect(drag, SIGNAL(actionChanged(Qt::DropAction)), this, SLOT(dndActionChanged(Qt::DropAction)));
-//    QMimeData *mimeData = new QMimeData;
-//
-//    // construct list of QUrls
-//    // other widgets accept this mime type, we can drop to them
-//    QList<QUrl> list;
-//
-//    foreach (QTreeWidgetItem *currentItem, selectedItems()) {
-//        PlaylistItem *playlistCurrentItem = static_cast<PlaylistItem *>(currentItem);
-//        list.append(playlistCurrentItem->getFileUrl());
-//    }
-//
-//    // mime stuff
-//    mimeData->setUrls(list);
-//    drag->setMimeData(mimeData);
-//
-//    // start drag
-//    qDebug("Starting drag");
-//    QList<QTreeWidgetItem *> itemsToRemove = selectedItems();
-//    drag->exec(Qt::CopyAction | Qt::MoveAction);
-//
-//    // Remove items after moving them
+
+void PlaylistWidget::dragEnterEvent(QDragEnterEvent *event) {
+    qDebug("dragEnterEvent ");
+
+
+    if (event->mimeData()->hasFormat("text/uri-list")) {
+        qDebug("Accepted!");
+        event->setDropAction(Qt::MoveAction);
+        event->accept();
+    }
+    else {
+        qDebug("Ignored!");
+        event->ignore();
+    }
+}
+
+
+void PlaylistWidget::dragMoveEvent(QDragMoveEvent *event)
+{
+    //qDebug("dragMoveEvent");
+    if (event->mimeData()->hasFormat("text/uri-list")) {
+        qDebug("Moving...");
+        event->accept();
+    }
+}
+
+
+void PlaylistWidget::mouseMoveEvent(QMouseEvent *event)
+{
+    qDebug("mouseMoveEvent");
+
+    // if not left button - return
+    if (!(event->buttons() & Qt::LeftButton)) return;
+
+    // if no item selected, return (else it would crash)
+    if (currentItem() == NULL) return;
+
+    drag = new QDrag(this);
+    connect(drag, SIGNAL(actionChanged(Qt::DropAction)), this, SLOT(dndActionChanged(Qt::DropAction)));
+    QMimeData *mimeData = new QMimeData;
+
+    // construct list of QUrls
+    // other widgets accept this mime type, we can drop to them
+    QList<QUrl> list;
+
+    foreach (QTreeWidgetItem *currentItem, selectedItems()) {
+        PlaylistItem *playlistCurrentItem = static_cast<PlaylistItem *>(currentItem);
+        list.append(playlistCurrentItem->getFileUrl());
+    }
+
+    // mime stuff
+    mimeData->setUrls(list);
+    drag->setMimeData(mimeData);
+
+    // start drag
+    qDebug("Starting drag");
+    QList<QTreeWidgetItem *> itemsToRemove = selectedItems();
+    drag->exec(Qt::CopyAction | Qt::MoveAction);
+
+    // Remove items after moving them
 //    qDebug("Removing original items");
 //    if (dndAction == Qt::MoveAction) {
 //        foreach (QTreeWidgetItem *currentItem, itemsToRemove) {
 //            PlaylistItem *playlistCurrentItem = static_cast<PlaylistItem *>(currentItem);
-//            
+//            qDebug("removing item");
 //            delete playlistCurrentItem;
 //        }
 //    }
-//    
-//    
-//
-//}
-//
-//
+
+
+
+}
+
+
 void PlaylistWidget::dropEvent(QDropEvent *event) {
     qDebug("dropEvent ");
 
     if (event->mimeData()->hasFormat("text/uri-list")) {
-        qDebug("Parsing uri-list");
-        QList<QUrl> urlList = event->mimeData()->urls();
-        foreach (QUrl url, urlList) {
-            qDebug("Trying to add new file: " + url.path().toUtf8());
-            int index = addSong(url, indexOfTopLevelItem(itemAt(event->pos())));
-            qDebug("New index: " + QString::number(index).toUtf8());
-            topLevelItem(index)->setSelected(true);
+        if (event->source() != this) {
+            qDebug("Parsing uri-list");
+            QList<QUrl> urlList = event->mimeData()->urls();
+            foreach (QUrl url, urlList) {
+                qDebug("Trying to add new file: " + url.path().toUtf8());
+                int index = addSong(url, indexOfTopLevelItem(itemAt(event->pos())));
+                qDebug("New index: " + QString::number(index).toUtf8());
+                topLevelItem(index)->setSelected(true);
+            }
+        }
+        else {
+            QList<QTreeWidgetItem *> itemsToInsert;
+            foreach (QTreeWidgetItem *currentItem, selectedItems()) {
+                QTreeWidgetItem *playlistCurrentItem = takeTopLevelItem(indexOfTopLevelItem(playlistCurrentItem));
+                itemsToInsert.append(playlistCurrentItem);
+            }
+            if (itemsToInsert.size() > 0) insertTopLevelItems(indexOfTopLevelItem(itemAt(event->pos())), itemsToInsert);
         }
     }
 
@@ -253,15 +263,13 @@ Qt::DropActions PlaylistWidget::supportedDropActions() const
 }
 
 
-//
-//
-//void PlaylistWidget::dndActionChanged(Qt::DropAction newAction) {
-//    qDebug("dndActionChanged()");
-//    dndAction = newAction;
-//    if (newAction == Qt::MoveAction) {
-//        qDebug("Move action");
-//    }
-//    else if (newAction == Qt::CopyAction) {
-//        qDebug("Copy action");
-//    }
-//}
+void PlaylistWidget::dndActionChanged(Qt::DropAction newAction) {
+    qDebug("dndActionChanged()");
+    dndAction = newAction;
+    if (newAction == Qt::MoveAction) {
+        qDebug("Move action");
+    }
+    else if (newAction == Qt::CopyAction) {
+        qDebug("Copy action");
+    }
+}

@@ -21,7 +21,7 @@ private slots:
     void fileChanged();
     void playNextSong();
     void playPreviousSong();
-//    void dndActionChanged(Qt::DropAction newAction);
+    void dndActionChanged(Qt::DropAction newAction);
 
 signals:
     void songInformationUpdated(QString newSongInformation);
@@ -42,11 +42,11 @@ private:
     void emitSongInformationUpdated();
 
     // Drag and drop events
+    void dragEnterEvent(QDragEnterEvent *event);
     void dropEvent(QDropEvent *event);
     Qt::DropActions supportedDropActions() const;
-
-    // Override addChild
-
+    void dragMoveEvent(QDragMoveEvent *event);
+    void mouseMoveEvent(QMouseEvent *event);
 
 };
 
