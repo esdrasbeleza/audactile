@@ -158,7 +158,6 @@ void PlaylistWidget::dragEnterEvent(QDragEnterEvent *event) {
 
     if (event->mimeData()->hasFormat("text/uri-list")) {
         qDebug("Accepted!");
-        event->setDropAction(Qt::MoveAction);
         event->accept();
     }
     else {
@@ -170,9 +169,7 @@ void PlaylistWidget::dragEnterEvent(QDragEnterEvent *event) {
 
 void PlaylistWidget::dragMoveEvent(QDragMoveEvent *event)
 {
-    //qDebug("dragMoveEvent");
     if (event->mimeData()->hasFormat("text/uri-list")) {
-        qDebug("Moving...");
         event->accept();
     }
 }
@@ -216,6 +213,11 @@ void PlaylistWidget::dropEvent(QDropEvent *event) {
     qDebug("dropEvent ");
 
     if (event->mimeData()->hasFormat("text/uri-list")) {
+
+        /*
+         * If the dropped objects come from outside, we parse them as
+         * a list of files, if they are a list of files.
+         */
         if (event->source() != this) {
             qDebug("Parsing uri-list");
             QList<QUrl> urlList = event->mimeData()->urls();
@@ -225,17 +227,28 @@ void PlaylistWidget::dropEvent(QDropEvent *event) {
                 topLevelItem(index)->setSelected(true);
             }
         }
+
+        /*
+         * If the dropped objects come from the playlist widget,
+         * so we are moving the items from list.
+         */
         else {
             qDebug("Moving from inside");
             QList<QTreeWidgetItem *> itemsToInsert;
+
+            // Create the list of items to add...
             foreach (QTreeWidgetItem *currentItem, selectedItems()) {
                 QTreeWidgetItem *playlistCurrentItem = takeTopLevelItem(indexOfTopLevelItem(currentItem));
                 itemsToInsert.append(playlistCurrentItem);
             }
+
+            // ...and insert them
             if (itemsToInsert.size() > 0) {
                 int indexToInsert = indexOfTopLevelItem(itemAt(event->pos()));
                 /*
-                 * If the index the cursor is over is -1, there's no item
+                 * If the index the cursor is over is -1, there's no item under
+                 * the cursor, so we must add the selected items to the end of
+                 * the list.
                  */
                 if (indexToInsert != -1) { insertTopLevelItems(indexToInsert, itemsToInsert); }
                 else { addTopLevelItems(itemsToInsert); }
