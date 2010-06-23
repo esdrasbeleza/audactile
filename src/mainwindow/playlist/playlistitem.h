@@ -2,6 +2,7 @@
 #define PLAYLISTITEM_H
 
 #include <QTreeWidgetItem>
+#include <QMessageBox>
 #include <QFileInfo>
 #include <QMap>
 #include <QUrl>
@@ -34,7 +35,7 @@ private:
     QString duration;
 
 private slots:
-    void loadMetaData();
+    void loadMetaData(Phonon::State newState, Phonon::State);
 
 };
 

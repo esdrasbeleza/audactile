@@ -5,22 +5,38 @@
 
 PlaylistItem::PlaylistItem(QString itemFilePath)
 {
+    qDebug("PlaylistItem by path");
+
     // TODO: make this use the another constructor.
     fileUrl = QUrl().fromLocalFile(itemFilePath);
     mediaObject = new Phonon::MediaObject(this);
-    connect(this->mediaObject, SIGNAL(metaDataChanged()), this, SLOT(loadMetaData()));
+    connect(this->mediaObject, SIGNAL(stateChanged(Phonon::State,Phonon::State)), this, SLOT(loadMetaData(Phonon::State,Phonon::State)));
     mediaObject->enqueue(fileUrl);
 }
 
 PlaylistItem::PlaylistItem(QUrl url) {
+    qDebug("PlaylistItem by URL");
     fileUrl = url;
+    qDebug("URL: " + url.path().toUtf8());
+
     mediaObject = new Phonon::MediaObject(this);
-    connect(this->mediaObject, SIGNAL(metaDataChanged()), this, SLOT(loadMetaData()));
+    connect(this->mediaObject, SIGNAL(stateChanged(Phonon::State,Phonon::State)), this, SLOT(loadMetaData(Phonon::State,Phonon::State)));
     mediaObject->enqueue(fileUrl);
 }
 
-void PlaylistItem::loadMetaData() {
+void PlaylistItem::loadMetaData(Phonon::State newState, Phonon::State) {
     qDebug("loadMetaData");
+
+    if (newState == Phonon::ErrorState) {
+        qDebug("Error!");
+        return;
+    }
+
+    if (mediaObject->currentSource().type() == Phonon::MediaSource::Invalid) {
+        qDebug("Error!");
+        return;
+    }
+
 
     QMap<QString, QString> metaData = mediaObject->metaData();
     artist = metaData.value("ARTIST");
@@ -45,6 +61,7 @@ void PlaylistItem::loadMetaData() {
 
 
 QUrl PlaylistItem::getFileUrl() {
+    qDebug("getFileUrl");
     return fileUrl;
 }
 
