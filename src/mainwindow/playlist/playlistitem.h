@@ -3,14 +3,15 @@
 
 #include <QTreeWidgetItem>
 #include <QFileInfo>
+#include <QMap>
 #include <QUrl>
-#include <taglib/tag.h>
-#include <taglib/fileref.h>
 #include <phonon/MediaSource>
+#include <phonon/MediaObject>
+#include <phonon/AudioOutput>
 
-
-class PlaylistItem : public QTreeWidgetItem
+class PlaylistItem : public QObject, public QTreeWidgetItem
 {
+    Q_OBJECT
 
 public:
     PlaylistItem(QString);
@@ -24,15 +25,16 @@ public:
 
 private:
     QUrl fileUrl;
-    QString filePath;
+
+    Phonon::MediaObject *mediaObject;
+
     QString artist;
     QString title;
     QString album;
     QString duration;
 
-    // TagLib references
-    TagLib::FileRef taglibFileRef;
-
+private slots:
+    void loadMetaData();
 
 };
 

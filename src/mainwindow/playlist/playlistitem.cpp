@@ -1,43 +1,35 @@
 #include "playlistitem.h"
 
+// TODO: if path is invalid, show error
+
+
 PlaylistItem::PlaylistItem(QString itemFilePath)
 {
-    filePath = itemFilePath;
-    fileUrl = QUrl().fromLocalFile(filePath);
-
-    // Set tags using taglib
-    taglibFileRef =  TagLib::FileRef(filePath.toUtf8());
-    artist = QString(taglibFileRef.tag()->artist().toCString());
-    album  = QString(taglibFileRef.tag()->album().toCString());
-    title  = QString(taglibFileRef.tag()->title().toCString());
-
-    if (artist.isEmpty()) artist = "Undefined";
-    if (album.isEmpty())  album  = "Undefined";
-    if (title.isEmpty())  title  = "Undefined";
-
-
-    setText(0, title);
-    setText(1, album);
-    setText(2, artist);
-
-
-    // TODO: use phonon to get duration.
+    // TODO: make this use the another constructor.
+    fileUrl = QUrl().fromLocalFile(itemFilePath);
+    mediaObject = new Phonon::MediaObject(this);
+    connect(this->mediaObject, SIGNAL(metaDataChanged()), this, SLOT(loadMetaData()));
+    mediaObject->enqueue(fileUrl);
 }
 
 PlaylistItem::PlaylistItem(QUrl url) {
-    filePath = QFileInfo(url.path()).canonicalFilePath();
     fileUrl = url;
+    mediaObject = new Phonon::MediaObject(this);
+    connect(this->mediaObject, SIGNAL(metaDataChanged()), this, SLOT(loadMetaData()));
+    mediaObject->enqueue(fileUrl);
+}
 
-    // If the path is null, return
-    // TODO: show some error message
-    if (filePath.size() == 0) return;
+void PlaylistItem::loadMetaData() {
+    qDebug("loadMetaData");
 
+    QMap<QString, QString> metaData = mediaObject->metaData();
+    artist = metaData.value("ARTIST");
+    album = metaData.value("ALBUM");
+    title = metaData.value("TITLE");
 
-    // Set tags using taglib
-    taglibFileRef =  TagLib::FileRef(filePath.toUtf8());
-    artist = QString(taglibFileRef.tag()->artist().toCString());
-    album  = QString(taglibFileRef.tag()->album().toCString());
-    title  = QString(taglibFileRef.tag()->title().toCString());
+    // TODO: put duration into right format
+    // TODO: if duration = -1, emit invalid file!
+    duration = QString::number(mediaObject->totalTime());
 
     if (artist.isEmpty()) artist = "Undefined";
     if (album.isEmpty())  album  = "Undefined";
@@ -46,6 +38,9 @@ PlaylistItem::PlaylistItem(QUrl url) {
     setText(0, title);
     setText(1, album);
     setText(2, artist);
+    setText(3, duration);
+
+    mediaObject->clear();
 }
 
 

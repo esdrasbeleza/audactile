@@ -22,7 +22,6 @@ PlaylistWidget::PlaylistWidget(QWidget *parent, Phonon::MediaObject *mediaObject
     setAcceptDrops(true);
     setDragEnabled(true);
     setDropIndicatorShown(true);
-    //setDragDropMode(QAbstractItemView::InternalMove);
 
     // Alternate row colors are good
     setAlternatingRowColors(true);
@@ -52,7 +51,6 @@ PlaylistWidget::PlaylistWidget(QWidget *parent, Phonon::MediaObject *mediaObject
     connect(mainMediaObject, SIGNAL(currentSourceChanged(Phonon::MediaSource)), this, SLOT(fileChanged()));
 }
 
-
 void PlaylistWidget::playSong(QModelIndex index) {
     qDebug("playSong ");
     PlaylistItem *item = static_cast<PlaylistItem *>(index.internalPointer());
@@ -62,8 +60,8 @@ void PlaylistWidget::playSong(QModelIndex index) {
     }
     currentSong = item;
     item->setBold();
+    qDebug("Playing " + item->getFileUrl().path().toUtf8());
     mainMediaObject->setCurrentSource(item->getFileUrl());
-    qDebug("Playing " + item->getFileUrl().toString().toUtf8());
     mainMediaObject->play();
 
     emitSongInformationUpdated();
@@ -129,7 +127,8 @@ void PlaylistWidget::emitSongInformationUpdated() {
 }
 
 int PlaylistWidget::addSong(PlaylistItem *newItem, int index) {
-    qDebug("addSong");
+    qDebug("addSong file");
+
     if (mainMediaObject->currentSource().type() == Phonon::MediaSource::Empty) {
         qDebug("First item added");
         currentSong = newItem;
@@ -145,7 +144,8 @@ int PlaylistWidget::addSong(PlaylistItem *newItem, int index) {
 }
 
 int PlaylistWidget::addSong(QUrl url, int index) {
-    qDebug("addSong ");
+    qDebug("addSong URL " + QString::number(Phonon::MediaSource(url).type()).toUtf8());
+
     PlaylistItem *newItem = new PlaylistItem(url);
     return addSong(newItem, index);
 }
