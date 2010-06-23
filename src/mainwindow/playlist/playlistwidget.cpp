@@ -235,7 +235,6 @@ void PlaylistWidget::dropEvent(QDropEvent *event) {
             foreach (QUrl url, urlList) {
                 qDebug("Trying to add new file: " + url.path().toUtf8());
                 int index = addSong(url, indexOfTopLevelItem(itemAt(event->pos())));
-                qDebug("New index: " + QString::number(index).toUtf8());
                 topLevelItem(index)->setSelected(true);
             }
         }
@@ -248,9 +247,9 @@ void PlaylistWidget::dropEvent(QDropEvent *event) {
             }
             if (itemsToInsert.size() > 0) {
                 int indexToInsert = indexOfTopLevelItem(itemAt(event->pos()));
-                qDebug("Index to insert: " + QString::number(indexToInsert).toUtf8());
-                qDebug("Items to insert: " + QString::number(itemsToInsert.size()).toUtf8());
-
+                /*
+                 * If the index the cursor is over is -1, there's no item
+                 */
                 if (indexToInsert != -1) { insertTopLevelItems(indexToInsert, itemsToInsert); }
                 else { addTopLevelItems(itemsToInsert); }
             }
