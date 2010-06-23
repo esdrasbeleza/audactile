@@ -240,12 +240,20 @@ void PlaylistWidget::dropEvent(QDropEvent *event) {
             }
         }
         else {
+            qDebug("Moving from inside");
             QList<QTreeWidgetItem *> itemsToInsert;
             foreach (QTreeWidgetItem *currentItem, selectedItems()) {
-                QTreeWidgetItem *playlistCurrentItem = takeTopLevelItem(indexOfTopLevelItem(playlistCurrentItem));
+                QTreeWidgetItem *playlistCurrentItem = takeTopLevelItem(indexOfTopLevelItem(currentItem));
                 itemsToInsert.append(playlistCurrentItem);
             }
-            if (itemsToInsert.size() > 0) insertTopLevelItems(indexOfTopLevelItem(itemAt(event->pos())), itemsToInsert);
+            if (itemsToInsert.size() > 0) {
+                int indexToInsert = indexOfTopLevelItem(itemAt(event->pos()));
+                qDebug("Index to insert: " + QString::number(indexToInsert).toUtf8());
+                qDebug("Items to insert: " + QString::number(itemsToInsert.size()).toUtf8());
+
+                if (indexToInsert != -1) { insertTopLevelItems(indexToInsert, itemsToInsert); }
+                else { addTopLevelItems(itemsToInsert); }
+            }
         }
     }
 
