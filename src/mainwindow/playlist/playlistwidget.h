@@ -5,6 +5,7 @@
 #include <QHeaderView>
 #include <QDropEvent>
 #include <QUrl>
+#include <QDir>
 #include <QFileInfo>
 #include <phonon/MediaObject>
 #include "playlistitem.h"
@@ -40,6 +41,7 @@ private:
     QDrag *drag;
     Qt::DropAction dndAction;
     void emitSongInformationUpdated();
+    void addFolder(QUrl url);
 
     // Drag and drop events
     void dragEnterEvent(QDragEnterEvent *event);

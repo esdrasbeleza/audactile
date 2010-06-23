@@ -145,9 +145,31 @@ int PlaylistWidget::addSong(PlaylistItem *newItem, int index) {
 }
 
 int PlaylistWidget::addSong(QUrl url, int index) {
-    qDebug("addSong");
+    qDebug("addSong ");
     PlaylistItem *newItem = new PlaylistItem(url);
     return addSong(newItem, index);
+}
+
+void PlaylistWidget::addFolder(QUrl url) {
+    qDebug("addFolder " + url.path().toUtf8());
+
+    // You shouldn't call this to add files, man.
+    if (QFileInfo(url.path()).isFile()) return;
+
+    QDir directory(url.path());
+    foreach (QString fileEntry, directory.entryList(directory.AllEntries | directory.NoDotAndDotDot, directory.DirsFirst | directory.Name)) {
+        // Change file entry to a full path
+        fileEntry = directory.absolutePath() + directory.separator() + fileEntry;
+        qDebug("Parsing " + fileEntry.toUtf8());
+        if (QFileInfo(fileEntry).isDir()) {
+            qDebug("Adding folder " + fileEntry.toUtf8());
+            addFolder(QUrl(fileEntry));
+        }
+        else if (QFileInfo(fileEntry).isFile()) {
+            qDebug("Adding file " + fileEntry.toUtf8());
+            addSong(QUrl(fileEntry));
+        }
+    }
 }
 
 
@@ -223,8 +245,18 @@ void PlaylistWidget::dropEvent(QDropEvent *event) {
             QList<QUrl> urlList = event->mimeData()->urls();
             foreach (QUrl url, urlList) {
                 qDebug("Trying to add new file: " + url.path().toUtf8());
-                int index = addSong(url, indexOfTopLevelItem(itemAt(event->pos())));
-                topLevelItem(index)->setSelected(true);
+
+                // If it's not a dir, add it using addSong
+                if (QFileInfo(url.path()).isFile()) {
+                    int index = addSong(url, indexOfTopLevelItem(itemAt(event->pos())));
+                    topLevelItem(index)->setSelected(true);
+                }
+                // If it's a folder, add it recursively
+                else if (QFileInfo(url.path()).isDir()) {
+                    qDebug("Add folder");
+                    addFolder(url);
+                }
+
             }
         }
 
