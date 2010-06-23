@@ -209,19 +209,6 @@ void PlaylistWidget::mouseMoveEvent(QMouseEvent *event)
     qDebug("Starting drag");
     QList<QTreeWidgetItem *> itemsToRemove = selectedItems();
     drag->exec(Qt::CopyAction | Qt::MoveAction);
-
-    // Remove items after moving them
-//    qDebug("Removing original items");
-//    if (dndAction == Qt::MoveAction) {
-//        foreach (QTreeWidgetItem *currentItem, itemsToRemove) {
-//            PlaylistItem *playlistCurrentItem = static_cast<PlaylistItem *>(currentItem);
-//            qDebug("removing item");
-//            delete playlistCurrentItem;
-//        }
-//    }
-
-
-
 }
 
 
