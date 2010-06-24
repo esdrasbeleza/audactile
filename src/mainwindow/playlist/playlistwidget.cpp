@@ -129,18 +129,25 @@ void PlaylistWidget::emitSongInformationUpdated() {
 int PlaylistWidget::addSong(PlaylistItem *newItem, int index) {
     qDebug("addSong file");
 
-    if (mainMediaObject->currentSource().type() == Phonon::MediaSource::Empty) {
-        qDebug("First item added");
-        currentSong = newItem;
-        mainMediaObject->enqueue(newItem->getFileUrl());
+    // A valid song has duration > -1
+    if (newItem->getDuration() > -1) {
+        if (mainMediaObject->currentSource().type() == Phonon::MediaSource::Empty) {
+            qDebug("First item added");
+            currentSong = newItem;
+            mainMediaObject->enqueue(newItem->getFileUrl());
+        }
+
+        if (index == -1) {
+            addTopLevelItem(newItem);
+        }
+        else {
+            insertTopLevelItem(index, newItem);
+        }
+        return indexOfTopLevelItem(newItem);
     }
-    if (index == -1) {
-        addTopLevelItem(newItem);
-    }
-    else {
-        insertTopLevelItem(index, newItem);
-    }
-    return indexOfTopLevelItem(newItem);
+
+    // TODO: show some notification to user that file is invalid.
+    return -1;
 }
 
 int PlaylistWidget::addSong(QUrl url, int index) {
@@ -249,7 +256,9 @@ void PlaylistWidget::dropEvent(QDropEvent *event) {
                 // If it's not a dir, add it using addSong
                 if (QFileInfo(url.path()).isFile()) {
                     int index = addSong(url, indexOfTopLevelItem(itemAt(event->pos())));
-                    topLevelItem(index)->setSelected(true);
+                    if (index > -1) {
+                        topLevelItem(index)->setSelected(true);
+                    }
                 }
                 // If it's a folder, add it recursively
                 else if (QFileInfo(url.path()).isDir()) {

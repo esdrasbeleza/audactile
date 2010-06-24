@@ -22,6 +22,7 @@ public:
     void setBold();
     void removeBold();
     QString getSongInfo();
+    qint64 getDuration();
 
 
 private:
@@ -32,10 +33,11 @@ private:
     QString artist;
     QString title;
     QString album;
-    QString duration;
+    qint64 duration;
 
 private slots:
     void loadMetaData(Phonon::State newState, Phonon::State);
+
 
 };
 
