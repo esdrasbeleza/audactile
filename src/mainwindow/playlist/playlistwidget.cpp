@@ -256,7 +256,7 @@ void PlaylistWidget::dropEvent(QDropEvent *event) {
                 // If it's not a dir, add it using addSong
                 if (QFileInfo(url.path()).isFile()) {
                     int index = addSong(url, indexOfTopLevelItem(itemAt(event->pos())));
-                    if (index > -1) {
+                    if (index != -1) {
                         topLevelItem(index)->setSelected(true);
                     }
                 }
