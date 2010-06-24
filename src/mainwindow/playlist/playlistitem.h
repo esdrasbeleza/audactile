@@ -23,6 +23,7 @@ public:
     void removeBold();
     QString getSongInfo();
     qint64 getDuration();
+    int index; // Index where item must be inserted at PlaylistWidget
 
 
 private:
@@ -38,6 +39,9 @@ private:
 private slots:
     void loadMetaData(Phonon::State newState, Phonon::State);
 
+signals:
+    void validFile(PlaylistItem*);
+    void invalidFile(PlaylistItem*);
 
 };
 

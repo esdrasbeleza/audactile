@@ -10,9 +10,8 @@ PlaylistItem::PlaylistItem(QString itemFilePath)
     // TODO: make this use the another constructor.
     fileUrl = QUrl().fromLocalFile(itemFilePath);
     mediaObject = new Phonon::MediaObject(this);
-    connect(this->mediaObject, SIGNAL(stateChanged(Phonon::State,Phonon::State)), this, SLOT(loadMetaData(Phonon::State,Phonon::State)));
+    connect(mediaObject, SIGNAL(stateChanged(Phonon::State,Phonon::State)), this, SLOT(loadMetaData(Phonon::State,Phonon::State)));
     mediaObject->setCurrentSource(fileUrl);
-    duration = mediaObject->totalTime();
 }
 
 PlaylistItem::PlaylistItem(QUrl url) {
@@ -23,7 +22,6 @@ PlaylistItem::PlaylistItem(QUrl url) {
     mediaObject = new Phonon::MediaObject(this);
     connect(this->mediaObject, SIGNAL(stateChanged(Phonon::State,Phonon::State)), this, SLOT(loadMetaData(Phonon::State,Phonon::State)));
     mediaObject->setCurrentSource(fileUrl);
-    duration = mediaObject->totalTime();
 }
 
 void PlaylistItem::loadMetaData(Phonon::State newState, Phonon::State) {
@@ -39,6 +37,7 @@ void PlaylistItem::loadMetaData(Phonon::State newState, Phonon::State) {
         return;
     }
     // If duration is greater than -1, it's a valid file
+    duration = mediaObject->totalTime();
     if (duration > -1) {
         QMap<QString, QString> metaData = mediaObject->metaData();
         artist = metaData.value("ARTIST");
@@ -52,15 +51,15 @@ void PlaylistItem::loadMetaData(Phonon::State newState, Phonon::State) {
         setText(0, title);
         setText(1, album);
         setText(2, artist);
-        setText(3, QString::number(duration));
 
-        mediaObject->clear();
+        QString qStr;
+        int secs = (duration / 1000) % 60;
+        int mins = (duration / 1000) / 60;
+        setText(3, QString::number(mins) + ":" + qStr.sprintf("%02d", secs));
+        emit validFile(this);
     }
     else {
-        setText(0, QString("Invalid!"));
-        setText(1, QString("Invalid!"));
-        setText(2, QString("Invalid!"));
-        setText(3, QString::number(duration));
+        emit invalidFile(this);
     }
 }
 
