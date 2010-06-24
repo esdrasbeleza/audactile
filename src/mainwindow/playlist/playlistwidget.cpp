@@ -44,16 +44,16 @@ PlaylistWidget::PlaylistWidget(QWidget *parent, Phonon::MediaObject *mediaObject
     headers->setSortIndicatorShown(true);
 
     // Assign signals
-    connect(this, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(playSong(QModelIndex)));
+    connect(this, SIGNAL(itemDoubleClicked(QTreeWidgetItem*,int)), this, SLOT(playSong(QTreeWidgetItem*)));
     connect(mainMediaObject, SIGNAL(aboutToFinish()), this, SLOT(enqueueNextSong()));
     connect(mainMediaObject, SIGNAL(finished()), this, SLOT(removeBold()));
     connect(mainMediaObject, SIGNAL(stateChanged(Phonon::State,Phonon::State)), this, SLOT(handleStateChange(Phonon::State)));
     connect(mainMediaObject, SIGNAL(currentSourceChanged(Phonon::MediaSource)), this, SLOT(fileChanged()));
 }
 
-void PlaylistWidget::playSong(QModelIndex index) {
+void PlaylistWidget::playSong(QTreeWidgetItem *doubleClickedItem) {
     qDebug("playSong ");
-    PlaylistItem *item = static_cast<PlaylistItem *>(index.internalPointer());
+    PlaylistItem *item = static_cast<PlaylistItem *>(doubleClickedItem);
     if (currentSong != NULL) {
         qDebug("Removing bold...");
         currentSong->removeBold();
@@ -72,7 +72,7 @@ void PlaylistWidget::playPreviousSong() {
     qDebug("playPreviousSong");
     QModelIndex index = indexAbove(indexFromItem(currentSong));
     if (index.isValid()) {
-       playSong(index);
+       playSong(itemFromIndex(index));
     }
 }
 
@@ -80,7 +80,7 @@ void PlaylistWidget::playNextSong() {
     qDebug("playNextSong");
     QModelIndex index = indexBelow(indexFromItem(currentSong));
     if (index.isValid()) {
-       playSong(index);
+       playSong(itemFromIndex(index));
     }
 }
 

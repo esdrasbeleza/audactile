@@ -15,7 +15,7 @@ class PlaylistWidget : public QTreeWidget
     Q_OBJECT
 
 private slots:
-    void playSong(QModelIndex index);
+    void playSong(QTreeWidgetItem *doubleClickedItem);
     void handleStateChange(Phonon::State newState);
     void enqueueNextSong();
     void removeBold();
