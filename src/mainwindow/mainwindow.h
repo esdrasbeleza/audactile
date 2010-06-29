@@ -20,6 +20,13 @@ public:
     Phonon::MediaObject *mediaObject;
     Phonon::AudioOutput *audioOutput;
 
+private:
+    qreal outputVolume;
+
+private slots:
+    void handleMute(bool mute);
+    void handleVolume(qreal volume);
+
 };
 
 #endif // MAINWINDOW_H

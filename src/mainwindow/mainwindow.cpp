@@ -15,7 +15,8 @@ MainWindow::MainWindow(QWidget *parent)
     mediaObject->setTickInterval(1000);
     audioOutput = new Phonon::AudioOutput(Phonon::MusicCategory, this);
     Phonon::createPath(mediaObject, audioOutput);
-
+    connect(audioOutput, SIGNAL(mutedChanged(bool)), this, SLOT(handleMute(bool)));
+    connect(audioOutput, SIGNAL(volumeChanged(qreal)), this, SLOT(handleVolume(qreal)));
 
     // Creates the horizontal layout where we'll put our notebook
     QSplitter *middleSplitter = new QSplitter();
@@ -44,3 +45,21 @@ MainWindow::MainWindow(QWidget *parent)
     addToolBar(playerbar);
 }
 
+
+/*
+ *
+ * The functions handleMute and handleVolume were created to avoid
+ * the problems with Phonon::VolumeSlider, that was showing wrong
+ * volume = 0% when volume was unmuted.
+ *
+ */
+
+
+void MainWindow::handleMute(bool mute) {
+    if (!mute) {
+        audioOutput->setVolume(outputVolume);
+    }
+}
+void MainWindow::handleVolume(qreal volume) {
+    outputVolume = volume;
+}
