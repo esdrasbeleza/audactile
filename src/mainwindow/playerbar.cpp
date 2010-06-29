@@ -76,8 +76,6 @@ PlayerBar::PlayerBar(QWidget *parent, Phonon::MediaObject *mediaObject, Phonon::
     songPositionWidget->setPalette(palette);
     songPositionWidget->setAutoFillBackground(true);
 
-
-
     QVBoxLayout *songPositionVBox = new QVBoxLayout(songPositionWidget);
     songPositionSlider = new SeekSlider(mainMediaObject, this);
     songPositionSlider->setOrientation(Qt::Horizontal);
@@ -88,7 +86,6 @@ PlayerBar::PlayerBar(QWidget *parent, Phonon::MediaObject *mediaObject, Phonon::
     // Volume button
     Phonon::VolumeSlider *volumeSlider = new Phonon::VolumeSlider(audioOutput, this);
     volumeSlider->setMaximumWidth((int)floor(0.2*(window()->width())));
-
 
     addWidget(playButton);
     addWidget(stopButton);
