@@ -1,6 +1,7 @@
 #ifndef PLAYERBAR_H
 #define PLAYERBAR_H
 
+#include <QApplication>
 #include <QToolBar>
 #include <QToolButton>
 #include <QVBoxLayout>
@@ -10,6 +11,7 @@
 #include <phonon/MediaObject>
 #include <phonon/SeekSlider>
 #include <phonon/VolumeSlider>
+#include "../settings/settingsdialog.h"
 
 
 using namespace Phonon;
@@ -30,6 +32,7 @@ public slots:
     void handleNextButton();
     void handlePreviousButton();
     void exitApplication();
+    void openSettings();
     void finish();
 
 signals:
