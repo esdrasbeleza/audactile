@@ -1,12 +1,16 @@
 #include <QtGui/QApplication>
 #include "mainwindow/mainwindow.h"
-
+#include "settings/applicationsettings.h"
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    a.setApplicationName("BlzAmp");
+    a.setOrganizationName("Audactile");
+    a.setApplicationName("Audactile");
     a.setApplicationVersion("0.1");
+
+    ApplicationSettings *settings = new ApplicationSettings();
+    settings->initialisation();
 
     MainWindow w;
     w.showMaximized();

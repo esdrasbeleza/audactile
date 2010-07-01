@@ -14,7 +14,8 @@ SOURCES += src/mainwindow/mainnotebook/collection/collectiontreewidget.cpp \
     src/mainwindow/playerbar.cpp \
     src/mainwindow/mainwindow.cpp \
     src/mainwindow/mainwidget.cpp \
-    src/main.cpp
+    src/main.cpp \
+    src/settings/applicationsettings.cpp
 HEADERS += src/mainwindow/mainnotebook/collection/collectiontreewidget.h \
     src/mainwindow/mainnotebook/filesystem/filesystemwidget.h \
     src/mainwindow/mainnotebook/mainnotebook.h \
@@ -22,8 +23,7 @@ HEADERS += src/mainwindow/mainnotebook/collection/collectiontreewidget.h \
     src/mainwindow/playlist/playlistitem.h \
     src/mainwindow/playerbar.h \
     src/mainwindow/mainwindow.h \
-    src/mainwindow/mainwidget.h
+    src/mainwindow/mainwidget.h \
+    src/settings/applicationsettings.h
 FORMS += 
 OTHER_FILES += TODO.txt
-#CONFIG += link_pkgconfig
-#PKGCONFIG += taglib
