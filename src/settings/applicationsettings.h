@@ -11,16 +11,15 @@
 class ApplicationSettings
 {
 public:
-    ApplicationSettings();
-    void initialisation();
-    QStringList collectionFolderList();
-    void addCollectionFolder(QString location);
-    void removeColletionFolder(QString location);
-    void setCollectionFolders(QStringList folders);
-    void createAppDirIfNeeded();
+    static void initialisation();
+    static QStringList collectionFolderList();
+    static void addCollectionFolder(QString location);
+    static void removeColletionFolder(QString location);
+    static void setCollectionFolders(QStringList folders);
+    static void createAppDirIfNeeded();
 
 private:
-    QSettings settings;
+    QSettings qsettings;
 
 };
 

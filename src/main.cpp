@@ -9,10 +9,8 @@ int main(int argc, char *argv[])
     a.setApplicationName("Audactile");
     a.setApplicationVersion("0.1");
 
-    ApplicationSettings *settings = new ApplicationSettings();
-    settings->createAppDirIfNeeded();
-    settings->initialisation();
-
+    ApplicationSettings::createAppDirIfNeeded();
+    ApplicationSettings::initialisation();
 
     MainWindow w;
     w.showMaximized();

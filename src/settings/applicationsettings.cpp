@@ -1,18 +1,12 @@
 #include "applicationsettings.h"
 
-ApplicationSettings::ApplicationSettings()
-{
-    QSettings settings(QSettings::UserScope, QApplication::organizationName(), QApplication::applicationName());
-    qDebug(settings.fileName().toUtf8());
-
-}
-
 void ApplicationSettings::initialisation() {
     qDebug("initialisation()");
+    
+    QSettings settings(QSettings::UserScope, QApplication::organizationName(), QApplication::applicationName());
     settings.beginGroup("General");
     settings.setValue("version", QApplication::applicationVersion());
     settings.endGroup();
-
 }
 
 void ApplicationSettings::createAppDirIfNeeded() {
@@ -33,8 +27,11 @@ void ApplicationSettings::createAppDirIfNeeded() {
 
 QStringList ApplicationSettings::collectionFolderList() {
     qDebug("collectionFolderList()");
-    QStringList folders;
 
+    
+    QSettings settings(QSettings::UserScope, QApplication::organizationName(), QApplication::applicationName());
+
+    QStringList folders;
     int size = settings.beginReadArray("folders");
     for (int i = 0; i < size; ++i) {
         settings.setArrayIndex(i);
@@ -49,6 +46,9 @@ QStringList ApplicationSettings::collectionFolderList() {
 }
 
 void ApplicationSettings::addCollectionFolder(QString location) {
+    
+    QSettings settings(QSettings::UserScope, QApplication::organizationName(), QApplication::applicationName());
+
     QStringList folders = collectionFolderList();
     folders.append(location);
     folders.removeDuplicates();
@@ -62,6 +62,9 @@ void ApplicationSettings::addCollectionFolder(QString location) {
 }
 
 void ApplicationSettings::setCollectionFolders(QStringList folders) {
+    
+    QSettings settings(QSettings::UserScope, QApplication::organizationName(), QApplication::applicationName());
+
     settings.remove("folders");
 
     settings.beginWriteArray("folders");
@@ -74,9 +77,10 @@ void ApplicationSettings::setCollectionFolders(QStringList folders) {
 }
 
 
-
-
 void ApplicationSettings::removeColletionFolder(QString location) {
+    
+    QSettings settings(QSettings::UserScope, QApplication::organizationName(), QApplication::applicationName());
+
     QStringList folders = collectionFolderList();
     folders.append(location);
     folders.removeAll(location);

@@ -20,13 +20,10 @@ FolderSettingsWidget::FolderSettingsWidget(QWidget *parent) : QWidget(parent)
     setLayout(hbox);
 
     // Update data
-    ApplicationSettings *settings = new ApplicationSettings();
-    originalFoldersList = settings->collectionFolderList();
+    originalFoldersList = ApplicationSettings::collectionFolderList();
     foreach (QString folder, originalFoldersList) {
         folderList->addItem(folder);
     }
-    delete settings;
-    
 
     connect(addButton, SIGNAL(clicked()), this, SLOT(addFolder()));
     connect(removeButton, SIGNAL(clicked()), this, SLOT(removeFolder()));
@@ -49,8 +46,6 @@ void FolderSettingsWidget::removeFolder() {
 }
 
 void FolderSettingsWidget::applySettings() {
-    ApplicationSettings *settings = new ApplicationSettings();
-
     /*
      *
      * Settings for folders
@@ -61,7 +56,7 @@ void FolderSettingsWidget::applySettings() {
         QListWidgetItem *item = folderList->item(i);
         folders.append(item->text());
     }
-    settings->setCollectionFolders(folders);
+    ApplicationSettings::setCollectionFolders(folders);
 
     // If folders have changed, rebuild the collection database
     if (folders != originalFoldersList) {
@@ -75,6 +70,4 @@ void FolderSettingsWidget::applySettings() {
      * Settings for folders - end
      *
      */
-
-    delete settings;
 }
