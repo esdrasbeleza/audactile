@@ -3,6 +3,9 @@
 # Ignore executable file
 Player
 
+# It's better if IDE regenerate the Makefile, I guess
+Makefile
+
 # Igore IDE user files
 Player.pro.user
 
