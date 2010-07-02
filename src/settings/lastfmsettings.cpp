@@ -44,11 +44,11 @@ QString LastFmSettings::password() {
         QByteArray text = settings.value("password").toByteArray();
         text = QByteArray::fromBase64(text);
         ret = QString(text);
-        qDebug("Password: " + ret.toUtf8());
     }
     settings.endGroup();
     return ret;
 }
+
 
 bool LastFmSettings::isActive() {
     QSettings settings(QSettings::UserScope, QApplication::organizationName(), QApplication::applicationName());

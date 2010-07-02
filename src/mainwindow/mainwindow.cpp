@@ -18,6 +18,9 @@ MainWindow::MainWindow(QWidget *parent)
     connect(audioOutput, SIGNAL(mutedChanged(bool)), this, SLOT(handleMute(bool)));
     connect(audioOutput, SIGNAL(volumeChanged(qreal)), this, SLOT(handleVolume(qreal)));
 
+    // Connect the MediaObject to our Last.fm scrobbler
+    LastFmScrobbler *scrobbler = new LastFmScrobbler(mediaObject);
+
     // Creates the horizontal layout where we'll put our notebook
     QSplitter *middleSplitter = new QSplitter();
     MainNotebook *mainNotebook = new MainNotebook(this);

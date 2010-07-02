@@ -25,6 +25,9 @@ private slots:
     void addFolder();
     void removeFolder();
 
+
+
+
 };
 
 #endif // FOLDERSETTINGSWIDGET_H
