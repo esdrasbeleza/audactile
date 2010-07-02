@@ -6,21 +6,37 @@ LastFmScrobbler::LastFmScrobbler(Phonon::MediaObject *mediaObject)
     this->mediaObject = mediaObject;
     songsToScrobble = new QQueue<SongInfo>();
     connect(mediaObject, SIGNAL(stateChanged(Phonon::State,Phonon::State)), this, SLOT(handleStateChange(Phonon::State,Phonon::State)));
+
+    tryToLogin();
 }
 
 
+void LastFmScrobbler::tryToLogin() {
+    QDateTime time = QDateTime::currentDateTime();
+    QString timeStamp = QString::number(time.toTime_t());
 
-QString LastFmScrobbler::generateToken(QString input) {
+    QUrl url("http://post.audioscrobbler.com/");
+    url.addQueryItem("hs", "true");
+    url.addQueryItem("p", "1.2.1");
+    url.addQueryItem("c", "tst"); // TODO: change this to application name
+    url.addQueryItem("v", "1.0");
+    url.addQueryItem("u", LastFmSettings::username());
+    url.addQueryItem("t", timeStamp);
+    url.addQueryItem("a", generateToken(LastFmSettings::password(), timeStamp));
+
+
+}
+
+
+QString LastFmScrobbler::generateToken(QString input, QString timestamp) {
     /*
      * As said in http://www.last.fm/api/submissions#1.2 ,
      * we must create a token in the format
      * token = md5(md5(password) + timestamp)
      * to use in scrobble.
      */
-    QByteArray encryptedPassword = QCryptographicHash::hash(input.toUtf8(), QCryptographicHash::Md5);
-    QDateTime time = QDateTime::currentDateTime();
-    QByteArray timeStamp = QString::number(time.toTime_t()).toUtf8();
-    QByteArray token = QCryptographicHash::hash(encryptedPassword + timeStamp, QCryptographicHash::Md5);
+    QByteArray encryptedPassword = QCryptographicHash::hash(input.toUtf8(), QCryptographicHash::Md5).toHex();
+    QByteArray token = QCryptographicHash::hash(encryptedPassword + timestamp.toUtf8(), QCryptographicHash::Md5).toHex();
     return QString(token);
 }
 

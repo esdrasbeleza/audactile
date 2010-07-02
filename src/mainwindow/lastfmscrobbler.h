@@ -5,6 +5,8 @@
 #include <QCryptographicHash> // To generate the token.
 #include <QDateTime>
 #include <QQueue>
+#include <QUrl>
+#include <QFile>
 #include <phonon/MediaObject>
 #include "../settings/lastfmsettings.h"
 
@@ -23,9 +25,10 @@ public slots:
     void resetStatus();
 
 private:
+    void tryToLogin();
     void enqueueTrack();
     void tryToScrobbleQueue();
-    QString generateToken(QString input);
+    QString generateToken(QString input, QString timestamp);
     Phonon::MediaObject *mediaObject;
     int ellapsedTime;
     bool canScrobble;
