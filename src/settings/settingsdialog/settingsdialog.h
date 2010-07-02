@@ -1,16 +1,12 @@
 #ifndef SETTINGSDIALOG_H
 #define SETTINGSDIALOG_H
 
-#include <QHBoxLayout>
 #include <QVBoxLayout>
-#include <QPushButton>
-#include <QListWidget>
-#include <QSpacerItem>
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QDialogButtonBox>
-#include <QFileDialog>
-#include "applicationsettings.h"
+
+#include "widgets/foldersettingswidget.h"
 
 class SettingsDialog : public QWidget
 {
@@ -21,13 +17,10 @@ public:
 
 private:
     void updateMediaFolders();
-    QListWidget *folderList;
     QDialogButtonBox *buttonBox;
-    QStringList originalFoldersList;
+    FolderSettingsWidget *folderSettingsWidget;
 
 private slots:
-    void addFolder();
-    void removeFolder();
     void applySettings();
     void handleAbstractButton(QAbstractButton*);
 

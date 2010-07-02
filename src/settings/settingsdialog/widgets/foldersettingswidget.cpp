@@ -1,13 +1,7 @@
-#include "settingsdialog.h"
+#include "foldersettingswidget.h"
 
-SettingsDialog::SettingsDialog(QWidget *parent) : QWidget(parent)
+FolderSettingsWidget::FolderSettingsWidget(QWidget *parent) : QWidget(parent)
 {
-    setWindowTitle("Settings");
-    setWindowFlags(Qt::Dialog);
-    setWindowModality(Qt::ApplicationModal);
-
-    // TODO: add icons. Icons are friends!
-
     // Create buttons and a widget to enclose them
     QVBoxLayout *vbox = new QVBoxLayout();
     QWidget *buttonsWidget = new QWidget();
@@ -23,34 +17,7 @@ SettingsDialog::SettingsDialog(QWidget *parent) : QWidget(parent)
     folderList->setSelectionMode(QListWidget::ExtendedSelection);
     hbox->addWidget(folderList);
     hbox->addWidget(buttonsWidget);
-    QWidget *central = new QWidget();
-    central->setLayout(hbox);
-
-    // Create button box
-    buttonBox = new QDialogButtonBox(Qt::Horizontal, this);
-    buttonBox->setStandardButtons(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Apply);
-
-    // Other vertical box to put the widgets created before.
-    QVBoxLayout *mainVBox = new QVBoxLayout();
-    mainVBox->addWidget(central);
-    mainVBox->addWidget(buttonBox);
-    setLayout(mainVBox);
-
-    // Connect buttons to their slots
-    connect(addButton, SIGNAL(clicked()), this, SLOT(addFolder()));
-    connect(removeButton, SIGNAL(clicked()), this, SLOT(removeFolder()));
-    connect(buttonBox, SIGNAL(clicked(QAbstractButton*)), this, SLOT(handleAbstractButton(QAbstractButton*)));
-
-    // Show window!
-    show();
-
-    // Center window
-    int x = (QApplication::desktop()->width() - width())/2;
-    int y = (QApplication::desktop()->height() - height())/2;
-    move(x, y);
-
-    // Set this to remove maximize buttons!
-    setFixedSize(width(), height());
+    setLayout(hbox);
 
     // Update data
     ApplicationSettings *settings = new ApplicationSettings();
@@ -59,9 +26,13 @@ SettingsDialog::SettingsDialog(QWidget *parent) : QWidget(parent)
         folderList->addItem(folder);
     }
     delete settings;
+    
+
+    connect(addButton, SIGNAL(clicked()), this, SLOT(addFolder()));
+    connect(removeButton, SIGNAL(clicked()), this, SLOT(removeFolder()));
 }
 
-void SettingsDialog::addFolder() {
+void FolderSettingsWidget::addFolder() {
     QString dir = QFileDialog::getExistingDirectory(this, tr("Add folder"), QDir::homePath(), QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
     QDir qdir;
     if (!dir.isEmpty() && qdir.exists(dir)) {
@@ -70,14 +41,14 @@ void SettingsDialog::addFolder() {
     }
 }
 
-void SettingsDialog::removeFolder() {
+void FolderSettingsWidget::removeFolder() {
     if (folderList->selectedItems().count() == 0) return;
     foreach(QListWidgetItem *item, folderList->selectedItems()) {
         delete item;
     }
 }
 
-void SettingsDialog::applySettings() {
+void FolderSettingsWidget::applySettings() {
     ApplicationSettings *settings = new ApplicationSettings();
 
     /*
@@ -106,23 +77,4 @@ void SettingsDialog::applySettings() {
      */
 
     delete settings;
-}
-
-void SettingsDialog::handleAbstractButton(QAbstractButton *button) {
-    qDebug("handleAbstractButton()");
-    switch (buttonBox->buttonRole(button)) {
-    case QDialogButtonBox::ApplyRole:
-        applySettings();
-        break;
-    case QDialogButtonBox::AcceptRole:
-        applySettings();
-        close();
-        break;
-    case QDialogButtonBox::RejectRole:
-        close();
-        break;
-    default:
-        // Does nothing
-        break;
-    }
 }

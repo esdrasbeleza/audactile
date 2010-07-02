@@ -11,7 +11,7 @@
 #include <phonon/MediaObject>
 #include <phonon/SeekSlider>
 #include <phonon/VolumeSlider>
-#include "../settings/settingsdialog.h"
+#include "../settings/settingsdialog/settingsdialog.h"
 
 
 using namespace Phonon;

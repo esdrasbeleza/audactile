@@ -16,7 +16,8 @@ SOURCES += src/mainwindow/mainnotebook/collection/collectiontreewidget.cpp \
     src/mainwindow/mainwidget.cpp \
     src/main.cpp \
     src/settings/applicationsettings.cpp \
-    src/settings/settingsdialog.cpp
+    src/settings/settingsdialog/widgets/foldersettingswidget.cpp \
+    src/settings/settingsdialog/settingsdialog.cpp
 HEADERS += src/mainwindow/mainnotebook/collection/collectiontreewidget.h \
     src/mainwindow/mainnotebook/filesystem/filesystemwidget.h \
     src/mainwindow/mainnotebook/mainnotebook.h \
@@ -26,6 +27,7 @@ HEADERS += src/mainwindow/mainnotebook/collection/collectiontreewidget.h \
     src/mainwindow/mainwindow.h \
     src/mainwindow/mainwidget.h \
     src/settings/applicationsettings.h \
-    src/settings/settingsdialog.h
+    src/settings/settingsdialog/widgets/foldersettingswidget.h \
+    src/settings/settingsdialog/settingsdialog.h
 FORMS += 
 OTHER_FILES += TODO.txt
