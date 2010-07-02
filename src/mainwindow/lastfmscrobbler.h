@@ -24,6 +24,7 @@ public slots:
 
 private:
     void enqueueTrack();
+    void tryToScrobbleQueue();
     QString generateToken(QString input);
     Phonon::MediaObject *mediaObject;
     int ellapsedTime;

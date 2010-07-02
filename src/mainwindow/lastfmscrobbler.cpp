@@ -25,6 +25,14 @@ QString LastFmScrobbler::generateToken(QString input) {
 }
 
 void LastFmScrobbler::onTick(qint64 time) {
+    /*
+     *
+     * If Last.fm was disabled, the signal will be disconnected only
+     * when the Phonon state changes. This test avoid undesired
+     * scrobbling.
+     */
+    if (!LastFmSettings::isActive()) return;
+
     ellapsedTime++;
     qint64 totalTime = mediaObject->totalTime();
     if (totalTime == 0) return; // Avoid division by 0 below
@@ -36,6 +44,7 @@ void LastFmScrobbler::onTick(qint64 time) {
     int percent = (int)(((double)time / (double)totalTime) * 100.0);
     if (totalTime >= 30000 && (percent >= 50 || ellapsedTime >= 240)) {
         enqueueTrack();
+        tryToScrobbleQueue();
     }
 }
 
@@ -48,6 +57,10 @@ void LastFmScrobbler::resetStatus() {
 void LastFmScrobbler::enqueueTrack() {
     qDebug("Song queued to scrobble!");
     songsToScrobble->enqueue(currentSong);
+}
+
+void LastFmScrobbler::tryToScrobbleQueue() {
+    qDebug("Trying to scrobble queued songs");
 }
 
 void LastFmScrobbler::handleStateChange(Phonon::State newState, Phonon::State oldState) {
