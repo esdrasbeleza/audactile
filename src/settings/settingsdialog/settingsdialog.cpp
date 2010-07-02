@@ -12,7 +12,10 @@ SettingsDialog::SettingsDialog(QWidget *parent) : QWidget(parent)
     QTabWidget *settingsTab = new QTabWidget(this);
 
     folderSettingsWidget = new FolderSettingsWidget(this);
+    lastFmSettingsWidget = new LastFmSettingsWidget(this);
+
     settingsTab->addTab(folderSettingsWidget, "Collection folders");
+    settingsTab->addTab(lastFmSettingsWidget, "Last.fm");
 
     // Create button box
     buttonBox = new QDialogButtonBox(Qt::Horizontal, this);
@@ -43,6 +46,7 @@ SettingsDialog::SettingsDialog(QWidget *parent) : QWidget(parent)
 
 void SettingsDialog::applySettings() {
     folderSettingsWidget->applySettings();
+    lastFmSettingsWidget->applySettings();
 }
 
 void SettingsDialog::handleAbstractButton(QAbstractButton *button) {

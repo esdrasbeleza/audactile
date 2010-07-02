@@ -7,6 +7,7 @@
 #include <QDialogButtonBox>
 
 #include "widgets/foldersettingswidget.h"
+#include "widgets/lastfmsettingswidget.h"
 
 class SettingsDialog : public QWidget
 {
@@ -19,6 +20,7 @@ private:
     void updateMediaFolders();
     QDialogButtonBox *buttonBox;
     FolderSettingsWidget *folderSettingsWidget;
+    LastFmSettingsWidget *lastFmSettingsWidget;
 
 private slots:
     void applySettings();
