@@ -15,6 +15,22 @@ void ApplicationSettings::initialisation() {
 
 }
 
+void ApplicationSettings::createAppDirIfNeeded() {
+    QString storageLocation = QDesktopServices::storageLocation(QDesktopServices::DataLocation);
+    QDir dir(storageLocation);
+    if (!dir.exists()) {
+        if (!dir.mkpath(storageLocation)) {
+            qWarning("Could not create data directory.\n\nExiting...");
+            QApplication::exit(1);
+        }
+    }
+    else if (!dir.isReadable()) {
+        qWarning("Could not read data directory.\n\nExiting...");
+        QApplication::exit(1);
+    }
+
+}
+
 QStringList ApplicationSettings::collectionFolderList() {
     qDebug("collectionFolderList()");
     QStringList folders;
