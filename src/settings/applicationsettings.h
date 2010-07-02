@@ -13,6 +13,7 @@ public:
     QStringList collectionFolderList();
     void addCollectionFolder(QString location);
     void removeColletionFolder(QString location);
+    void setCollectionFolders(QStringList folders);
 
 private:
     QSettings settings;

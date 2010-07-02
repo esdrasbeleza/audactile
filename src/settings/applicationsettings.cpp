@@ -45,6 +45,21 @@ void ApplicationSettings::addCollectionFolder(QString location) {
     settings.endArray();
 }
 
+void ApplicationSettings::setCollectionFolders(QStringList folders) {
+    settings.remove("folders");
+
+    settings.beginWriteArray("folders");
+    for (int i = 0; i < folders.size(); ++i) {
+        settings.setArrayIndex(i);
+        qDebug(folders.at(i).toUtf8());
+        settings.setValue("path", folders.at(i));
+    }
+    settings.endArray();
+}
+
+
+
+
 void ApplicationSettings::removeColletionFolder(QString location) {
     QStringList folders = collectionFolderList();
     folders.append(location);
