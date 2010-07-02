@@ -10,6 +10,11 @@ CollectionTreeWidget::CollectionTreeWidget()
     header()->hide(); // hide headers
     hideColumn(1); // hide id column
 
+
+    /*
+     * Code for test-only
+     * TODO: remove this.
+     */
     addArtist("Artista 1");
     addArtist("Artista 1");
     addArtist("Artista 1");
@@ -32,8 +37,9 @@ CollectionTreeWidget::CollectionTreeWidget()
     removeAlbum("Artista 3", "Album 1");
     removeMusic("Artista 5", "Album 2 do artista 4", "Musica 3");
     removeMusic("Artista 4", "Album 2 do artista 4", "Musica 3");
-
     cleanUp(NULL, CollectionTreeWidget::LevelNone);
+    // End of test code.
+
 }
 
 QStringList CollectionTreeWidget::toColumns(QString string) {
@@ -57,6 +63,7 @@ QTreeWidgetItem *CollectionTreeWidget::addArtist(QString artist) {
         // Set icon
         item->setIcon(0, QIcon::fromTheme("folder"));
 
+        // Insert item
         insertTopLevelItem(0, item);
         sortItems(0, Qt::AscendingOrder);
 
@@ -171,8 +178,14 @@ bool CollectionTreeWidget::removeMusic(QString artist, QString album, QString mu
     if (albumItem != NULL) {
         for (int i = 0; i < albumItem->childCount(); i++) {
             if (albumItem->child(i)->text(0) == music) {
+                qDebug("Deleting music");
                 delete albumItem->child(i);
-                cleanUp(albumItem, CollectionTreeWidget::LevelAlbum);
+
+                if (albumItem->childCount() == 0) {
+                    qDebug("Removing album");
+                    delete albumItem;
+                }
+
                 return true;
             }
         }
@@ -189,6 +202,27 @@ void CollectionTreeWidget::cleanUp(QTreeWidgetItem *parent = NULL, CollectionTre
 
     // if we have a parent, process it
     else {
+
+        // If it's an artist, enter it
+        if (level < CollectionTreeWidget::LevelAlbum) {
+            int childCount = parent->childCount();
+            for (int i = 0; i < childCount; i++) {
+                TreeLevel newLevel =  (TreeLevel)(level + 1);
+                cleanUp(parent->child(i), newLevel);
+            }
+        }
+
+        // If it's an album and it has no songs, remove it!
+        else {
+            if (parent->childCount() == 0) {
+                QTreeWidgetItem *parentParent = parent->parent();
+                delete parent;
+
+                // If artist has no more albums, remove it too
+                if (parentParent->childCount() == 0) delete parentParent;
+
+            }
+        }
     }
 
 }
