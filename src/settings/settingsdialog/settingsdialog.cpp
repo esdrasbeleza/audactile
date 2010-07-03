@@ -34,8 +34,8 @@ SettingsDialog::SettingsDialog(QWidget *parent) : QWidget(parent)
     show();
 
     // Center window
-    int x = (QApplication::desktop()->width() - width())/2;
-    int y = (QApplication::desktop()->height() - height())/2;
+    int x = (parent->width() - width())/2;
+    int y = (parent->height() - height())/2;
     move(x, y);
 
     // Set this to remove maximize buttons!

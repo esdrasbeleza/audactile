@@ -233,5 +233,5 @@ void PlayerBar::exitApplication() {
 
 /// @brief Open settings
 void PlayerBar::openSettings() {
-    SettingsDialog *dialog = new SettingsDialog(this);
+    SettingsDialog *dialog = new SettingsDialog(parentWidget());
 }
