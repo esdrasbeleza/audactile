@@ -4,9 +4,12 @@
 #include <QObject>
 #include <QCryptographicHash> // To generate the token.
 #include <QDateTime>
+#include <QStringList>
 #include <QQueue>
 #include <QUrl>
-#include <QFile>
+#include <QNetworkAccessManager>
+#include <QNetworkRequest>
+#include <QNetworkReply>
 #include <phonon/MediaObject>
 #include "../settings/lastfmsettings.h"
 
@@ -22,7 +25,10 @@ signals:
 public slots:
     void onTick(qint64 time);
     void handleStateChange(Phonon::State, Phonon::State);
-    void resetStatus();
+    void resetSongStatus();
+
+    // Network related stuff
+    void readReply();
 
 private:
     void tryToLogin();
@@ -40,6 +46,20 @@ private:
     };
     SongInfo currentSong;
     QQueue<SongInfo> *songsToScrobble;
+
+    // Network related stuff
+    enum LastFmState  {
+        LastFmStateNone = 0,
+        LastFmStateWaitingToken = 1,
+        LastFmGotToken = 2
+    };
+    LastFmState state;
+    QString token;
+    QNetworkAccessManager *netManager;
+    QNetworkRequest *netRequest;
+    QNetworkReply *netReply;
+
+
 
 };
 

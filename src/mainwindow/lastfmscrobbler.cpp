@@ -2,11 +2,16 @@
 
 LastFmScrobbler::LastFmScrobbler(Phonon::MediaObject *mediaObject)
 {
-    resetStatus();
+    resetSongStatus();
     this->mediaObject = mediaObject;
     songsToScrobble = new QQueue<SongInfo>();
     connect(mediaObject, SIGNAL(stateChanged(Phonon::State,Phonon::State)), this, SLOT(handleStateChange(Phonon::State,Phonon::State)));
 
+    // TODO: call this only if Last.fm is enabled.
+    // Maybe do a function to call this, calling only
+    // on applicaton start or when Last.fm is enabled.
+    state = this->LastFmStateNone;
+    netManager = new QNetworkAccessManager(this);
     tryToLogin();
 }
 
@@ -24,8 +29,28 @@ void LastFmScrobbler::tryToLogin() {
     url.addQueryItem("t", timeStamp);
     url.addQueryItem("a", generateToken(LastFmSettings::password(), timeStamp));
 
+    state = LastFmStateWaitingToken;
+    QNetworkRequest netRequest;
+    netRequest.setUrl(url);
+    qDebug("Asking to login to Last.fm...");
+    netReply = netManager->get(netRequest);
+    connect(netReply, SIGNAL(readyRead()), this, SLOT(readReply()));
 
 }
+
+void LastFmScrobbler::readReply() {
+    qDebug("Got reply!");
+    QString replyArray = netReply->readAll();
+    if (state == LastFmStateWaitingToken) {
+        QStringList lines = replyArray.split('\n');
+        if (lines.at(0) == "OK") {
+            state = LastFmGotToken;
+            token = lines.at(1);
+        }
+        break;
+    }
+}
+
 
 
 QString LastFmScrobbler::generateToken(QString input, QString timestamp) {
@@ -64,7 +89,7 @@ void LastFmScrobbler::onTick(qint64 time) {
     }
 }
 
-void LastFmScrobbler::resetStatus() {
+void LastFmScrobbler::resetSongStatus() {
     ellapsedTime = 0;
     canScrobble = false;
     SongInfo currentSong;
@@ -84,13 +109,13 @@ void LastFmScrobbler::handleStateChange(Phonon::State newState, Phonon::State ol
     if (LastFmSettings::isActive()) {
         qDebug("Last.fm is enabled!");
         connect(mediaObject, SIGNAL(tick(qint64)), this, SLOT(onTick(qint64)));
-        connect(mediaObject, SIGNAL(finished()), this, SLOT(resetStatus()));
+        connect(mediaObject, SIGNAL(finished()), this, SLOT(resetSongStatus()));
     }
     // Disconnect slots if Last.fm is disabled.
     else {
         qDebug("Last.fm is disabled");
         disconnect(mediaObject, SIGNAL(tick(qint64)), this, SLOT(onTick(qint64)));
-        disconnect(mediaObject, SIGNAL(finished()), this, SLOT(resetStatus()));
+        disconnect(mediaObject, SIGNAL(finished()), this, SLOT(resetSongStatus()));
         return;
     }
 
@@ -117,7 +142,7 @@ void LastFmScrobbler::handleStateChange(Phonon::State newState, Phonon::State ol
         }
     }
     else if (newState == Phonon::StoppedState) {
-        resetStatus();
+        resetSongStatus();
     }
 
 }

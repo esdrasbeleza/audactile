@@ -3,7 +3,8 @@
 # -------------------------------------------------
 QT += sql \
     phonon \
-    webkit
+    webkit \
+    network
 TARGET = Player
 TEMPLATE = app
 SOURCES += src/mainwindow/mainnotebook/collection/collectiontreewidget.cpp \

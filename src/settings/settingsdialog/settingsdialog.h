@@ -3,7 +3,6 @@
 
 #include <QVBoxLayout>
 #include <QApplication>
-#include <QDesktopWidget>
 #include <QDialogButtonBox>
 
 #include "widgets/foldersettingswidget.h"
