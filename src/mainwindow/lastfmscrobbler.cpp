@@ -151,8 +151,9 @@ void LastFmScrobbler::readSubmissionReply() {
     qDebug("Got submission reply!");
     QString replyString = nowPlayingReply->readAll();
     QStringList lines = replyString.split('\n');
-    qDebug("Reply: " + QString(lines.at(0)).toUtf8());
+    qDebug("Reply: " + QString(lines.at(0)).toAscii());
 
+    songsToScrobble->clear();
     // TODO: handle server reply in a better way. Couldn't get OK/BADSESSION/etc.
     // TODO: in case of BADSESSION, handshake again.
 }
