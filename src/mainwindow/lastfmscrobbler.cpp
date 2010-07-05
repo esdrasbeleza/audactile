@@ -4,7 +4,8 @@ LastFmScrobbler::LastFmScrobbler(Phonon::MediaObject *mediaObject)
 {
     resetSongStatus();
     this->mediaObject = mediaObject;
-    songsToScrobble = new QQueue<SongInfo>();
+    qDebug("Tick interval: " + QString::number(mediaObject->tickInterval()).toUtf8());
+    songsToScrobble = new QList<SongInfo>();
     connect(mediaObject, SIGNAL(stateChanged(Phonon::State,Phonon::State)), this, SLOT(handleStateChange(Phonon::State,Phonon::State)));
 
     // TODO: call this only if Last.fm is enabled.
@@ -12,11 +13,11 @@ LastFmScrobbler::LastFmScrobbler(Phonon::MediaObject *mediaObject)
     // on applicaton start or when Last.fm is enabled.
     state = this->LastFmStateNone;
     netManager = new QNetworkAccessManager(this);
-    tryToLogin();
+    handshake();
 }
 
 
-void LastFmScrobbler::tryToLogin() {
+void LastFmScrobbler::handshake() {
     QDateTime time = QDateTime::currentDateTime();
     QString timeStamp = QString::number(time.toTime_t());
 
@@ -47,8 +48,8 @@ void LastFmScrobbler::readAuthenticationReply() {
         if (lines.at(0) == "OK") {
             state = LastFmGotToken;
             sessionId = lines.at(1);
-            nowPlaying = lines.at(2);
-            submission = lines.at(3);
+            nowPlayingUrl = lines.at(2);
+            submissionUrl = lines.at(3);
             qDebug("Last.fm token: " + sessionId.toUtf8());
         }
         // TODO: better feedback for the user of what's wrong.
@@ -56,17 +57,10 @@ void LastFmScrobbler::readAuthenticationReply() {
         else {
             qDebug("Authentication problem! Disabling Last.fm");
             LastFmSettings::setActive(false);
+            state = LastFmStateNone;
         }
     }
 }
-
-
-void LastFmScrobbler::readNowPlayingReply() {
-    qDebug("Got Now Playing reply!");
-    QString replyString = nowPlayingReply->readAll();
-    qDebug("Reply: " + replyString.toUtf8());
-}
-
 
 QString LastFmScrobbler::generateToken(QString input, QString timestamp) {
     /*
@@ -82,20 +76,27 @@ QString LastFmScrobbler::generateToken(QString input, QString timestamp) {
 
 void LastFmScrobbler::onTick(qint64 time) {
     /*
-     *
      * If Last.fm was disabled, the signal will be disconnected only
      * when the Phonon state changes. This test avoid undesired
      * scrobbling.
      */
     if (!LastFmSettings::isActive()) return;
 
-    ellapsedTime = mediaObject->currentTime();
+    /*
+     * Since tickinterval = 1000 isn't asserting that onTick is called
+     * every 1 second, we'll use lastTickTime to assert that we'll only
+     * sum 1 to ellapsedTime when 1 second has passed.
+     */
+    if (time == lastTickTime) return;
+
+    ellapsedTime++;
+    lastTickTime = time;
     /*
      * We only can scrobble songs that were played for more than
      * 240s or half of its length.
      */
-    if (ellapsedTime >= mediaObject->remainingTime() || ellapsedTime >= 240000) {
-        enqueueTrack();
+    if (ellapsedTime >= timeToScrobble || ellapsedTime >= 240) {
+        songsToScrobble->append(currentSong);
         tryToScrobbleQueue();
 
         // Disconnect this slot if the song was already queued.
@@ -105,17 +106,55 @@ void LastFmScrobbler::onTick(qint64 time) {
 
 void LastFmScrobbler::resetSongStatus() {
     ellapsedTime = 0;
+    lastTickTime = 0;
     canScrobble = false;
-    SongInfo currentSong;
+
+    // Reset currentSong
+    SongInfo resetSong;
+    currentSong = resetSong;
 }
 
-void LastFmScrobbler::enqueueTrack() {
-    qDebug("Song queued to scrobble!");
-    songsToScrobble->enqueue(currentSong);
-}
 
 void LastFmScrobbler::tryToScrobbleQueue() {
     qDebug("Trying to scrobble queued songs");
+    // If we got no token or queue, nothing done.
+    if (state != LastFmGotToken || songsToScrobble->count() == 0) return;
+
+    // Try to scrobble queue
+    QUrl url(submissionUrl);
+    QString dataToPost = "s=" + sessionId;
+
+    for (int i = 0; i < songsToScrobble->count(); i++) {
+        SongInfo song = songsToScrobble->at(i);
+        dataToPost += "&a[" + QString::number(i) + "]=" + song.artist + "&" +
+                      "t[" + QString::number(i) + "]=" + song.title + "&" +
+                      "b[" + QString::number(i) + "]=" + song.album + "&" +
+                      "i[" + QString::number(i) + "]=" + song.startTimeStamp + "&" +
+                      "l[" + QString::number(i) + "]=" + song.duration + "&" +
+                      "n[" + QString::number(i) + "]=" + "&" + // TODO: track number
+                      "m[" + QString::number(i) + "]=" + "&" + // TODO: MusicBrainz id
+                      "r[" + QString::number(i) + "]=" + "&" + // TODO: rating
+                      "o[" + QString::number(i) + "]=P";
+    }
+    qDebug("Data to post to " + submissionUrl.toUtf8() + ": " + dataToPost.toUtf8());
+
+    QNetworkRequest netRequest;
+    netRequest.setUrl(url);
+    qDebug("Scrobbling...");
+    submissionReply = netManager->post(netRequest,dataToPost.toUtf8());
+    connect(submissionReply, SIGNAL(readyRead()), this, SLOT(readSubmissionReply()));
+}
+
+
+
+void LastFmScrobbler::readSubmissionReply() {
+    qDebug("Got submission reply!");
+    QString replyString = nowPlayingReply->readAll();
+    QStringList lines = replyString.split('\n');
+    qDebug("Reply: " + QString(lines.at(0)).toUtf8());
+
+    // TODO: handle server reply in a better way. Couldn't get OK/BADSESSION/etc.
+    // TODO: in case of BADSESSION, handshake again.
 }
 
 void LastFmScrobbler::handleStateChange(Phonon::State newState, Phonon::State oldState) {
@@ -146,21 +185,25 @@ void LastFmScrobbler::handleStateChange(Phonon::State newState, Phonon::State ol
             canScrobble = true;
             qDebug("Can scrobble!");
 
-            SongInfo currentSong;
+            // Reset currentSong
+            SongInfo resetSong;
+            currentSong = resetSong;
             currentSong.artist = artist;
             currentSong.title = title;
+            qDebug("Artist: " + currentSong.artist.toUtf8());
+            currentSong.duration = QString::number(qRound(mediaObject->totalTime() / 1000));
             if (!album.isEmpty()) currentSong.album = album;
 
             QDateTime time = QDateTime::currentDateTime();
             currentSong.startTimeStamp = QString::number(time.toTime_t()).toUtf8();
 
             // Send a "Now Playing" notification to Last.fm
-            QUrl url(nowPlaying);
+            QUrl url(nowPlayingUrl);
             QString dataToPost = "s=" + sessionId + "&" +
-                                 "a=" + artist + "&" +
-                                 "t=" + title + "&" +
-                                 "b=" + album + "&" +
-                                 "l=" + QString::number(qRound(mediaObject->totalTime() / 1000)) + "&" +
+                                 "a=" + currentSong.artist + "&" +
+                                 "t=" + currentSong.title + "&" +
+                                 "b=" + currentSong.album + "&" +
+                                 "l=" + currentSong.duration + "&" +
                                  "n=";
 
             QNetworkRequest netRequest;
@@ -177,3 +220,8 @@ void LastFmScrobbler::handleStateChange(Phonon::State newState, Phonon::State ol
 
 }
 
+void LastFmScrobbler::readNowPlayingReply() {
+    qDebug("Got Now Playing reply!");
+    QString replyString = nowPlayingReply->readAll();
+    qDebug("Reply: " + replyString.toUtf8());
+}

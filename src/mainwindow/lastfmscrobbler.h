@@ -5,7 +5,7 @@
 #include <QCryptographicHash> // To generate the token.
 #include <QDateTime>
 #include <QStringList>
-#include <QQueue>
+#include <QList>
 #include <QUrl>
 #include <QNetworkAccessManager>
 #include <QNetworkRequest>
@@ -30,10 +30,10 @@ public slots:
     // Network related stuff
     void readAuthenticationReply();
     void readNowPlayingReply();
+    void readSubmissionReply();
 
 private:
-    void tryToLogin();
-    void enqueueTrack();
+    void handshake();
     void tryToScrobbleQueue();
     QString generateToken(QString input, QString timestamp);
     Phonon::MediaObject *mediaObject;
@@ -44,9 +44,10 @@ private:
         QString album;
         QString title;
         QString startTimeStamp;
+        QString duration;
     };
     SongInfo currentSong;
-    QQueue<SongInfo> *songsToScrobble;
+    QList<SongInfo> *songsToScrobble;
 
     // Network related stuff
     enum LastFmState  {
@@ -55,13 +56,16 @@ private:
         LastFmGotToken = 2
     };
     LastFmState state;
+    int timeToScrobble;
+    qint64 lastTickTime;
     QString sessionId;
-    QString nowPlaying;
-    QString submission;
+    QString nowPlayingUrl;
+    QString submissionUrl;
     QNetworkAccessManager *netManager;
     QNetworkRequest *netRequest;
     QNetworkReply *authReply;
     QNetworkReply *nowPlayingReply;
+    QNetworkReply *submissionReply;
 
 
 
