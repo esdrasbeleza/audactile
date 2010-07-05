@@ -28,7 +28,8 @@ public slots:
     void resetSongStatus();
 
     // Network related stuff
-    void readReply();
+    void readAuthenticationReply();
+    void readNowPlayingReply();
 
 private:
     void tryToLogin();
@@ -54,10 +55,13 @@ private:
         LastFmGotToken = 2
     };
     LastFmState state;
-    QString token;
+    QString sessionId;
+    QString nowPlaying;
+    QString submission;
     QNetworkAccessManager *netManager;
     QNetworkRequest *netRequest;
-    QNetworkReply *netReply;
+    QNetworkReply *authReply;
+    QNetworkReply *nowPlayingReply;
 
 
 
