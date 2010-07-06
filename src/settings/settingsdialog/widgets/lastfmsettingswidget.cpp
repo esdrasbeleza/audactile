@@ -10,11 +10,11 @@ LastFmSettingsWidget::LastFmSettingsWidget(QWidget *parent) : QWidget(parent)
     active = new QCheckBox("Active", this);
 
     QGridLayout *layout = new QGridLayout(this);
-    layout->addWidget(usernameLabel, 0, 0, Qt::AlignRight);
-    layout->addWidget(usernameTextBox, 0, 1);
-    layout->addWidget(passwordLabel, 1, 0, Qt::AlignRight);
-    layout->addWidget(passwordTextBox, 1, 1);
-    layout->addWidget(active, 2, 0, 1, 2);
+    layout->addWidget(active, 0, 0, 1, 2);
+    layout->addWidget(usernameLabel, 1, 0, Qt::AlignRight);
+    layout->addWidget(usernameTextBox, 1, 1);
+    layout->addWidget(passwordLabel, 2, 0, Qt::AlignRight);
+    layout->addWidget(passwordTextBox, 2, 1);
     layout->setSizeConstraint(QLayout::SetFixedSize);
 
     // TODO: make this fill better the window width.
@@ -22,10 +22,28 @@ LastFmSettingsWidget::LastFmSettingsWidget(QWidget *parent) : QWidget(parent)
     usernameTextBox->setText(LastFmSettings::username());
     passwordTextBox->setText(LastFmSettings::password());
     active->setChecked(LastFmSettings::isActive());
+
+    // If Last.fm is not active, disable the textboxes
+    if (!active->isChecked()) {
+        usernameTextBox->setDisabled(true);
+        passwordTextBox->setDisabled(true);
+        usernameLabel->setDisabled(true);
+        passwordLabel->setDisabled(true);
+    }
+    connect(active, SIGNAL(toggled(bool)), this, SLOT(handleLastFmState(bool)));
+
+
 }
 
 void LastFmSettingsWidget::applySettings() {
     LastFmSettings::setPassword(passwordTextBox->text());
     LastFmSettings::setUsername(usernameTextBox->text());
     LastFmSettings::setActive(active->isChecked());
+}
+
+void LastFmSettingsWidget::handleLastFmState(bool enabled) {
+    usernameLabel->setEnabled(enabled);
+    usernameTextBox->setEnabled(enabled);
+    passwordLabel->setEnabled(enabled);
+    passwordTextBox->setEnabled(enabled);
 }

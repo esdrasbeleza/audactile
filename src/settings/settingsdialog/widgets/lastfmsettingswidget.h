@@ -22,6 +22,10 @@ private:
     QLineEdit *usernameTextBox;
     QLineEdit *passwordTextBox;
     QCheckBox *active;
+
+private slots:
+    void handleLastFmState(bool enabled);
+
 };
 
 #endif // LASTFMSETTINGSWIDGET_H
