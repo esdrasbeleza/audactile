@@ -35,7 +35,7 @@ public slots:
 
 private:
     void handshake();
-    void tryToScrobbleQueue();
+    void tryToScrobble();
     QString generateToken(QString input, QString timestamp);
     Phonon::MediaObject *mediaObject;
     int ellapsedTime;

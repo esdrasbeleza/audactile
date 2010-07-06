@@ -24,8 +24,8 @@ void LastFmScrobbler::handshake() {
     QUrl url("http://post.audioscrobbler.com/");
     url.addQueryItem("hs", "true");
     url.addQueryItem("p", "1.2.1");
-    url.addQueryItem("c", "tst"); // TODO: change this to application name
-    url.addQueryItem("v", "1.0");
+    url.addQueryItem("c", "adl"); // TODO: change this to application name
+    url.addQueryItem("v", "0.1");
     url.addQueryItem("u", LastFmSettings::username());
     url.addQueryItem("t", timeStamp);
     url.addQueryItem("a", generateToken(LastFmSettings::password(), timeStamp));
@@ -36,6 +36,11 @@ void LastFmScrobbler::handshake() {
     qDebug("Asking to login to Last.fm...");
     authReply = netManager->get(netRequest);
     connect(authReply, SIGNAL(readyRead()), this, SLOT(readAuthenticationReply()));
+
+    // If we already have songs in the queue, scrobble them!
+    if (songsToScrobble->count() > 0) {
+        tryToScrobble();
+    }
 
 }
 
@@ -97,7 +102,7 @@ void LastFmScrobbler::onTick(qint64 time) {
      */
     if (ellapsedTime >= timeToScrobble || ellapsedTime >= 240) {
         songsToScrobble->append(currentSong);
-        tryToScrobbleQueue();
+        tryToScrobble();
 
         // Disconnect this slot if the song was already queued.
         disconnect(mediaObject, SIGNAL(tick(qint64)), this, SLOT(onTick(qint64)));
@@ -115,7 +120,7 @@ void LastFmScrobbler::resetSongStatus() {
 }
 
 
-void LastFmScrobbler::tryToScrobbleQueue() {
+void LastFmScrobbler::tryToScrobble() {
     qDebug("Trying to scrobble queued songs");
     // If we got no token or queue, nothing done.
     if (state != LastFmGotToken || songsToScrobble->count() == 0) return;
@@ -136,26 +141,33 @@ void LastFmScrobbler::tryToScrobbleQueue() {
                       "r[" + QString::number(i) + "]=" + "&" + // TODO: rating
                       "o[" + QString::number(i) + "]=P";
     }
+    //dataToPost = dataToPost.replace(' ',"%20");
     qDebug("Data to post to " + submissionUrl.toUtf8() + ": " + dataToPost.toUtf8());
 
     QNetworkRequest netRequest;
     netRequest.setUrl(url);
     qDebug("Scrobbling...");
+
     submissionReply = netManager->post(netRequest,dataToPost.toUtf8());
     connect(submissionReply, SIGNAL(readyRead()), this, SLOT(readSubmissionReply()));
 }
 
 
-
 void LastFmScrobbler::readSubmissionReply() {
     qDebug("Got submission reply!");
-    QString replyString = nowPlayingReply->readAll();
-    QStringList lines = replyString.split('\n');
-    qDebug("Reply: " + QString(lines.at(0)).toAscii());
+    QString replyString = submissionReply->readAll().replace('\n', "");
+    qDebug("Reply: " + QString(replyString).toAscii());
 
-    songsToScrobble->clear();
-    // TODO: handle server reply in a better way. Couldn't get OK/BADSESSION/etc.
-    // TODO: in case of BADSESSION, handshake again.
+    // If we get an OK, clear our list of songs to scrobble.
+    if (replyString == "OK") {
+            songsToScrobble->clear();
+    }
+    // BADSESSION? Handshake again. And try to scrobble the songs after.
+    else if (replyString == "BADSESSION") {
+        handshake();
+    }
+
+
 }
 
 void LastFmScrobbler::handleStateChange(Phonon::State newState, Phonon::State oldState) {
@@ -177,21 +189,18 @@ void LastFmScrobbler::handleStateChange(Phonon::State newState, Phonon::State ol
 
         // We only can scrobble titles that have
         // artist and title defined.
-        if (!artist.isEmpty() && !title.isEmpty() && state == LastFmGotToken && mediaObject->totalTime() >= 30000) {
+        if (!artist.isEmpty() && !title.isEmpty() && mediaObject->totalTime() >= 30000) {
             timeToScrobble = qRound(mediaObject->totalTime() / 2000);
-            qDebug("Last.fm is enabled!");
             connect(mediaObject, SIGNAL(tick(qint64)), this, SLOT(onTick(qint64)));
             connect(mediaObject, SIGNAL(finished()), this, SLOT(resetSongStatus()));
 
             canScrobble = true;
-            qDebug("Can scrobble!");
 
             // Reset currentSong
             SongInfo resetSong;
             currentSong = resetSong;
             currentSong.artist = artist;
             currentSong.title = title;
-            qDebug("Artist: " + currentSong.artist.toUtf8());
             currentSong.duration = QString::number(qRound(mediaObject->totalTime() / 1000));
             if (!album.isEmpty()) currentSong.album = album;
 
