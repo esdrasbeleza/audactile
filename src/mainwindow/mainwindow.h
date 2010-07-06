@@ -8,7 +8,7 @@
 #include <phonon/AudioOutput>
 #include "playlist/playlistwidget.h"
 #include "playerbar.h"
-#include "lastfmscrobbler.h"
+#include "../services/lastfmscrobbler.h"
 
 
 
