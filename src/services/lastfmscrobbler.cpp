@@ -24,7 +24,7 @@ void LastFmScrobbler::handshake() {
     QUrl url("http://post.audioscrobbler.com/");
     url.addQueryItem("hs", "true");
     url.addQueryItem("p", "1.2.1");
-    url.addQueryItem("c", "adl"); // TODO: change this to application name
+    url.addQueryItem("c", "adl");
     url.addQueryItem("v", "0.1");
     url.addQueryItem("u", LastFmSettings::username());
     url.addQueryItem("t", timeStamp);

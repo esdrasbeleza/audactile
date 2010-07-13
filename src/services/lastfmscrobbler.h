@@ -1,7 +1,6 @@
 #ifndef LASTFMSCROBBLER_H
 #define LASTFMSCROBBLER_H
 
-// TODO: change this file location
 #include <QObject>
 #include <QCryptographicHash> // To generate the token.
 #include <QDateTime>
@@ -63,7 +62,6 @@ private:
     QString nowPlayingUrl;
     QString submissionUrl;
     QNetworkAccessManager *netManager;
-    QNetworkRequest *netRequest;
     QNetworkReply *authReply;
     QNetworkReply *nowPlayingReply;
     QNetworkReply *submissionReply;
