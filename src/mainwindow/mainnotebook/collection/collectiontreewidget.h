@@ -4,6 +4,7 @@
 #include <QTreeWidget>
 #include <QLabel>
 #include <QHeaderView>
+#include "../../../iconfactory.h"
 
 class CollectionTreeWidget : public QTreeWidget
 {

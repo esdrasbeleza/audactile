@@ -61,7 +61,7 @@ QTreeWidgetItem *CollectionTreeWidget::addArtist(QString artist) {
         item->setFont(0, font);
 
         // Set icon
-        item->setIcon(0, QIcon::fromTheme("folder"));
+        item->setIcon(0, IconFactory::fromTheme("folder"));
 
         // Insert item
         insertTopLevelItem(0, item);
@@ -102,7 +102,7 @@ QTreeWidgetItem *CollectionTreeWidget::addAlbum(QString artist, QString album) {
     newAlbumNode = new QTreeWidgetItem((QTreeWidget*)0, toColumns(album));
 
     // Set icon
-    newAlbumNode->setIcon(0, QIcon::fromTheme("media-cdrom"));
+    newAlbumNode->setIcon(0, IconFactory::fromTheme("media-cdrom"));
 
     artistItem->addChild(newAlbumNode);
     artistItem->sortChildren(0, Qt::AscendingOrder);
@@ -149,7 +149,7 @@ QTreeWidgetItem *CollectionTreeWidget::addMusic(QString artist, QString album, Q
     newMusicNode = new QTreeWidgetItem((QTreeWidget*)0, toColumns(music));
 
     // Set icon
-    newMusicNode->setIcon(0, QIcon::fromTheme("sound"));
+    newMusicNode->setIcon(0, IconFactory::fromTheme("sound"));
 
     albumItem->addChild(newMusicNode);
     albumItem->sortChildren(0, Qt::AscendingOrder);

@@ -23,12 +23,12 @@ PlayerBar::PlayerBar(QWidget *parent, Phonon::MediaObject *mediaObject, Phonon::
     previousButton = new QToolButton();
     prefButton = new QToolButton();
 
-    playButton->setIcon(QIcon::fromTheme("media-playback-start"));
-    stopButton->setIcon(QIcon::fromTheme("media-playback-stop"));
-    nextButton->setIcon(QIcon::fromTheme("media-skip-forward"));
-    previousButton->setIcon(QIcon::fromTheme("media-skip-backward"));
-    prefButton->setIcon(QIcon::fromTheme("preferences-other"));
-    exitButton->setIcon(QIcon::fromTheme("application-exit"));
+    playButton->setIcon(IconFactory::fromTheme("media-playback-start"));
+    stopButton->setIcon(IconFactory::fromTheme("media-playback-stop"));
+    nextButton->setIcon(IconFactory::fromTheme("media-skip-forward"));
+    previousButton->setIcon(IconFactory::fromTheme("media-skip-backward"));
+    prefButton->setIcon(IconFactory::fromTheme("preferences-other"));
+    exitButton->setIcon(IconFactory::fromTheme("application-exit"));
 
     stopButton->setDisabled(true);
 
@@ -146,13 +146,13 @@ void PlayerBar::updateSongPosition() {
 void PlayerBar::handleState(Phonon::State newState, Phonon::State oldState) {
     // Handle play button
     if (newState == Phonon::PlayingState) {
-        playButton->setIcon(QIcon::fromTheme("media-playback-pause"));
+        playButton->setIcon(IconFactory::fromTheme("media-playback-pause"));
     }
     else if (newState == Phonon::StoppedState) {
-        playButton->setIcon(QIcon::fromTheme("media-playback-start"));
+        playButton->setIcon(IconFactory::fromTheme("media-playback-start"));
     }
     else if (newState == Phonon::PausedState) {
-        playButton->setIcon(QIcon::fromTheme("media-playback-start"));
+        playButton->setIcon(IconFactory::fromTheme("media-playback-start"));
     }
 
     // Handle stop button

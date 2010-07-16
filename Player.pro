@@ -21,7 +21,9 @@ SOURCES += src/mainwindow/mainnotebook/collection/collectiontreewidget.cpp \
     src/settings/settingsdialog/settingsdialog.cpp \
     src/settings/settingsdialog/widgets/lastfmsettingswidget.cpp \
     src/settings/lastfmsettings.cpp \
-    src/services/lastfmscrobbler.cpp
+    src/services/lastfmscrobbler.cpp \
+    src/services/lastfmcontext.cpp \
+    src/iconfactory.cpp
 HEADERS += src/mainwindow/mainnotebook/collection/collectiontreewidget.h \
     src/mainwindow/mainnotebook/filesystem/filesystemwidget.h \
     src/mainwindow/mainnotebook/mainnotebook.h \
@@ -35,6 +37,9 @@ HEADERS += src/mainwindow/mainnotebook/collection/collectiontreewidget.h \
     src/settings/settingsdialog/settingsdialog.h \
     src/settings/settingsdialog/widgets/lastfmsettingswidget.h \
     src/settings/lastfmsettings.h \
-    src/services/lastfmscrobbler.h
+    src/services/lastfmscrobbler.h \
+    src/services/lastfmcontext.h \
+    src/iconfactory.h
 FORMS += 
 OTHER_FILES += TODO.txt
+RESOURCES += icons.qrc

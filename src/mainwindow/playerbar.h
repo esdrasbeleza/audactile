@@ -11,6 +11,7 @@
 #include <phonon/MediaObject>
 #include <phonon/SeekSlider>
 #include <phonon/VolumeSlider>
+#include "../iconfactory.h"
 #include "../settings/settingsdialog/settingsdialog.h"
 
 

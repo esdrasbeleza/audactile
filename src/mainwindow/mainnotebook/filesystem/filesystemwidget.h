@@ -11,6 +11,7 @@
 #include <QLineEdit>
 #include <QLabel>
 #include <phonon/BackendCapabilities>
+#include "../../../iconfactory.h"
 #include "../../mainwindow.h"
 #include "../../playlist/playlistitem.h"
 
