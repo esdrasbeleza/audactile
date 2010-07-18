@@ -39,5 +39,4 @@ HEADERS += src/mainwindow/mainnotebook/collection/collectiontreewidget.h \
     src/services/lastfmscrobbler.h \
     src/services/lastfmcontext.h \
     src/mainwindow/mainnotebook/context/contextwidget.h
-FORMS += 
-OTHER_FILES += TODO.txt
+FORMS +=
