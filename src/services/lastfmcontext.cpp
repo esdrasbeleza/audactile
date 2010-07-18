@@ -31,6 +31,7 @@ void LastFmContext::readContextReply() {
     QString artistName;
     QString artistPicture;
     QString artistSummary;
+    QString artistProfile;
 
     QXmlQuery query;
     query.setFocus(replyString);
@@ -48,7 +49,11 @@ void LastFmContext::readContextReply() {
         query.evaluateTo(&artistName);
         artistName = artistName.trimmed();
 
-        query.setQuery("lfm/artist/image[@size=\"medium\"]/text()");
+        query.setQuery("lfm/artist/url/text()");
+        query.evaluateTo(&artistProfile);
+        artistProfile = artistProfile.trimmed();
+
+        query.setQuery("lfm/artist/image[@size=\"extralarge\"]/text()");
         query.evaluateTo(&artistPicture);
         artistPicture = artistPicture.trimmed();
 
@@ -57,17 +62,18 @@ void LastFmContext::readContextReply() {
         query.evaluateTo(&artistSummary);
         artistSummary = artistSummary.trimmed().replace("&lt;","<").replace("&gt;",">");
         // TODO: Replace all HTML entities!
+
+        // Store the context data into... contextData. Nice!
+        contextData.clear();
+        contextData.insert("artist", artistName);
+        contextData.insert("picture", artistPicture);
+        contextData.insert("summary", artistSummary);
+        contextData.insert("profile", artistProfile);
+
+        // Emit the signal
+        emit contextUpdated(contextData);
     }
     else {
         qDebug("FAIL!");
     }
-
-    // Store the context data into... contextData. Nice!
-    contextData.clear();
-    contextData.insert("artist", artistName);
-    contextData.insert("picture", artistPicture);
-    contextData.insert("summary", artistSummary);
-
-    // Emit the signal
-    emit contextUpdated(contextData);
 }

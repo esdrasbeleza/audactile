@@ -1,12 +1,19 @@
 #ifndef CONTEXTWIDGET_H
 #define CONTEXTWIDGET_H
 
-#include <QWidget>
+#include <QPalette>
 #include <QMap>
 #include <QLabel>
 #include <QVBoxLayout>
 #include <QImage>
 #include <QUrl>
+#include <QFont>
+#include <QWidget>
+#include <QNetworkRequest>
+#include <QNetworkReply>
+#include <QScrollArea>
+#include <QBuffer>
+#include <QImage>
 #include "../../../services/lastfmcontext.h"
 
 class ContextWidget : public QWidget
@@ -21,7 +28,12 @@ private:
     QLabel *artistLabel;
     QLabel *summaryLabel;
     QLabel *pictureLabel;
+    QLabel *moreLinkLabel;
+
+    QImage pictureData;
     void resetLabels();
+    QNetworkReply *contextReply;
+    QBuffer *pictureBuffer;
 
 
 signals:
@@ -29,6 +41,8 @@ signals:
 public slots:
     void songInformationUpdated(QMap<QString, QString> newContextInformation);
     void updateContextInformation(QMap<QString, QString> newContextInformation);
+    void readPictureReply();
+    void showPicture();
 };
 
 #endif // CONTEXTWIDGET_H

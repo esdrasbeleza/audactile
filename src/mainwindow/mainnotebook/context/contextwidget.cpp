@@ -6,21 +6,63 @@ ContextWidget::ContextWidget(QWidget *parent) :
     context = new LastFmContext(this);
     connect(context, SIGNAL(contextUpdated(QMap<QString,QString>)), this, SLOT(updateContextInformation(QMap<QString,QString>)));
 
+    setContentsMargins(QMargins(8, 8, 8, 8));
+    QScrollArea *scrollArea = new QScrollArea(this);
+    scrollArea->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
+    scrollArea->setMidLineWidth(2);
+    scrollArea->setLineWidth(2);
+
+    // Set background and foreground colors
+    QPalette contextPalette = scrollArea->palette();
+    contextPalette.setBrush(backgroundRole(), QColor(255,255, 255));
+    contextPalette.setColor(foregroundRole(), QColor(100,100,100));
+    scrollArea->setPalette(contextPalette);
+    scrollArea->setAutoFillBackground(true);
+
     artistLabel = new QLabel(this);
+    artistLabel->setWordWrap(true);
+    QFont artistFont = artistLabel->font();
+    artistFont.setBold(true);
+    artistFont.setPointSize(artistFont.pointSize() + 4);
+    artistLabel->setFont(artistFont);
+
     pictureLabel = new QLabel(this);
+
     summaryLabel = new QLabel(this);
     summaryLabel->setOpenExternalLinks(true);
     summaryLabel->setWordWrap(true);
+    QFont summaryFont = summaryLabel->font();
+    summaryFont.setPointSize(summaryFont.pointSize() + 2);
+    summaryLabel->setFont(summaryFont);
+
+    moreLinkLabel = new QLabel(this);
+    QFont moreLinkFont = moreLinkLabel->font();
+    moreLinkFont.setItalic(true);
+    moreLinkLabel->setFont(moreLinkFont);
+    moreLinkLabel->setOpenExternalLinks(true);
 
     QVBoxLayout *layout = new QVBoxLayout(this);
-    layout->addWidget(artistLabel);
-    layout->addWidget(summaryLabel);
-    setLayout(layout);
+    layout->setContentsMargins(QMargins(15, 15, 15, 15));
+    layout->addWidget(artistLabel, 0, Qt::AlignTop);
+    layout->addSpacing(20);
+    layout->addWidget(pictureLabel, 0, Qt::AlignTop | Qt::AlignHCenter);
+    layout->addSpacing(20);
+    layout->addWidget(summaryLabel, 0, Qt::AlignTop);
+    layout->addSpacing(20);
+    layout->addWidget(moreLinkLabel, 0, Qt::AlignTop | Qt::AlignRight);
+    layout->addStretch(0);
+    scrollArea->setLayout(layout);
     resetLabels();
+
+    QVBoxLayout *mainLayout = new QVBoxLayout(this);
+    mainLayout->addWidget(scrollArea);
+    setLayout(mainLayout);
+
 }
 
 void ContextWidget::songInformationUpdated(QMap<QString, QString> newContextInformation) {
     lastRequest = newContextInformation;
+    artistLabel->setText(newContextInformation.value("artist"));
     context->getInfo(newContextInformation.value("artist"));
 }
 
@@ -28,17 +70,42 @@ void ContextWidget::updateContextInformation(QMap<QString, QString>newContextInf
     QString artist = newContextInformation.value("artist");
     if (artist.toLower() != lastRequest.value("artist").toLower()) return;
 
-    artistLabel->setText("<b>" + artist + "</b>");
+    artistLabel->setText(artist);
     summaryLabel->setText(newContextInformation.value("summary"));
+    moreLinkLabel->setText("<a href=\"" + newContextInformation.value("profile") + "\">More...</a>");
 
 
     // TODO: LOAD PICTURE
-    // http://lists.trolltech.com/qt-interest/2006-03/thread01519-0.html
-    // http://www.greyc.ensicaen.fr/ensicaen/Docs/Qt4/widgets-imageviewer.html
+    if (!newContextInformation.value("picture").isEmpty()) {
+       pictureBuffer = new QBuffer(this);
+       pictureBuffer->open(QIODevice::WriteOnly);
+
+       QUrl pictureUrl(newContextInformation.value("picture"));
+       QNetworkRequest netRequest;
+       QNetworkAccessManager *netManager = new QNetworkAccessManager(this);
+       netRequest.setUrl(pictureUrl);
+       qDebug("Picture: " + newContextInformation.value("picture").toUtf8());
+       contextReply = netManager->get(netRequest);
+       connect(contextReply, SIGNAL(readyRead()), this, SLOT(readPictureReply())); // TODO: handle error() signal
+       connect(contextReply, SIGNAL(finished()), this, SLOT(showPicture())); // TODO: handle error() signal
+    }
+
+}
+
+void ContextWidget::readPictureReply() {
+    pictureBuffer->write(contextReply->readAll());
+}
+
+void ContextWidget::showPicture() {
+    pictureData.loadFromData(pictureBuffer->data());
+    QPixmap pixmap = QPixmap::fromImage(pictureData);
+    pictureLabel->setPixmap(pixmap);
+    pictureLabel->setMinimumSize(pixmap.size());
 }
 
 void ContextWidget::resetLabels() {
     artistLabel->setText("<b>No music being listened!</b>");
     summaryLabel->clear();
     pictureLabel->clear();
+    moreLinkLabel->clear();
 }

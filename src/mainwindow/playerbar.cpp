@@ -66,12 +66,11 @@ PlayerBar::PlayerBar(QWidget *parent, Phonon::MediaObject *mediaObject, Phonon::
     songPositionLabelsHBox->addWidget(remainingSongPosition, 1, Qt::AlignRight);
     songPositionLabelsWidget->setLayout(songPositionLabelsHBox);
 
-    
     // Set background for song position widget
     QPalette palette = songPositionWidget->palette();
     QLinearGradient songPositionBgGradient(1.0, 1.0, 1.0, 40.0);
-    songPositionBgGradient.setColorAt(0, QColor(250,250,230));
-    songPositionBgGradient.setColorAt(1, QColor(220,220,200));
+    songPositionBgGradient.setColorAt(0.0, QColor(250,250,230));
+    songPositionBgGradient.setColorAt(1.0, QColor(220,220,200));
     palette.setBrush(songPositionLabelsWidget->backgroundRole(), QBrush(songPositionBgGradient));
     palette.setColor(songPositionLabelsWidget->foregroundRole(), QColor(100,100,100));
     songPositionWidget->setPalette(palette);
