@@ -29,6 +29,7 @@ FilesystemWidget::FilesystemWidget(QWidget *parent)
     fsWidgetModel->setNameFilterDisables(false);
     fsWidgetModel->setFilter(QDir::AllDirs|QDir::Files|QDir::NoDotAndDotDot);
     fsListView = new QListView();
+    fsListView->setDragEnabled(true);
     fsListView->setModel(fsWidgetModel);
 
     // We shall use this to filter available file extensions from Phonon
