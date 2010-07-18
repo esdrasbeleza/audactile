@@ -3,7 +3,8 @@
 # -------------------------------------------------
 QT += sql \
     phonon \
-    webkit \
+    xml \
+    xmlpatterns \
     network
 TARGET = Player
 TEMPLATE = app
@@ -14,14 +15,15 @@ SOURCES += src/mainwindow/mainnotebook/collection/collectiontreewidget.cpp \
     src/mainwindow/playlist/playlistitem.cpp \
     src/mainwindow/playerbar.cpp \
     src/mainwindow/mainwindow.cpp \
-    src/mainwindow/mainwidget.cpp \
     src/main.cpp \
     src/settings/applicationsettings.cpp \
     src/settings/settingsdialog/widgets/foldersettingswidget.cpp \
     src/settings/settingsdialog/settingsdialog.cpp \
     src/settings/settingsdialog/widgets/lastfmsettingswidget.cpp \
     src/settings/lastfmsettings.cpp \
-    src/services/lastfmscrobbler.cpp
+    src/services/lastfmscrobbler.cpp \
+    src/services/lastfmcontext.cpp \
+    src/mainwindow/mainnotebook/context/contextwidget.cpp
 HEADERS += src/mainwindow/mainnotebook/collection/collectiontreewidget.h \
     src/mainwindow/mainnotebook/filesystem/filesystemwidget.h \
     src/mainwindow/mainnotebook/mainnotebook.h \
@@ -29,12 +31,13 @@ HEADERS += src/mainwindow/mainnotebook/collection/collectiontreewidget.h \
     src/mainwindow/playlist/playlistitem.h \
     src/mainwindow/playerbar.h \
     src/mainwindow/mainwindow.h \
-    src/mainwindow/mainwidget.h \
     src/settings/applicationsettings.h \
     src/settings/settingsdialog/widgets/foldersettingswidget.h \
     src/settings/settingsdialog/settingsdialog.h \
     src/settings/settingsdialog/widgets/lastfmsettingswidget.h \
     src/settings/lastfmsettings.h \
-    src/services/lastfmscrobbler.h
+    src/services/lastfmscrobbler.h \
+    src/services/lastfmcontext.h \
+    src/mainwindow/mainnotebook/context/contextwidget.h
 FORMS += 
 OTHER_FILES += TODO.txt

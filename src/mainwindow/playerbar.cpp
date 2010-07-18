@@ -206,9 +206,8 @@ void PlayerBar::handleStopButton() {
 /// @brief Update the song information in the bar
 /// 
 /// @param newSongInformation
-void PlayerBar::updateSongInformation(QString newSongInformation) {
-    qDebug("updateSongInformation: " + newSongInformation.toUtf8());
-    currentSongInfo->setText(newSongInformation);
+void PlayerBar::updateSongInformation(QMap<QString, QString>newSongInformation) {
+    currentSongInfo->setText(newSongInformation.value("artist") + " - " + newSongInformation.value("title"));
 }
 
 /// @brief Reset information to its initial state

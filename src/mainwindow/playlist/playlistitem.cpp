@@ -76,8 +76,8 @@ QString PlaylistItem::getArtist() {
     return artist;
 }
 
-QString PlaylistItem::getSongInfo() {
-    return artist + " - " + title;
+QString PlaylistItem::getTitle() {
+    return title;
 }
 
 void PlaylistItem::setBold() {

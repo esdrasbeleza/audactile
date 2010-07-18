@@ -1,0 +1,73 @@
+#include "lastfmcontext.h"
+
+LastFmContext::LastFmContext(QObject *parent) :
+    QObject(parent)
+{
+    netManager = new QNetworkAccessManager(this);
+}
+
+void LastFmContext::getInfo(QString artist) {
+    qDebug("Requesting information for the artist " + artist.toUtf8());
+
+    QUrl url("http://ws.audioscrobbler.com/2.0/");
+    url.addQueryItem("method", "artist.getinfo");
+    url.addQueryItem("artist", artist.toUtf8());
+    url.addQueryItem("api_key", "ee988217b1695e36e1447dc0de443ac3");
+
+    QNetworkRequest netRequest;
+    netRequest.setUrl(url);
+    contextReply = netManager->get(netRequest);
+    connect(contextReply, SIGNAL(finished()), this, SLOT(readContextReply())); // TODO: handle error() signal
+}
+
+void LastFmContext::readContextReply() {
+    qDebug("Got reply!");
+    QString replyString = QString::fromUtf8(contextReply->readAll());
+
+    if (replyString.isEmpty()) return; // Avoid empty parsing of XML
+
+    // Parametres
+    QString status;
+    QString artistName;
+    QString artistPicture;
+    QString artistSummary;
+
+    QXmlQuery query;
+    query.setFocus(replyString);
+    query.setQuery("lfm[@status = 'ok']/count(artist)");
+    query.evaluateTo(&status);
+    status = status.trimmed();
+    qDebug("Status: " + status.toUtf8());
+
+    /*
+     * If we got the data successfully, let's read it.
+     * I hate XML.
+     */
+    if (status == "1") {
+        query.setQuery("lfm/artist/name/text()");
+        query.evaluateTo(&artistName);
+        artistName = artistName.trimmed();
+
+        query.setQuery("lfm/artist/image[@size=\"medium\"]/text()");
+        query.evaluateTo(&artistPicture);
+        artistPicture = artistPicture.trimmed();
+
+        // Summary has HTML entities that must be un-replaced.
+        query.setQuery("lfm/artist/bio/summary/text()");
+        query.evaluateTo(&artistSummary);
+        artistSummary = artistSummary.trimmed().replace("&lt;","<").replace("&gt;",">");
+        // TODO: Replace all HTML entities!
+    }
+    else {
+        qDebug("FAIL!");
+    }
+
+    // Store the context data into... contextData. Nice!
+    contextData.clear();
+    contextData.insert("artist", artistName);
+    contextData.insert("picture", artistPicture);
+    contextData.insert("summary", artistSummary);
+
+    // Emit the signal
+    emit contextUpdated(contextData);
+}

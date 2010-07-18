@@ -19,6 +19,7 @@ public:
     PlaylistItem(QUrl url);
     QUrl getFileUrl();
     QString getArtist();
+    QString getTitle();
     void setBold();
     void removeBold();
     QString getSongInfo();

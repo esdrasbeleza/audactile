@@ -7,6 +7,7 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QLabel>
+#include <QMap>
 #include <cmath>
 #include <phonon/MediaObject>
 #include <phonon/SeekSlider>
@@ -25,7 +26,7 @@ public:
 
 public slots:
     void updateSongPosition();
-    void updateSongInformation(QString newSongInformation);
+    void updateSongInformation(QMap<QString,QString> newSongInformation);
     void handleState(Phonon::State oldState, Phonon::State newState);
     void handlePlayButton();
     void handleStopButton();
