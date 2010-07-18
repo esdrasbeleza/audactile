@@ -16,7 +16,7 @@
 #include <QImage>
 #include "../../../services/lastfmcontext.h"
 
-class ContextWidget : public QWidget
+class ContextWidget : public QScrollArea
 {
 Q_OBJECT
 public:

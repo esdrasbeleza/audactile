@@ -75,5 +75,6 @@ void LastFmContext::readContextReply() {
     }
     else {
         qDebug("FAIL!");
+        // TODO: emit error!
     }
 }

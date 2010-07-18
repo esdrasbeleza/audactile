@@ -1,23 +1,22 @@
 #include "contextwidget.h"
 
+// TODO: put a "fetch info" and "reload" buttons.
+// TODO: show a message when no information is available.
 ContextWidget::ContextWidget(QWidget *parent) :
-    QWidget(parent)
+    QScrollArea(parent)
 {
     context = new LastFmContext(this);
     connect(context, SIGNAL(contextUpdated(QMap<QString,QString>)), this, SLOT(updateContextInformation(QMap<QString,QString>)));
 
-    setContentsMargins(QMargins(8, 8, 8, 8));
-    QScrollArea *scrollArea = new QScrollArea(this);
-    scrollArea->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
-    scrollArea->setMidLineWidth(2);
-    scrollArea->setLineWidth(2);
+    setFrameShape(QFrame::Box);
 
     // Set background and foreground colors
-    QPalette contextPalette = scrollArea->palette();
-    contextPalette.setBrush(backgroundRole(), QColor(255,255, 255));
+    QWidget *widget = new QWidget(this);
+    QPalette contextPalette = widget->palette();
+    contextPalette.setColor(backgroundRole(), QColor(255,255, 255));
     contextPalette.setColor(foregroundRole(), QColor(100,100,100));
-    scrollArea->setPalette(contextPalette);
-    scrollArea->setAutoFillBackground(true);
+    widget->setPalette(contextPalette);
+    widget->setAutoFillBackground(true);
 
     artistLabel = new QLabel(this);
     artistLabel->setWordWrap(true);
@@ -25,6 +24,7 @@ ContextWidget::ContextWidget(QWidget *parent) :
     artistFont.setBold(true);
     artistFont.setPointSize(artistFont.pointSize() + 4);
     artistLabel->setFont(artistFont);
+    artistLabel->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Maximum);
 
     pictureLabel = new QLabel(this);
 
@@ -34,6 +34,8 @@ ContextWidget::ContextWidget(QWidget *parent) :
     QFont summaryFont = summaryLabel->font();
     summaryFont.setPointSize(summaryFont.pointSize() + 2);
     summaryLabel->setFont(summaryFont);
+    summaryLabel->setTextInteractionFlags(Qt::TextBrowserInteraction | Qt::TextSelectableByKeyboard | Qt::TextSelectableByMouse);
+    summaryLabel->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Maximum);
 
     moreLinkLabel = new QLabel(this);
     QFont moreLinkFont = moreLinkLabel->font();
@@ -42,7 +44,7 @@ ContextWidget::ContextWidget(QWidget *parent) :
     moreLinkLabel->setOpenExternalLinks(true);
 
     QVBoxLayout *layout = new QVBoxLayout(this);
-    layout->setContentsMargins(QMargins(15, 15, 15, 15));
+    layout->setContentsMargins(20, 20, 20, 20);
     layout->addWidget(artistLabel, 0, Qt::AlignTop);
     layout->addSpacing(20);
     layout->addWidget(pictureLabel, 0, Qt::AlignTop | Qt::AlignHCenter);
@@ -51,12 +53,11 @@ ContextWidget::ContextWidget(QWidget *parent) :
     layout->addSpacing(20);
     layout->addWidget(moreLinkLabel, 0, Qt::AlignTop | Qt::AlignRight);
     layout->addStretch(0);
-    scrollArea->setLayout(layout);
+    widget->setLayout(layout);
+    setWidget(widget);
+    setWidgetResizable(true);
     resetLabels();
 
-    QVBoxLayout *mainLayout = new QVBoxLayout(this);
-    mainLayout->addWidget(scrollArea);
-    setLayout(mainLayout);
 
 }
 
@@ -73,9 +74,8 @@ void ContextWidget::updateContextInformation(QMap<QString, QString>newContextInf
     artistLabel->setText(artist);
     summaryLabel->setText(newContextInformation.value("summary"));
     moreLinkLabel->setText("<a href=\"" + newContextInformation.value("profile") + "\">More...</a>");
+    pictureLabel->setText("Loading...");
 
-
-    // TODO: LOAD PICTURE
     if (!newContextInformation.value("picture").isEmpty()) {
        pictureBuffer = new QBuffer(this);
        pictureBuffer->open(QIODevice::WriteOnly);
