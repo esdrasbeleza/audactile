@@ -8,11 +8,11 @@ FilesystemWidget::FilesystemWidget(QWidget *parent)
     QToolBar *fsToolbar = new QToolBar();
     fsToolbar->setMovable(false);
 
-    goUpAction = new QAction(QIcon::fromTheme("go-up"), tr("Go up"), this);
+    goUpAction = new QAction(IconFactory::fromTheme("go-up"), tr("Go up"), this);
     connect(goUpAction, SIGNAL(triggered()), this, SLOT(goUp()));
     fsToolbar->addAction(goUpAction);
 
-    goHomeAction = new QAction(QIcon::fromTheme("go-home"), tr("Go to the home folder"), this);
+    goHomeAction = new QAction(IconFactory::fromTheme("go-home"), tr("Go to the home folder"), this);
     connect(goHomeAction, SIGNAL(triggered()), this, SLOT(goHome()));
     fsToolbar->addAction(goHomeAction);
 

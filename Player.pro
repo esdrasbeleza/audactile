@@ -23,7 +23,8 @@ SOURCES += src/mainwindow/mainnotebook/collection/collectiontreewidget.cpp \
     src/settings/lastfmsettings.cpp \
     src/services/lastfmscrobbler.cpp \
     src/services/lastfmcontext.cpp \
-    src/mainwindow/mainnotebook/context/contextwidget.cpp
+    src/mainwindow/mainnotebook/context/contextwidget.cpp \
+    src/iconfactory.cpp
 HEADERS += src/mainwindow/mainnotebook/collection/collectiontreewidget.h \
     src/mainwindow/mainnotebook/filesystem/filesystemwidget.h \
     src/mainwindow/mainnotebook/mainnotebook.h \
@@ -38,5 +39,6 @@ HEADERS += src/mainwindow/mainnotebook/collection/collectiontreewidget.h \
     src/settings/lastfmsettings.h \
     src/services/lastfmscrobbler.h \
     src/services/lastfmcontext.h \
-    src/mainwindow/mainnotebook/context/contextwidget.h
-FORMS +=
+    src/mainwindow/mainnotebook/context/contextwidget.h \
+    src/iconfactory.h
+FORMS += 

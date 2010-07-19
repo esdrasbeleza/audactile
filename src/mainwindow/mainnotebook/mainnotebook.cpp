@@ -27,10 +27,10 @@ MainNotebook::MainNotebook(QWidget *parent, PlaylistWidget *playlistWidget)
     QLabel *testLabel3 = new QLabel(tr("Test label 3"));
 
     // Creates one tab.
-    addTab(collectionWidget, QIcon::fromTheme("audio-x-generic"), tr("Collection"));
-    addTab(filesystemWidget, QIcon::fromTheme("system-file-manager"), tr("Files"));
-    addTab(contextContainer, QIcon::fromTheme("emblem-web"), tr("Context"));
-    addTab(testLabel3, QIcon::fromTheme("text-x-generic"), tr("Playlists"));
+    addTab(collectionWidget, IconFactory::fromTheme("audio-x-generic"), tr("Collection"));
+    addTab(filesystemWidget, IconFactory::fromTheme("system-file-manager"), tr("Files"));
+    addTab(contextContainer, IconFactory::fromTheme("emblem-web"), tr("Context"));
+    addTab(testLabel3, IconFactory::fromTheme("text-x-generic"), tr("Playlists"));
 
     show();
 }

@@ -14,6 +14,7 @@
 #include "../../../iconfactory.h"
 #include "../../mainwindow.h"
 #include "../../playlist/playlistitem.h"
+#include "../../../iconfactory.h"
 
 
 class FilesystemWidget : public QWidget
