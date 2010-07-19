@@ -1,31 +1,34 @@
 #ifndef LASTFMCONTEXT_H
 #define LASTFMCONTEXT_H
 
+#include <QTextDocument>
 #include <QObject>
 #include <QUrl>
-#include <QNetworkAccessManager>
 #include <QNetworkRequest>
 #include <QNetworkReply>
+#include <QNetworkAccessManager>
+#include <QXmlQuery>
+#include <QStringList>
+#include <QMap>
+
 
 class LastFmContext : public QObject
 {
 Q_OBJECT
 public:
-    LastFmContext(QString artist, QObject *parent = 0);
+    explicit LastFmContext(QObject *parent = 0);
+    void getInfo(QString artist);
 
 private:
-    // Network related stuff
-    enum GetContextState  {
-        GetContextNone = 0,
-        GetContextWaitingResponse = 1
-    };
-    GetContextState state;
+    QNetworkAccessManager *netManager;
+    QNetworkReply *contextReply;
+    QMap<QString, QString> contextData;
 
 signals:
+    void contextUpdated(QMap<QString, QString> contextData);    
 
-public slots:
-
-
+private slots:
+    void readContextReply();
 
 };
 

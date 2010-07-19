@@ -35,7 +35,7 @@ void LastFmScrobbler::handshake() {
     netRequest.setUrl(url);
     qDebug("Asking to login to Last.fm...");
     authReply = netManager->get(netRequest);
-    connect(authReply, SIGNAL(readyRead()), this, SLOT(readAuthenticationReply()));
+    connect(authReply, SIGNAL(finished()), this, SLOT(readAuthenticationReply())); // TODO: handle error() signal
 
     // If we already have songs in the queue, scrobble them!
     if (songsToScrobble->count() > 0) {
@@ -155,7 +155,7 @@ void LastFmScrobbler::tryToScrobble() {
 
 void LastFmScrobbler::readSubmissionReply() {
     qDebug("Got submission reply!");
-    QString replyString = submissionReply->readAll().replace('\n', "");
+    QString replyString = QString::fromUtf8(submissionReply->readAll().replace('\n', ""));
     qDebug("Reply: " + QString(replyString).toAscii());
 
     // If we get an OK, clear our list of songs to scrobble.
@@ -232,6 +232,6 @@ void LastFmScrobbler::handleStateChange(Phonon::State newState, Phonon::State ol
 
 void LastFmScrobbler::readNowPlayingReply() {
     qDebug("Got Now Playing reply!");
-    QString replyString = nowPlayingReply->readAll();
+    QString replyString = QString::fromUtf8(nowPlayingReply->readAll());
     qDebug("Reply: " + replyString.toUtf8());
 }

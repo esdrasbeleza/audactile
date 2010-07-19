@@ -122,7 +122,9 @@ void PlaylistWidget::handleStateChange(Phonon::State newState) {
 
 void PlaylistWidget::emitSongInformationUpdated() {
     qDebug("emitSongInformationUpdated");
-    QString songInfo = QString(currentSong->getSongInfo());
+    QMap<QString, QString> songInfo;
+    songInfo.insert("artist", currentSong->getArtist());
+    songInfo.insert("title", currentSong->getTitle());
     emit songInformationUpdated(songInfo);
 }
 

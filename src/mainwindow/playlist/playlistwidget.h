@@ -7,6 +7,7 @@
 #include <QUrl>
 #include <QDir>
 #include <QFileInfo>
+#include <QMap>
 #include <phonon/MediaObject>
 #include "playlistitem.h"
 
@@ -27,7 +28,7 @@ private slots:
     void deleteInvalidItem(PlaylistItem *invalidItem);
 
 signals:
-    void songInformationUpdated(QString newSongInformation);
+    void songInformationUpdated(QMap<QString, QString> newSongInformation);
 
 
 public:

@@ -23,13 +23,14 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Creates the horizontal layout where we'll put our notebook
     QSplitter *middleSplitter = new QSplitter();
-    MainNotebook *mainNotebook = new MainNotebook(this);
-    mainNotebook->setMinimumWidth(200);
     playlistWidget = new PlaylistWidget(this, mediaObject);
+    MainNotebook *mainNotebook = new MainNotebook(this, playlistWidget); // Notebook needs to connect context to playlistwidget!
+    // TODO: playlistWidget must be a singleton.
+    mainNotebook->setMinimumWidth(200);
     middleSplitter->addWidget(mainNotebook);
     middleSplitter->addWidget(playlistWidget);
     middleSplitter->setStretchFactor(0, 1);
-    middleSplitter->setStretchFactor(1, 4);
+    middleSplitter->setStretchFactor(1, 3);
 
     // Create a vertical layout
     QWidget *mainVerticalWidget = new QWidget();
@@ -42,7 +43,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Includes our toolbar with more widgets, friendly called PlayerBar
     PlayerBar *playerbar = new PlayerBar(this, mediaObject, audioOutput);
-    connect(playlistWidget, SIGNAL(songInformationUpdated(QString)), playerbar, SLOT(updateSongInformation(QString)));
+    connect(playlistWidget, SIGNAL(songInformationUpdated(QMap<QString,QString>)), playerbar, SLOT(updateSongInformation(QMap<QString,QString>)));
     connect(playerbar, SIGNAL(nextButtonClicked()), playlistWidget, SLOT(playNextSong()));
     connect(playerbar, SIGNAL(previousButtonClicked()), playlistWidget, SLOT(playPreviousSong()));
     addToolBar(playerbar);

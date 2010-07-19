@@ -66,12 +66,11 @@ PlayerBar::PlayerBar(QWidget *parent, Phonon::MediaObject *mediaObject, Phonon::
     songPositionLabelsHBox->addWidget(remainingSongPosition, 1, Qt::AlignRight);
     songPositionLabelsWidget->setLayout(songPositionLabelsHBox);
 
-    
     // Set background for song position widget
     QPalette palette = songPositionWidget->palette();
     QLinearGradient songPositionBgGradient(1.0, 1.0, 1.0, 40.0);
-    songPositionBgGradient.setColorAt(0, QColor(250,250,230));
-    songPositionBgGradient.setColorAt(1, QColor(220,220,200));
+    songPositionBgGradient.setColorAt(0.0, QColor(250,250,230));
+    songPositionBgGradient.setColorAt(1.0, QColor(220,220,200));
     palette.setBrush(songPositionLabelsWidget->backgroundRole(), QBrush(songPositionBgGradient));
     palette.setColor(songPositionLabelsWidget->foregroundRole(), QColor(100,100,100));
     songPositionWidget->setPalette(palette);
@@ -206,9 +205,8 @@ void PlayerBar::handleStopButton() {
 /// @brief Update the song information in the bar
 /// 
 /// @param newSongInformation
-void PlayerBar::updateSongInformation(QString newSongInformation) {
-    qDebug("updateSongInformation: " + newSongInformation.toUtf8());
-    currentSongInfo->setText(newSongInformation);
+void PlayerBar::updateSongInformation(QMap<QString, QString>newSongInformation) {
+    currentSongInfo->setText(newSongInformation.value("artist") + " - " + newSongInformation.value("title"));
 }
 
 /// @brief Reset information to its initial state
