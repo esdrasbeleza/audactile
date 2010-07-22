@@ -4,7 +4,9 @@
 #include <QVBoxLayout>
 #include <QApplication>
 #include <QDialogButtonBox>
+#include <QStackedWidget>
 
+#include "../../iconfactory.h"
 #include "widgets/foldersettingswidget.h"
 #include "widgets/lastfmsettingswidget.h"
 

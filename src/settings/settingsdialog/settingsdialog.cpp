@@ -8,14 +8,36 @@ SettingsDialog::SettingsDialog(QWidget *parent) : QWidget(parent)
 
     // TODO: add icons. Icons are friends!
 
-    // Create tab bar
-    QTabWidget *settingsTab = new QTabWidget(this);
+    // List to show the selected configuration
+    QListWidget *listWidget = new QListWidget(this);
+    listWidget->setViewMode(QListView::IconMode);
+    listWidget->setIconSize(QSize(48, 48));
+    QLabel *label = new QLabel(this);
+    listWidget->setMaximumHeight(96 + 2*label->minimumHeight());
+    listWidget->setSpacing(12);
+    listWidget->setMovement(QListView::Static);
 
+
+    // Create tab bar
+    QStackedWidget *settingsStack = new QStackedWidget(this);
+
+    // Settings widgets
+    QListWidgetItem *folderSettingsListItem = new QListWidgetItem(IconFactory::fromTheme("audio-x-generic"), "Collection folders");
     folderSettingsWidget = new FolderSettingsWidget(this);
+    QListWidgetItem *lastFmSettingsListItem = new QListWidgetItem(IconFactory::fromTheme("audio-x-generic"), "Last.fm");
     lastFmSettingsWidget = new LastFmSettingsWidget(this);
 
-    settingsTab->addTab(folderSettingsWidget, "Collection folders");
-    settingsTab->addTab(lastFmSettingsWidget, "Last.fm");
+    /*
+     * Add the widgets above to stacked widget and
+     * make a reference for them in the list
+     */
+    listWidget->addItem(folderSettingsListItem);
+    settingsStack->addWidget(folderSettingsWidget);
+    listWidget->addItem(lastFmSettingsListItem);
+    settingsStack->addWidget(lastFmSettingsWidget);
+
+    // Link listwidget and settings stack
+    connect(listWidget, SIGNAL(currentRowChanged(int)), settingsStack, SLOT(setCurrentIndex(int)));
 
     // Create button box
     buttonBox = new QDialogButtonBox(Qt::Horizontal, this);
@@ -23,7 +45,8 @@ SettingsDialog::SettingsDialog(QWidget *parent) : QWidget(parent)
 
     // Other vertical box to put the widgets created before.
     QVBoxLayout *mainVBox = new QVBoxLayout();
-    mainVBox->addWidget(settingsTab);
+    mainVBox->addWidget(listWidget, 0);
+    mainVBox->addWidget(settingsStack);
     mainVBox->addWidget(buttonBox);
     setLayout(mainVBox);
 
