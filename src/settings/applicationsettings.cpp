@@ -65,13 +65,24 @@ void ApplicationSettings::setCollectionFolders(QStringList folders) {
     
     QSettings settings(QSettings::UserScope, QApplication::organizationName(), QApplication::applicationName());
 
+    // Get list of old values
+    QStringList oldFolders = collectionFolderList();
+
+    // Clear old values from settings file
     settings.remove("folders");
 
     settings.beginWriteArray("folders");
     for (int i = 0; i < folders.size(); ++i) {
         settings.setArrayIndex(i);
-        qDebug(folders.at(i).toUtf8());
         settings.setValue("path", folders.at(i));
+
+        // If we're adding a folder that does not exist, scan it!
+        if (!oldFolders.contains(folders.at(i), Qt::CaseSensitive)) {
+            qDebug("Parsing directory...");
+            CollectionDatabase *cdb = CollectionDatabase::instance();
+            cdb->scanDirectory(folders.at(i));
+            delete cdb;
+        }
     }
     settings.endArray();
 }

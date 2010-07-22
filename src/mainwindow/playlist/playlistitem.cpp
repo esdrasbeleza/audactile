@@ -10,7 +10,7 @@ PlaylistItem::PlaylistItem(QString itemFilePath)
     // TODO: make this use the another constructor.
     fileUrl = QUrl().fromLocalFile(itemFilePath);
     mediaObject = new Phonon::MediaObject(this);
-    connect(mediaObject, SIGNAL(stateChanged(Phonon::State,Phonon::State)), this, SLOT(loadMetaData(Phonon::State,Phonon::State)));
+    connect(mediaObject, SIGNAL(stateChanged(Phonon::State,Phonon::State)), this, SLOT(loadMetaData(Phonon::State)));
     mediaObject->setCurrentSource(fileUrl);
 }
 
@@ -20,11 +20,11 @@ PlaylistItem::PlaylistItem(QUrl url) {
     qDebug("URL: " + url.path().toUtf8());
 
     mediaObject = new Phonon::MediaObject(this);
-    connect(this->mediaObject, SIGNAL(stateChanged(Phonon::State,Phonon::State)), this, SLOT(loadMetaData(Phonon::State,Phonon::State)));
+    connect(this->mediaObject, SIGNAL(stateChanged(Phonon::State,Phonon::State)), this, SLOT(loadMetaData(Phonon::State)));
     mediaObject->setCurrentSource(fileUrl);
 }
 
-void PlaylistItem::loadMetaData(Phonon::State newState, Phonon::State) {
+void PlaylistItem::loadMetaData(Phonon::State newState) {
     qDebug("loadMetaData");
 
     if (newState == Phonon::ErrorState) {
@@ -36,6 +36,7 @@ void PlaylistItem::loadMetaData(Phonon::State newState, Phonon::State) {
         qDebug("Error!");
         return;
     }
+
     // If duration is greater than -1, it's a valid file
     duration = mediaObject->totalTime();
     if (duration > -1) {

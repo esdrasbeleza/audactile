@@ -7,6 +7,7 @@
 #include <QStringList>
 #include <QDesktopServices>
 #include <QDir>
+#include "../collection/collectiondatabase.h"
 
 class ApplicationSettings
 {

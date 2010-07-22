@@ -38,7 +38,7 @@ private:
     qint64 duration;
 
 private slots:
-    void loadMetaData(Phonon::State newState, Phonon::State);
+    void loadMetaData(Phonon::State newState);
 
 signals:
     void validFile(PlaylistItem*);
