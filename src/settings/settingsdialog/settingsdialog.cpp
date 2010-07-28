@@ -22,9 +22,9 @@ SettingsDialog::SettingsDialog(QWidget *parent) : QWidget(parent)
     QStackedWidget *settingsStack = new QStackedWidget(this);
 
     // Settings widgets
-    QListWidgetItem *folderSettingsListItem = new QListWidgetItem(IconFactory::fromTheme("audio-x-generic"), "Collection folders");
+    QListWidgetItem *folderSettingsListItem = new QListWidgetItem(IconFactory::fromTheme("system-file-manager"), "Collection folders");
     folderSettingsWidget = new FolderSettingsWidget(this);
-    QListWidgetItem *lastFmSettingsListItem = new QListWidgetItem(IconFactory::fromTheme("audio-x-generic"), "Last.fm");
+    QListWidgetItem *lastFmSettingsListItem = new QListWidgetItem(QIcon("icons/lastfm.png"), "Last.fm");
     lastFmSettingsWidget = new LastFmSettingsWidget(this);
 
     /*

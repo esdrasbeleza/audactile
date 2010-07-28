@@ -46,3 +46,5 @@ HEADERS += src/mainwindow/mainnotebook/collection/collectiontreewidget.h \
     src/collection/collectiondatabase.h \
     src/collection/collectionitem.h
 FORMS += 
+RESOURCES += images.qrc
+OTHER_FILES += README
