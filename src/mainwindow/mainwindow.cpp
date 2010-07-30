@@ -22,20 +22,29 @@ MainWindow::MainWindow(QWidget *parent)
     LastFmScrobbler *scrobbler = new LastFmScrobbler(mediaObject);
 
     // Creates the horizontal layout where we'll put our notebook
-    QSplitter *middleSplitter = new QSplitter();
+    middleSplitter = new QSplitter();
+    connect(middleSplitter, SIGNAL(splitterMoved(int,int)), this, SLOT(saveSplitterSize(int, int)));
     playlistWidget = new PlaylistWidget(this, mediaObject);
-    MainNotebook *mainNotebook = new MainNotebook(this, playlistWidget); // Notebook needs to connect context to playlistwidget!
+    mainNotebook = new MainNotebook(this, playlistWidget); // Notebook needs to connect context to playlistwidget!
     // TODO: playlistWidget must be a singleton.
     mainNotebook->setMinimumWidth(200);
+
+    // Add widgets
     middleSplitter->addWidget(mainNotebook);
     middleSplitter->addWidget(playlistWidget);
     middleSplitter->setStretchFactor(0, 1);
     middleSplitter->setStretchFactor(1, 3);
 
+    // Set splitter sizes to saved sizes, if existent
+    int notebookSize = ceil(width() * ApplicationSettings::getSplitterSize());
+    QList<int> sizes;
+    sizes.append(notebookSize);
+    sizes.append(width() - notebookSize);
+    middleSplitter->setSizes(sizes);
+
     // Create a vertical layout
     QWidget *mainVerticalWidget = new QWidget();
     QVBoxLayout *verticalLayout = new QVBoxLayout();
-
 
     verticalLayout->addWidget(middleSplitter);
     mainVerticalWidget->setLayout(verticalLayout);
@@ -49,6 +58,13 @@ MainWindow::MainWindow(QWidget *parent)
     addToolBar(playerbar);
 }
 
+
+// Handle splitter movement
+void MainWindow::saveSplitterSize(int pos, int index) {
+    if (middleSplitter->widget(index) == playlistWidget) {
+        ApplicationSettings::setSplitterSize((float)pos / width());
+    }
+}
 
 /*
  *
@@ -67,3 +83,5 @@ void MainWindow::handleMute(bool mute) {
 void MainWindow::handleVolume(qreal volume) {
     outputVolume = volume;
 }
+
+

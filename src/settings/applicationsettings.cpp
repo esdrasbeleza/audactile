@@ -29,6 +29,26 @@ int ApplicationSettings::getTabOrder(QString tab) {
     return position;
 }
 
+void ApplicationSettings::setSplitterSize(float value) {
+    QSettings settings(QSettings::UserScope, QApplication::organizationName(), QApplication::applicationName());
+
+    settings.beginGroup("Widgets");
+    settings.setValue("SplitterRelativeSize", QString::number(value)); // Save as string only to make it readable
+    settings.endGroup();
+}
+
+float ApplicationSettings::getSplitterSize() {
+    QSettings settings(QSettings::UserScope, QApplication::organizationName(), QApplication::applicationName());
+
+    settings.beginGroup("Widgets");
+    float size = settings.value("SplitterRelativeSize", 0.25).toFloat();
+    settings.endGroup();
+
+    return size;
+}
+
+
+
 void ApplicationSettings::createAppDirIfNeeded() {
     QString storageLocation = QDesktopServices::storageLocation(QDesktopServices::DataLocation);
     QDir dir(storageLocation);

@@ -16,6 +16,8 @@ public:
     static QStringList collectionFolderList();
     static void setTabOrder(QString tab, int value);
     static int  getTabOrder(QString tab);
+    static void setSplitterSize(float value);
+    static float  getSplitterSize();
     static void addCollectionFolder(QString location);
     static void removeColletionFolder(QString location);
     static void setCollectionFolders(QStringList folders);

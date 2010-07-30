@@ -24,10 +24,13 @@ public:
 
 private:
     qreal outputVolume;
+    MainNotebook *mainNotebook;
+    QSplitter *middleSplitter;
 
 private slots:
     void handleMute(bool mute);
     void handleVolume(qreal volume);
+    void saveSplitterSize(int pos, int index);
 
 };
 
