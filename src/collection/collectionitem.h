@@ -6,6 +6,7 @@
 #include <QUrl>
 #include <phonon/MediaSource>
 #include <phonon/MediaObject>
+#include <phonon/AudioOutput>
 
 class CollectionItem : public QObject
 {
@@ -15,7 +16,7 @@ public:
     QString getArtist();
 
 private:
-    Phonon::MediaObject *m;
+    Phonon::MediaObject *metaDataResolver;
     QString filePath;
     QString fileName;
     QString artist;

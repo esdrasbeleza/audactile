@@ -34,13 +34,15 @@ void CollectionDatabase::scanDirectory(QDir directory) {
         }
         else if (QFileInfo(fileEntry).isFile()) {
             qDebug("Adding file " + fileEntry.toUtf8());
-            CollectionItem *item = new CollectionItem(fileEntry, this);
-            connect(item, SIGNAL(validFile(CollectionItem*)), this, SLOT(addSong(CollectionItem*)));
+            CollectionItem *item = new CollectionItem(fileEntry);
+            CollectionDatabase *cdb = this->instance();
+            connect(item, SIGNAL(validFile(CollectionItem*)), cdb, SLOT(addSong(CollectionItem*)));
         }
     }
 
 }
 
 void CollectionDatabase::addSong(CollectionItem *validFile) {
+    qDebug("addSong!");
     qDebug(validFile->getArtist().toUtf8());
 }

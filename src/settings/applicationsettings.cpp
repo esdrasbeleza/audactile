@@ -9,6 +9,26 @@ void ApplicationSettings::initialisation() {
     settings.endGroup();
 }
 
+
+void ApplicationSettings::setTabOrder(QString tab, int value) {
+    QSettings settings(QSettings::UserScope, QApplication::organizationName(), QApplication::applicationName());
+
+    settings.beginGroup("TabOrder");
+    settings.setValue(tab, value);
+    settings.endGroup();
+}
+
+
+int ApplicationSettings::getTabOrder(QString tab) {
+    QSettings settings(QSettings::UserScope, QApplication::organizationName(), QApplication::applicationName());
+
+    settings.beginGroup("TabOrder");
+    int position = settings.value(tab, -1).toInt();
+    settings.endGroup();
+
+    return position;
+}
+
 void ApplicationSettings::createAppDirIfNeeded() {
     QString storageLocation = QDesktopServices::storageLocation(QDesktopServices::DataLocation);
     QDir dir(storageLocation);

@@ -26,6 +26,8 @@ private slots:
     void dndActionChanged(Qt::DropAction newAction);
     void insertValidItem(PlaylistItem *newItem);
     void deleteInvalidItem(PlaylistItem *invalidItem);
+    void addSong(PlaylistItem *newItem, int index = -1);
+    void addSong(QUrl url, int index = -1);
 
 signals:
     void songInformationUpdated(QMap<QString, QString> newSongInformation);
@@ -33,8 +35,6 @@ signals:
 
 public:
     PlaylistWidget(QWidget *parent, Phonon::MediaObject *mediaObject);
-    void addSong(PlaylistItem *newItem, int index = -1);
-    void addSong(QUrl url, int index = -1);
 
 
 private:

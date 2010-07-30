@@ -14,6 +14,8 @@ class ApplicationSettings
 public:
     static void initialisation();
     static QStringList collectionFolderList();
+    static void setTabOrder(QString tab, int value);
+    static int  getTabOrder(QString tab);
     static void addCollectionFolder(QString location);
     static void removeColletionFolder(QString location);
     static void setCollectionFolders(QStringList folders);

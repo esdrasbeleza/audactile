@@ -10,9 +10,8 @@
 #include <QAction>
 #include <QLineEdit>
 #include <QLabel>
-#include <phonon/BackendCapabilities>
 #include "../../../iconfactory.h"
-#include "../../mainwindow.h"
+//#include "../../mainwindow.h"
 #include "../../playlist/playlistitem.h"
 #include "../../../iconfactory.h"
 
@@ -32,6 +31,9 @@ private slots:
     void doubleClickAt(QModelIndex modelIndex);
     void setNameFilter(QString filter);
 
+signals:
+    void askToAddItemToPlaylist(PlaylistItem*);
+
 private:
     QDir dir;
     QString startLocation;
@@ -40,7 +42,6 @@ private:
     QAction *goUpAction;
     QAction *goHomeAction;
     QLineEdit* filterEdit;
-    QStringList* getPhononExtensions();
     void setNameFilter();
 };
 
