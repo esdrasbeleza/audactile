@@ -60,7 +60,7 @@ void LastFmContext::readContextReply() {
         // Summary has HTML entities that must be un-replaced.
         query.setQuery("lfm/artist/bio/summary/text()");
         query.evaluateTo(&artistSummary);
-        artistSummary = artistSummary.trimmed().replace("&lt;","<").replace("&gt;",">");
+        artistSummary = artistSummary.trimmed().replace("&lt;","<").replace("&gt;",">").replace("&quot;", "\"");
         // TODO: Replace all HTML entities!
 
         // Store the context data into... contextData. Nice!
