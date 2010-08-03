@@ -1,6 +1,6 @@
 #include "iconfactory.h"
 
-#ifndef Q_WS_X11
+#ifdef Q_WS_X11
 QIcon IconFactory::fromTheme(QString iconName) {
     // qDebug("=== " + iconName.toUtf8());
     return QIcon::fromTheme(iconName);
