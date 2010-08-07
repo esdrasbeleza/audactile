@@ -6,66 +6,62 @@
 PlaylistItem::PlaylistItem(QString itemFilePath)
 {
     qDebug("PlaylistItem by path");
-
-    // TODO: make this use the another constructor.
     fileUrl = QUrl().fromLocalFile(itemFilePath);
-    mediaObject = new Phonon::MediaObject(this);
-    connect(mediaObject, SIGNAL(stateChanged(Phonon::State,Phonon::State)), this, SLOT(loadMetaData(Phonon::State)));
-    mediaObject->setCurrentSource(fileUrl);
+    loadFile();
 }
 
 PlaylistItem::PlaylistItem(QUrl url) {
     qDebug("PlaylistItem by URL");
     fileUrl = url;
-    qDebug("URL: " + url.path().toUtf8());
-
-    mediaObject = new Phonon::MediaObject(this);
-    connect(this->mediaObject, SIGNAL(stateChanged(Phonon::State,Phonon::State)), this, SLOT(loadMetaData(Phonon::State)));
-    mediaObject->setCurrentSource(fileUrl);
+    loadFile();
 }
 
-void PlaylistItem::loadMetaData(Phonon::State newState) {
-    qDebug("loadMetaData");
+void PlaylistItem::loadFile() {
+    qDebug("File: " + fileUrl.toLocalFile().toUtf8());
+    TagLib::FileRef taglibFileRef = TagLib::FileRef(fileUrl.toLocalFile().toUtf8());
 
-    if (newState == Phonon::ErrorState) {
-        qDebug("Error!");
-        return;
-    }
+    // Verify if some file is valid
+    if (!taglibFileRef.isNull()) {
+        trackNumber = taglibFileRef.tag()->track();
 
-    if (mediaObject->currentSource().type() == Phonon::MediaSource::Invalid) {
-        qDebug("Error!");
-        return;
-    }
-
-    // If duration is greater than -1, it's a valid file
-    duration = mediaObject->totalTime();
-    if (duration > -1) {
-        QMap<QString, QString> metaData = mediaObject->metaData();
-        artist = metaData.value("ARTIST");
-        album = metaData.value("ALBUM");
-        title = metaData.value("TITLE");
+        // Read metadata
+        artist = QString(taglibFileRef.tag()->artist().toCString()).toAscii();
+        album = QString(taglibFileRef.tag()->album().toCString()).toAscii();
+        title = QString(taglibFileRef.tag()->title().toCString()).toAscii();
+        duration = taglibFileRef.audioProperties()->length();
 
         if (artist.isEmpty()) artist = "Undefined";
         if (album.isEmpty())  album  = "Undefined";
         if (title.isEmpty())  title  = "Undefined";
 
-        setText(0, title);
-        setText(1, album);
-        setText(2, artist);
 
         QString qStr;
-        int secs = (duration / 1000) % 60;
-        int mins = (duration / 1000) / 60;
-        setText(3, QString::number(mins) + ":" + qStr.sprintf("%02d", secs));
-        emit validFile(this);
+        int secs = duration % 60;
+        int mins = duration / 60;
+
+        // Set columns text
+        if (trackNumber > 0) { setData(0, Qt::DisplayRole, trackNumber); }
+        else { setData(0, Qt::DisplayRole, QString("")); }
+        setText(1, title);
+        setText(2, album);
+        setText(3, artist);
+        setText(4, QString::number(mins) + ":" + qStr.sprintf("%02d", secs));
+
+        qDebug("Valid!");
+        valid = true;
     }
     else {
-        emit invalidFile(this);
+        qDebug("Invalid!");
+        valid = false;
     }
 }
 
-qint64 PlaylistItem::getDuration() {
+unsigned int PlaylistItem::getDuration() {
     return duration;
+}
+
+bool PlaylistItem::isValid() {
+    return valid;
 }
 
 QUrl PlaylistItem::getFileUrl() {
@@ -79,6 +75,10 @@ QString PlaylistItem::getArtist() {
 
 QString PlaylistItem::getTitle() {
     return title;
+}
+
+unsigned int PlaylistItem::getTrackNumber() {
+    return trackNumber;
 }
 
 void PlaylistItem::setBold() {

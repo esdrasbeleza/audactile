@@ -32,6 +32,7 @@ PlaylistWidget::PlaylistWidget(QWidget *parent, Phonon::MediaObject *mediaObject
 
     // Define titles for labels
     QStringList playlistWidgetHeaders;
+    playlistWidgetHeaders.append("Track");
     playlistWidgetHeaders.append("Title");
     playlistWidgetHeaders.append("Album");
     playlistWidgetHeaders.append("Artist");
@@ -53,11 +54,12 @@ PlaylistWidget::PlaylistWidget(QWidget *parent, Phonon::MediaObject *mediaObject
 
 void PlaylistWidget::playSong(QTreeWidgetItem *doubleClickedItem) {
     qDebug("playSong ");
-    PlaylistItem *item = static_cast<PlaylistItem *>(doubleClickedItem);
+    PlaylistItem *item = (PlaylistItem*) doubleClickedItem;
     if (currentSong != NULL) {
         qDebug("Removing bold...");
         currentSong->removeBold();
     }
+    qDebug("Trying to play song...");
     currentSong = item;
     item->setBold();
     qDebug("Playing " + item->getFileUrl().path().toUtf8());
@@ -130,6 +132,24 @@ void PlaylistWidget::emitSongInformationUpdated() {
 
 void PlaylistWidget::addSong(PlaylistItem *newItem, int index) {
     qDebug("addSong file");
+    newItem->index = index;
+
+    if (newItem->isValid()) {
+        insertValidItem(newItem);
+    }
+    else {
+        delete newItem;
+    }
+}
+
+void PlaylistWidget::addSong(QUrl url, int index) {
+    qDebug("addSong URL " + QString::number(Phonon::MediaSource(url).type()).toUtf8());
+    PlaylistItem *newItem = new PlaylistItem(url);
+    addSong(newItem, index);
+}
+
+void PlaylistWidget::insertValidItem(PlaylistItem *newItem) {
+    qDebug("Inserting item " + newItem->getArtist().toUtf8());
 
     if (mainMediaObject->currentSource().type() == Phonon::MediaSource::Empty) {
         qDebug("First item added");
@@ -137,19 +157,6 @@ void PlaylistWidget::addSong(PlaylistItem *newItem, int index) {
         mainMediaObject->enqueue(newItem->getFileUrl());
     }
 
-    newItem->index = index;
-    connect(newItem, SIGNAL(validFile(PlaylistItem*)), this, SLOT(insertValidItem(PlaylistItem*)));
-    connect(newItem, SIGNAL(invalidFile(PlaylistItem*)), this, SLOT(deleteInvalidItem(PlaylistItem*)));
-}
-
-void PlaylistWidget::addSong(QUrl url, int index) {
-    qDebug("addSong URL " + QString::number(Phonon::MediaSource(url).type()).toUtf8());
-
-    PlaylistItem *newItem = new PlaylistItem(url);
-    addSong(newItem, index);
-}
-
-void PlaylistWidget::insertValidItem(PlaylistItem *newItem) {
     int index = newItem->index;
     if (index == -1) {
         addTopLevelItem(newItem);
@@ -253,6 +260,9 @@ void PlaylistWidget::dropEvent(QDropEvent *event) {
          * If the dropped objects come from outside, we parse them as
          * a list of files, if they are a list of files.
          */
+
+        // TODO: change mouse cursor - Issue GH-45
+
         if (event->source() != this) {
             qDebug("Parsing uri-list");
             QList<QUrl> urlList = event->mimeData()->urls();
@@ -269,7 +279,6 @@ void PlaylistWidget::dropEvent(QDropEvent *event) {
                     qDebug("Add folder");
                     addFolder(url);
                 }
-
             }
         }
 
@@ -299,6 +308,7 @@ void PlaylistWidget::dropEvent(QDropEvent *event) {
                 else { addTopLevelItems(itemsToInsert); }
             }
         }
+
     }
 
     else {
@@ -329,6 +339,15 @@ void PlaylistWidget::dndActionChanged(Qt::DropAction newAction) {
 void PlaylistWidget::removeSelectedItems() {
     if (selectedItems().count() > 0) {
         foreach(QTreeWidgetItem *item, selectedItems()) {
+            // Avoid wrong references
+            qDebug("Deleting currentSong");
+            if (currentSong == item) { currentSong = NULL; }
+            else if (nextSong == item) {
+                qDebug("nextSong");
+                if (itemBelow(nextSong) != NULL) nextSong = (PlaylistItem*)itemBelow(nextSong);
+                else nextSong = NULL;
+            }
+
             delete item;
         }
     }

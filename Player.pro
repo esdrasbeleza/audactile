@@ -50,3 +50,5 @@ HEADERS += src/mainwindow/mainnotebook/collection/collectiontreewidget.h \
 FORMS += 
 RESOURCES += images.qrc
 OTHER_FILES += README
+CONFIG += link_pkgconfig
+PKGCONFIG += taglib

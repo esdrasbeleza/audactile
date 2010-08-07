@@ -2,47 +2,39 @@
 #define PLAYLISTITEM_H
 
 #include <QTreeWidgetItem>
-#include <QMessageBox>
-#include <QFileInfo>
-#include <QMap>
 #include <QUrl>
-#include <phonon/MediaSource>
-#include <phonon/MediaObject>
-#include <phonon/AudioOutput>
+#include <taglib/tag.h>
+#include <taglib/fileref.h>
 
-class PlaylistItem : public QObject, public QTreeWidgetItem
+
+class PlaylistItem : public QTreeWidgetItem
 {
-    Q_OBJECT
 
 public:
     PlaylistItem(QString);
     PlaylistItem(QUrl url);
+    bool isValid();
     QUrl getFileUrl();
     QString getArtist();
     QString getTitle();
+    unsigned int getTrackNumber();
     void setBold();
     void removeBold();
     QString getSongInfo();
-    qint64 getDuration();
+    unsigned int getDuration();
     int index; // Index where item must be inserted at PlaylistWidget
 
 
 private:
+    void loadFile();
     QUrl fileUrl;
-
-    Phonon::MediaObject *mediaObject;
-
+    unsigned int trackNumber;
     QString artist;
     QString title;
     QString album;
-    qint64 duration;
+    unsigned int duration;
+    bool valid;
 
-private slots:
-    void loadMetaData(Phonon::State newState);
-
-signals:
-    void validFile(PlaylistItem*);
-    void invalidFile(PlaylistItem*);
 
 };
 
