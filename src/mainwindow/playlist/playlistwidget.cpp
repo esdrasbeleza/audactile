@@ -170,7 +170,7 @@ void PlaylistWidget::deleteInvalidItem(PlaylistItem *invalidItem) {
     delete invalidItem;
 }
 
-void PlaylistWidget::addFolder(QUrl url) {
+void PlaylistWidget::addFolder(QUrl url, int &index) {
     qDebug("addFolder " + url.path().toUtf8());
 
     // You shouldn't call this to add files, man.
@@ -183,11 +183,18 @@ void PlaylistWidget::addFolder(QUrl url) {
         qDebug("Parsing " + fileEntry.toUtf8());
         if (QFileInfo(fileEntry).isDir()) {
             qDebug("Adding folder " + fileEntry.toUtf8());
-            addFolder(QUrl(fileEntry));
+            addFolder(QUrl(fileEntry), index);
         }
         else if (QFileInfo(fileEntry).isFile()) {
-            qDebug("Adding file " + fileEntry.toUtf8());
-            addSong(QUrl(fileEntry));
+            qDebug("Adding file " + fileEntry.toUtf8() + "at index " + QString::number(index).toUtf8());
+            addSong(QUrl(fileEntry), index);
+
+            /*
+             * If index is -1, we must append all songs to the end, so there's no need
+             * to change indexes. But if its >= 0, we must sum +1 to it in order to put
+             * songs in the right place.
+             */
+            if (index != -1) index++;
         }
     }
 }
@@ -276,8 +283,9 @@ void PlaylistWidget::dropEvent(QDropEvent *event) {
                 }
                 // If it's a folder, add it recursively
                 else if (QFileInfo(url.path()).isDir()) {
+                    int indexToInsert = indexOfTopLevelItem(itemAt(event->pos()));
                     qDebug("Add folder");
-                    addFolder(url);
+                    addFolder(url, indexToInsert);
                 }
             }
         }

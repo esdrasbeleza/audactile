@@ -44,7 +44,7 @@ private:
     QDrag *drag;
     Qt::DropAction dndAction;
     void emitSongInformationUpdated();
-    void addFolder(QUrl url);
+    void addFolder(QUrl url, int &index);
 
 
     // Drag and drop events
