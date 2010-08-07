@@ -81,7 +81,11 @@ void FilesystemWidget::goHome() {
 
 void FilesystemWidget::pathChanged(QString newPath) {
     // Enable/disable go up button
-    if (dir.absolutePath() == QDir::rootPath()) { goUpAction->setDisabled(true); }
+    if (dir.absolutePath() == QDir::rootPath()) {
+        goUpAction->setDisabled(true);
+        // If we are on a Mac, we should allow hidden files - GH-40
+        // fsWidgetModel->setFilter(QDir::AllDirs|QDir::Files|QDir::NoDotAndDotDot|QDir::Hidden);
+    }
     else { goUpAction->setEnabled(true); }
     updateWidget();
 }
