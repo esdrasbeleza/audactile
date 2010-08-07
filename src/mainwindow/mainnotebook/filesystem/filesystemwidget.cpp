@@ -8,6 +8,7 @@ FilesystemWidget::FilesystemWidget(QWidget *parent)
     QToolBar *fsToolbar = new QToolBar();
     fsToolbar->setMovable(false);
 
+
     goUpAction = new QAction(IconFactory::fromTheme("go-up"), tr("Go up"), this);
     connect(goUpAction, SIGNAL(triggered()), this, SLOT(goUp()));
     fsToolbar->addAction(goUpAction);
@@ -29,6 +30,7 @@ FilesystemWidget::FilesystemWidget(QWidget *parent)
     fsWidgetModel->setNameFilterDisables(false);
     fsWidgetModel->setFilter(QDir::AllDirs|QDir::Files|QDir::NoDotAndDotDot);
     fsListView = new QListView();
+    fsListView->setSelectionMode(QAbstractItemView::ExtendedSelection);
     fsListView->setDragEnabled(true);
     fsListView->setModel(fsWidgetModel);
 

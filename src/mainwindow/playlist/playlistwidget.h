@@ -46,12 +46,18 @@ private:
     void emitSongInformationUpdated();
     void addFolder(QUrl url);
 
+
     // Drag and drop events
     void dragEnterEvent(QDragEnterEvent *event);
     void dropEvent(QDropEvent *event);
     Qt::DropActions supportedDropActions() const;
     void dragMoveEvent(QDragMoveEvent *event);
     void mouseMoveEvent(QMouseEvent *event);
+
+    // Keyboard events
+    void keyPressEvent(QKeyEvent *event);
+    void removeSelectedItems();
+    void selectAll();
 
 };
 

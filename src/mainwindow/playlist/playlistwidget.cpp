@@ -325,3 +325,31 @@ void PlaylistWidget::dndActionChanged(Qt::DropAction newAction) {
         qDebug("Copy action");
     }
 }
+
+void PlaylistWidget::removeSelectedItems() {
+    if (selectedItems().count() > 0) {
+        foreach(QTreeWidgetItem *item, selectedItems()) {
+            delete item;
+        }
+    }
+}
+
+void PlaylistWidget::selectAll() {
+    int total = topLevelItemCount();
+    for (int i = 0; i < total; i++) {
+        QTreeWidgetItem *item = topLevelItem(i);
+        item->setSelected(true);
+    }
+}
+
+void PlaylistWidget::keyPressEvent(QKeyEvent *event) {
+
+    if (event->key() == Qt::Key_Delete && event->modifiers() == Qt::NoModifier) {
+        removeSelectedItems();
+    }
+    else if (event->modifiers() == Qt::ControlModifier && event->key() == Qt::Key_A) {
+        qDebug("Select all!");
+        selectAll();
+    }
+
+}
