@@ -5,7 +5,8 @@ QT += sql \
     phonon \
     xml \
     xmlpatterns \
-    network
+    network \
+    webkit
 TARGET = Player
 TEMPLATE = app
 SOURCES += src/mainwindow/mainnotebook/collection/collectiontreewidget.cpp \
@@ -23,11 +24,13 @@ SOURCES += src/mainwindow/mainnotebook/collection/collectiontreewidget.cpp \
     src/settings/lastfmsettings.cpp \
     src/services/lastfmscrobbler.cpp \
     src/services/lastfmcontext.cpp \
-    src/mainwindow/mainnotebook/context/contextwidget.cpp \
     src/iconfactory.cpp \
     src/collection/collectiondatabase.cpp \
     src/collection/collectionitem.cpp \
-    src/separator.cpp
+    src/separator.cpp \
+    src/mainwindow/mainnotebook/context/lyricswidget.cpp \
+    src/mainwindow/mainnotebook/context/artistinfowidget.cpp \
+    src/mainwindow/mainnotebook/context/contextwidget.cpp
 HEADERS += src/mainwindow/mainnotebook/collection/collectiontreewidget.h \
     src/mainwindow/mainnotebook/filesystem/filesystemwidget.h \
     src/mainwindow/mainnotebook/mainnotebook.h \
@@ -42,11 +45,13 @@ HEADERS += src/mainwindow/mainnotebook/collection/collectiontreewidget.h \
     src/settings/lastfmsettings.h \
     src/services/lastfmscrobbler.h \
     src/services/lastfmcontext.h \
-    src/mainwindow/mainnotebook/context/contextwidget.h \
     src/iconfactory.h \
     src/collection/collectiondatabase.h \
     src/collection/collectionitem.h \
-    src/separator.h
+    src/separator.h \
+    src/mainwindow/mainnotebook/context/lyricswidget.h \
+    src/mainwindow/mainnotebook/context/artistinfowidget.h \
+    src/mainwindow/mainnotebook/context/contextwidget.h
 FORMS += 
 RESOURCES += images.qrc
 OTHER_FILES += README

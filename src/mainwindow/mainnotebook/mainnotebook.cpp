@@ -27,7 +27,7 @@ MainNotebook::MainNotebook(QWidget *parent, PlaylistWidget *playlistWidget)
 
     contextContainer = new QWidget(this);
     QVBoxLayout *contextLayout = new QVBoxLayout(contextContainer);
-    contextLayout->setContentsMargins(16, 16, 16, 16);
+    contextLayout->setContentsMargins(5, 5, 5, 5);
     contextLayout->addWidget(contextWidget);
 
     // Playlists widget
