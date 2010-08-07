@@ -41,21 +41,21 @@ MainWindow::MainWindow(QWidget *parent)
     sizes.append(notebookSize);
     sizes.append(width() - notebookSize);
     middleSplitter->setSizes(sizes);
-
-    // Create a vertical layout
-    QWidget *mainVerticalWidget = new QWidget();
-    QVBoxLayout *verticalLayout = new QVBoxLayout();
-
-    verticalLayout->addWidget(middleSplitter);
-    mainVerticalWidget->setLayout(verticalLayout);
-    setCentralWidget(mainVerticalWidget);
+    middleSplitter->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::MinimumExpanding);
 
     // Includes our toolbar with more widgets, friendly called PlayerBar
     PlayerBar *playerbar = new PlayerBar(this, mediaObject, audioOutput);
     connect(playlistWidget, SIGNAL(songInformationUpdated(QMap<QString,QString>)), playerbar, SLOT(updateSongInformation(QMap<QString,QString>)));
     connect(playerbar, SIGNAL(nextButtonClicked()), playlistWidget, SLOT(playNextSong()));
     connect(playerbar, SIGNAL(previousButtonClicked()), playlistWidget, SLOT(playPreviousSong()));
-    addToolBar(playerbar);
+
+    // Create a vertical layout
+    QWidget *mainVerticalWidget = new QWidget();
+    QVBoxLayout *verticalLayout = new QVBoxLayout();
+    verticalLayout->addWidget(playerbar);
+    verticalLayout->addWidget(middleSplitter);
+    mainVerticalWidget->setLayout(verticalLayout);
+    setCentralWidget(mainVerticalWidget);
 }
 
 

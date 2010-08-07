@@ -44,19 +44,11 @@ SettingsDialog::SettingsDialog(QWidget *parent) : QWidget(parent)
     buttonBox->setStandardButtons(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Apply);
 
     // Other vertical box to put the widgets created before.
-    QFrame *separator = new QFrame(this);
-    separator->setFrameShape(QFrame::HLine);
-    separator->setFrameShadow(QFrame::Sunken);
-
-    QFrame *separator2 = new QFrame(this);
-    separator2->setFrameShape(QFrame::HLine);
-    separator2->setFrameShadow(QFrame::Sunken);
-
     QVBoxLayout *mainVBox = new QVBoxLayout();
     mainVBox->addWidget(listWidget, 0);
-    mainVBox->addWidget(separator);
+    mainVBox->addWidget(Separator::horizontalSeparator(this));
     mainVBox->addWidget(settingsStack);
-    mainVBox->addWidget(separator2);
+    mainVBox->addWidget(Separator::horizontalSeparator(this));
     mainVBox->addWidget(buttonBox);
     setLayout(mainVBox);
 

@@ -6,6 +6,7 @@
 #include <QDialogButtonBox>
 #include <QStackedWidget>
 
+#include "../../separator.h"
 #include "../../iconfactory.h"
 #include "widgets/foldersettingswidget.h"
 #include "widgets/lastfmsettingswidget.h"

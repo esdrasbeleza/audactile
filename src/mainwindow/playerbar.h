@@ -2,7 +2,6 @@
 #define PLAYERBAR_H
 
 #include <QApplication>
-#include <QToolBar>
 #include <QToolButton>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
@@ -12,13 +11,14 @@
 #include <phonon/MediaObject>
 #include <phonon/SeekSlider>
 #include <phonon/VolumeSlider>
+#include "../separator.h"
 #include "../iconfactory.h"
 #include "../settings/settingsdialog/settingsdialog.h"
 
 
 using namespace Phonon;
 
-class PlayerBar : public QToolBar
+class PlayerBar : public QWidget
 {
     Q_OBJECT
 

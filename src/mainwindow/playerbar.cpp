@@ -9,19 +9,31 @@ using namespace Phonon;
 /// @param audioOutput AudioOutput that will be linked to MediaObject
 PlayerBar::PlayerBar(QWidget *parent, Phonon::MediaObject *mediaObject, Phonon::AudioOutput *audioOutput)
 {
-    setAllowedAreas(Qt::TopToolBarArea|Qt::BottomToolBarArea);
-    setIconSize(QSize(36, 36));
-
     mainMediaObject = mediaObject;
     setParent(parent);
+    setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Minimum);
 
     // Buttons
-    playButton = new QToolButton();
-    stopButton = new QToolButton();
-    exitButton = new QToolButton();
-    nextButton = new QToolButton();
-    previousButton = new QToolButton();
-    prefButton = new QToolButton();
+    playButton = new QToolButton(this);
+    stopButton = new QToolButton(this);
+    exitButton = new QToolButton(this);
+    nextButton = new QToolButton(this);
+    previousButton = new QToolButton(this);
+    prefButton = new QToolButton(this);
+
+    playButton->setIconSize(QSize(48, 48));
+    stopButton->setIconSize(QSize(48, 48));
+    exitButton->setIconSize(QSize(48, 48));
+    nextButton->setIconSize(QSize(48, 48));
+    previousButton->setIconSize(QSize(48, 48));
+    prefButton->setIconSize(QSize(48, 48));
+
+    playButton->setAutoRaise(true);
+    stopButton->setAutoRaise(true);
+    exitButton->setAutoRaise(true);
+    nextButton->setAutoRaise(true);
+    previousButton->setAutoRaise(true);
+    prefButton->setAutoRaise(true);
 
     playButton->setIcon(IconFactory::fromTheme("media-playback-start"));
     stopButton->setIcon(IconFactory::fromTheme("media-playback-stop"));
@@ -87,18 +99,21 @@ PlayerBar::PlayerBar(QWidget *parent, Phonon::MediaObject *mediaObject, Phonon::
     Phonon::VolumeSlider *volumeSlider = new Phonon::VolumeSlider(audioOutput, this);
     volumeSlider->setMaximumWidth((int)floor(0.2*(window()->width())));
 
-    addWidget(playButton);
-    addWidget(stopButton);
-    addSeparator();
-    addWidget(previousButton);
-    addWidget(nextButton);
-    addSeparator();
-    addWidget(songPositionWidget);
-    addSeparator();
-    addWidget(volumeSlider);
-    addSeparator();
-    addWidget(prefButton);
-    addWidget(exitButton);
+    QHBoxLayout *playerBarLayout = new QHBoxLayout(this);
+    playerBarLayout->addWidget(playButton);
+    playerBarLayout->addWidget(stopButton);
+    playerBarLayout->addWidget(Separator::verticalSeparator(this));
+    playerBarLayout->addWidget(previousButton);
+    playerBarLayout->addWidget(nextButton);
+    playerBarLayout->addWidget(Separator::verticalSeparator(this));
+    playerBarLayout->addWidget(songPositionWidget);
+    playerBarLayout->addWidget(Separator::verticalSeparator(this));
+    playerBarLayout->addWidget(volumeSlider);
+    playerBarLayout->addWidget(Separator::verticalSeparator(this));
+    playerBarLayout->addWidget(prefButton);
+    playerBarLayout->addWidget(exitButton);
+
+    setLayout(playerBarLayout);
 
     // Signals from media source
     connect(mainMediaObject, SIGNAL(tick(qint64)), this, SLOT(updateSongPosition()));
