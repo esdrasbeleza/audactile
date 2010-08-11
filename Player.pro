@@ -30,7 +30,9 @@ SOURCES += src/mainwindow/mainnotebook/collection/collectiontreewidget.cpp \
     src/separator.cpp \
     src/mainwindow/mainnotebook/context/lyricswidget.cpp \
     src/mainwindow/mainnotebook/context/artistinfowidget.cpp \
-    src/mainwindow/mainnotebook/context/contextwidget.cpp
+    src/mainwindow/mainnotebook/context/contextwidget.cpp \
+    src/services/lyricsdownloader.cpp \
+    src/mainwindow/mainnotebook/context/abstractcontainer.cpp
 HEADERS += src/mainwindow/mainnotebook/collection/collectiontreewidget.h \
     src/mainwindow/mainnotebook/filesystem/filesystemwidget.h \
     src/mainwindow/mainnotebook/mainnotebook.h \
@@ -51,7 +53,9 @@ HEADERS += src/mainwindow/mainnotebook/collection/collectiontreewidget.h \
     src/separator.h \
     src/mainwindow/mainnotebook/context/lyricswidget.h \
     src/mainwindow/mainnotebook/context/artistinfowidget.h \
-    src/mainwindow/mainnotebook/context/contextwidget.h
+    src/mainwindow/mainnotebook/context/contextwidget.h \
+    src/services/lyricsdownloader.h \
+    src/mainwindow/mainnotebook/context/abstractcontainer.h
 FORMS += 
 RESOURCES += images.qrc
 OTHER_FILES += README

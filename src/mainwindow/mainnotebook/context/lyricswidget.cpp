@@ -1,11 +1,15 @@
 #include "lyricswidget.h"
 
-LyricsWidget::LyricsWidget(QWidget *parent) : QWidget(parent)
+LyricsWidget::LyricsWidget(QWidget *parent) : AbstractContainer(parent)
 {
-    QLabel *label = new QLabel("Here will be the lyrics");
+    setHtml("No music being listened!");
 
-    QVBoxLayout *layout = new QVBoxLayout(this);
-    layout->addWidget(label);
+    // Try to fetch lyrics
+    lyricsProvider = new LyricsDownloader();
+    connect(lyricsProvider, SIGNAL(lyricsReady(QWebElement)), this, SLOT(showLyrics(QWebElement)));
+}
 
-    setLayout(layout);
+void LyricsWidget::showLyrics(QWebElement webElement) {
+    qDebug("Trying to show lyrics...");
+    setHtml(webElement.toOuterXml());
 }
