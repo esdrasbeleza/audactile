@@ -4,6 +4,7 @@
 #include <QFrame>
 #include <QVBoxLayout>
 #include <QWebView>
+#include <QLabel>
 
 class AbstractContainer : public QFrame
 {
@@ -13,6 +14,8 @@ public:
     void setHtml(QString html);
 
 private:
+    QString header;
+    QString footer;
     QWebView *contentView;
 
 
