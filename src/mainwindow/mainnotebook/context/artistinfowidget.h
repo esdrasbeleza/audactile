@@ -38,6 +38,7 @@ signals:
 
 public slots:
     void updateContextInformation(QMap<QString, QString> newContextInformation);
+    void showContextError();
 };
 
 

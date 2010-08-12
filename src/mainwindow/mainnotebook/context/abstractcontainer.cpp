@@ -7,6 +7,9 @@ AbstractContainer::AbstractContainer(QWidget *parent) :
     setFrameShadow(QFrame::Sunken);
 
     contentView = new QWebView(this);
+    connect(contentView, SIGNAL(linkClicked(QUrl)), this, SLOT(openLinksInExternalWindow(QUrl)));
+    contentView->page()->setLinkDelegationPolicy(QWebPage::DelegateAllLinks);
+    contentView->setContextMenuPolicy(Qt::NoContextMenu);
 
     // Stole font from a QLabel
     QLabel *label = new QLabel("I will die soon!");
@@ -45,4 +48,8 @@ AbstractContainer::AbstractContainer(QWidget *parent) :
 void AbstractContainer::setHtml(QString html) {
     html = header + html + footer;
     contentView->setHtml(html);
+}
+
+void AbstractContainer::openLinksInExternalWindow(QUrl url) {
+    QDesktopServices::openUrl(url);
 }

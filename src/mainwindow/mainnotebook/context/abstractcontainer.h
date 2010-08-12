@@ -6,6 +6,7 @@
 #include <QWebView>
 #include <QLabel>
 #include <QString>
+#include <QDesktopServices>
 
 class AbstractContainer : public QFrame
 {
@@ -19,6 +20,8 @@ private:
     QString footer;
     QWebView *contentView;
 
+private slots:
+    void openLinksInExternalWindow(QUrl url);
 
 signals:
 

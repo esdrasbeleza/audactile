@@ -26,6 +26,7 @@ private:
 
 signals:
     void contextUpdated(QMap<QString, QString> contextData);    
+    void contextError();
 
 private slots:
     void readContextReply();

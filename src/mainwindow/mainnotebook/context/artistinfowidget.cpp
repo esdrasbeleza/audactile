@@ -7,6 +7,7 @@ ArtistInfoWidget::ArtistInfoWidget(QWidget *parent) :
 {
     context = new LastFmContext(this);
     connect(context, SIGNAL(contextUpdated(QMap<QString,QString>)), this, SLOT(updateContextInformation(QMap<QString,QString>)));
+    connect(context, SIGNAL(contextError()), this, SLOT(showContextError()));
 
     resetLabels();
 }
@@ -29,6 +30,10 @@ void ArtistInfoWidget::updateContextInformation(QMap<QString, QString>newContext
     html += "<p>" + newContextInformation.value("summary") + "</p>";
     html += "<div class=\"reference\"><a href=\"" + newContextInformation.value("profile") + "\">More...</a></div>";
     setHtml(html);
+}
+
+void ArtistInfoWidget::showContextError() {
+    setHtml("<div class=\"title\">Error while trying to download information!</div>");
 }
 
 void ArtistInfoWidget::resetLabels() {

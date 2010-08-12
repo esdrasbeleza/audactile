@@ -24,7 +24,10 @@ void LastFmContext::readContextReply() {
     qDebug("Got reply!");
     QString replyString = QString::fromUtf8(contextReply->readAll());
 
-    if (replyString.isEmpty()) return; // Avoid empty parsing of XML
+    if (replyString.isEmpty()) {
+        emit contextError();
+        return; // Avoid empty parsing of XML
+    }
 
     // Parametres
     QString status;
@@ -74,6 +77,6 @@ void LastFmContext::readContextReply() {
     }
     else {
         qDebug("FAIL!");
-        // TODO: emit error!
+        emit contextError();
     }
 }
