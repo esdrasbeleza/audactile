@@ -14,10 +14,25 @@ AbstractContainer::AbstractContainer(QWidget *parent) :
     delete label;
 
     // TODO: set margins, color, etc.
-    header= "<div style=\"font-family: " + font.family() + "; \">";
-    footer = "</div>";
+    QStringList headerList;
+    headerList += "<style type=\"text/css\">body { \n";
+    headerList += "  font-family: " + font.family() + ";\n";
+    headerList += " font-size: " + QString::number(font.pointSize() + 2) + "pt; \n";
+    headerList += "} \n";
+    headerList += ".title {";
+    headerList += " font-size: " + QString::number(font.pointSize() + 4) + "pt; \n";
+    headerList += " font-weight: bold; \n";
+    headerList += "}\n";
+    headerList += ".reference {";
+    headerList += " text-align: right;";
+    headerList += " font-style: italic; \n";
+    headerList += "}\n";
+    headerList += "</style>";
 
-    qDebug("HEADER: " + header.toUtf8());
+    header = headerList.join("");
+
+    footer = ""; // no footer yet.
+
 
     // TODO: open links in another window
     QVBoxLayout *layout = new QVBoxLayout(this);

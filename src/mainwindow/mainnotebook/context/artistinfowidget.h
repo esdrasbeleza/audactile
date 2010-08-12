@@ -14,9 +14,10 @@
 #include <QScrollArea>
 #include <QBuffer>
 #include <QImage>
+#include "abstractcontainer.h"
 #include "../../../services/lastfmcontext.h"
 
-class ArtistInfoWidget : public QScrollArea
+class ArtistInfoWidget : public AbstractContainer
 {
 Q_OBJECT
 
@@ -27,23 +28,16 @@ public:
 private:
     LastFmContext *context;
     QMap<QString, QString> lastRequest;
-    QLabel *artistLabel;
-    QLabel *summaryLabel;
-    QLabel *pictureLabel;
-    QLabel *moreLinkLabel;
 
     QImage pictureData;
     void resetLabels();
     QNetworkReply *contextReply;
-    QBuffer *pictureBuffer;
 
 
 signals:
 
 public slots:
     void updateContextInformation(QMap<QString, QString> newContextInformation);
-    void readPictureReply();
-    void showPicture();
 };
 
 

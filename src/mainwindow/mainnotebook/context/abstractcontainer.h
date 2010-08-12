@@ -5,6 +5,7 @@
 #include <QVBoxLayout>
 #include <QWebView>
 #include <QLabel>
+#include <QString>
 
 class AbstractContainer : public QFrame
 {
