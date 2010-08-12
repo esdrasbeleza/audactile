@@ -53,4 +53,5 @@ ContextWidget::ContextWidget(QWidget *parent) : QWidget(parent)
 
 void ContextWidget::songInformationUpdated(QMap<QString, QString> newContextInformation) {
     artistInfoWidget->songInformationUpdated(newContextInformation);
+    lyricsWidget->songInformationUpdated(newContextInformation);
 }

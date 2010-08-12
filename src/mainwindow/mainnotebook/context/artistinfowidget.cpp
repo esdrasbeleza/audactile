@@ -33,7 +33,7 @@ void ArtistInfoWidget::updateContextInformation(QMap<QString, QString>newContext
 }
 
 void ArtistInfoWidget::showContextError() {
-    setHtml("<div class=\"title\">Error while trying to download information!</div>");
+    setHtml("<div class=\"title\">Error while trying to download information for" + lastRequest.value("artist") + "!</div>");
 }
 
 void ArtistInfoWidget::resetLabels() {
