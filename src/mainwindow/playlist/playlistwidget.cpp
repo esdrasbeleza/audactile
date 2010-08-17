@@ -273,17 +273,15 @@ void PlaylistWidget::dropEvent(QDropEvent *event) {
         if (event->source() != this) {
             qDebug("Parsing uri-list");
             QList<QUrl> urlList = event->mimeData()->urls();
+            int indexToInsert = indexOfTopLevelItem(itemAt(event->pos()));
             foreach (QUrl url, urlList) {
-                qDebug("Trying to add new file: " + url.path().toUtf8());
-
+                qDebug("Trying to add new file: " + url.path().toUtf8());                
                 // If it's not a dir, add it using addSong
                 if (QFileInfo(url.path()).isFile()) {
-                    int index = indexOfTopLevelItem(itemAt(event->pos()));
-                    addSong(url, index);
+                    addSong(url, indexToInsert);
                 }
                 // If it's a folder, add it recursively
-                else if (QFileInfo(url.path()).isDir()) {
-                    int indexToInsert = indexOfTopLevelItem(itemAt(event->pos()));
+                else if (QFileInfo(url.path()).isDir()) {                    
                     qDebug("Add folder");
                     addFolder(url, indexToInsert);
                 }
