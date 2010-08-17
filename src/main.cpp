@@ -10,6 +10,7 @@ int main(int argc, char *argv[])
     a.setApplicationName("Audactile");
     a.setApplicationVersion("0.1");
 
+    // Read and/or set application settings
     ApplicationSettings::createAppDirIfNeeded();
     ApplicationSettings::initialisation();
 
