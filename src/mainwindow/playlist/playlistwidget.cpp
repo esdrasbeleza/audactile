@@ -376,10 +376,14 @@ void PlaylistWidget::selectAll() {
  */
 void PlaylistWidget::keyPressEvent(QKeyEvent *event) {
     if (event->key() == Qt::Key_Delete && event->modifiers() == Qt::NoModifier) {
+        event->accept();
         removeSelectedItems();
     }
     else if (event->modifiers() == Qt::ControlModifier && event->key() == Qt::Key_A) {
-        qDebug("Select all!");
+        event->accept();
         selectAll();
+    }
+    else {
+        event->ignore();
     }
 }

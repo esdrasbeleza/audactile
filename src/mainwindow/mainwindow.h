@@ -28,6 +28,7 @@ private:
     MainNotebook *mainNotebook;
     QSplitter *middleSplitter;
     void keyPressEvent(QKeyEvent *event);
+    void toggleFullscreen();
 
 private slots:
     void handleMute(bool mute);

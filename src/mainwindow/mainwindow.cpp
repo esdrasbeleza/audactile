@@ -10,6 +10,9 @@ MainWindow::MainWindow(QWidget *parent)
     setWindowTitle("Audactile");
     setMinimumWidth(800);
 
+    // Set strong focus, to capture all keyboard events
+    setFocusPolicy(Qt::StrongFocus);
+
     // Our Phonon MediaObject
     mediaObject = new Phonon::MediaObject(this);
     mediaObject->setTickInterval(1000);
@@ -94,28 +97,37 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
     case Qt::Key_Play:
     case Qt::Key_Return:
         qDebug("Play key pressed!");
+        event->accept();
         break;
 
     // Full screen support!
     case Qt::Key_F11:
-        if (windowState() != Qt::WindowFullScreen) {
-            originalWindowState = windowState();
-            showFullScreen();
-        }
-        else {
-            switch (originalWindowState) {
-            case Qt::WindowNoState:
-                showNormal();
-                break;
-            case Qt::WindowMinimized:
-                showMinimized();
-                break;
-            default:
-                showMaximized();
-                break;
-            }
-        }
+        toggleFullscreen();
+        event->accept();
+        break;
+    default:
+        event->ignore();
         break;
     }
 }
 
+// TODO: add button to toggle fullscreen mode.
+void MainWindow::toggleFullscreen() {
+    if (windowState() != Qt::WindowFullScreen) {
+        originalWindowState = windowState();
+        showFullScreen();
+    }
+    else {
+        switch (originalWindowState) {
+        case Qt::WindowNoState:
+            showNormal();
+            break;
+        case Qt::WindowMinimized:
+            showMinimized();
+            break;
+        default:
+            showMaximized();
+            break;
+        }
+    }
+}
