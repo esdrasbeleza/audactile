@@ -33,7 +33,9 @@ SOURCES += src/mainwindow/mainnotebook/collection/collectiontreewidget.cpp \
     src/mainwindow/mainnotebook/context/contextwidget.cpp \
     src/services/lyricsdownloader.cpp \
     src/mainwindow/mainnotebook/context/abstractcontainer.cpp \
-    src/services/collectionservice.cpp
+    src/services/collectionservice.cpp \
+    src/settings/contextsettings.cpp \
+    src/settings/settingsdialog/widgets/contextsettingswidget.cpp
 HEADERS += src/mainwindow/mainnotebook/collection/collectiontreewidget.h \
     src/mainwindow/mainnotebook/filesystem/filesystemwidget.h \
     src/mainwindow/mainnotebook/mainnotebook.h \
@@ -57,7 +59,9 @@ HEADERS += src/mainwindow/mainnotebook/collection/collectiontreewidget.h \
     src/mainwindow/mainnotebook/context/contextwidget.h \
     src/services/lyricsdownloader.h \
     src/mainwindow/mainnotebook/context/abstractcontainer.h \
-    src/services/collectionservice.h
+    src/services/collectionservice.h \
+    src/settings/contextsettings.h \
+    src/settings/settingsdialog/widgets/contextsettingswidget.h
 FORMS += 
 RESOURCES += images.qrc
 OTHER_FILES += README

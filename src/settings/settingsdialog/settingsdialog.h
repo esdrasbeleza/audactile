@@ -10,6 +10,7 @@
 #include "../../iconfactory.h"
 #include "widgets/foldersettingswidget.h"
 #include "widgets/lastfmsettingswidget.h"
+#include "widgets/contextsettingswidget.h"
 
 class SettingsDialog : public QWidget
 {
@@ -23,6 +24,7 @@ private:
     QDialogButtonBox *buttonBox;
     FolderSettingsWidget *folderSettingsWidget;
     LastFmSettingsWidget *lastFmSettingsWidget;
+    ContextSettingsWidget *contextSettingsWidget;
 
 private slots:
     void applySettings();

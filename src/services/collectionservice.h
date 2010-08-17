@@ -3,7 +3,7 @@
 
 #include <QObject>
 #include <QFileSystemWatcher>
-#include "../settings/applicationsettings.cpp"
+#include "../settings/applicationsettings.h"
 
 class CollectionService : public QObject
 {

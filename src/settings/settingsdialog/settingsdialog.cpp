@@ -26,6 +26,8 @@ SettingsDialog::SettingsDialog(QWidget *parent) : QWidget(parent)
     folderSettingsWidget = new FolderSettingsWidget(this);
     QListWidgetItem *lastFmSettingsListItem = new QListWidgetItem(QIcon(":icons/lastfm.png"), "Last.fm");
     lastFmSettingsWidget = new LastFmSettingsWidget(this);
+    QListWidgetItem *contextSettingsListItem = new QListWidgetItem(IconFactory::fromTheme("system-file-manager"), "Context");
+    contextSettingsWidget = new ContextSettingsWidget(this);
 
     /*
      * Add the widgets above to stacked widget and
@@ -35,6 +37,8 @@ SettingsDialog::SettingsDialog(QWidget *parent) : QWidget(parent)
     settingsStack->addWidget(folderSettingsWidget);
     listWidget->addItem(lastFmSettingsListItem);
     settingsStack->addWidget(lastFmSettingsWidget);
+    listWidget->addItem(contextSettingsListItem);
+    settingsStack->addWidget(contextSettingsWidget);
 
     // Link listwidget and settings stack
     connect(listWidget, SIGNAL(currentRowChanged(int)), settingsStack, SLOT(setCurrentIndex(int)));
@@ -72,6 +76,7 @@ SettingsDialog::SettingsDialog(QWidget *parent) : QWidget(parent)
 void SettingsDialog::applySettings() {
     folderSettingsWidget->applySettings();
     lastFmSettingsWidget->applySettings();
+    contextSettingsWidget->applySettings();
 }
 
 void SettingsDialog::handleAbstractButton(QAbstractButton *button) {

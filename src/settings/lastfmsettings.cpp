@@ -53,10 +53,7 @@ QString LastFmSettings::password() {
 bool LastFmSettings::isActive() {
     QSettings settings(QSettings::UserScope, QApplication::organizationName(), QApplication::applicationName());
     settings.beginGroup("lastfm");
-    bool ret = false;
-    if (settings.contains("active")) {
-        ret = settings.value("active").toBool();
-    }
+    bool ret = settings.value("active", false).toBool();
     settings.endGroup();
     return ret;
 }

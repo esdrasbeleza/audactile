@@ -12,7 +12,6 @@ void ApplicationSettings::initialisation() {
 
 void ApplicationSettings::setTabOrder(QString tab, int value) {
     QSettings settings(QSettings::UserScope, QApplication::organizationName(), QApplication::applicationName());
-
     settings.beginGroup("TabOrder");
     settings.setValue(tab, value);
     settings.endGroup();
@@ -68,7 +67,6 @@ void ApplicationSettings::createAppDirIfNeeded() {
 QStringList ApplicationSettings::collectionFolderList() {
     qDebug("collectionFolderList()");
 
-    
     QSettings settings(QSettings::UserScope, QApplication::organizationName(), QApplication::applicationName());
 
     QStringList folders;

@@ -1,7 +1,6 @@
 #include <QtGui/QApplication>
 #include "mainwindow/mainwindow.h"
 #include "settings/applicationsettings.h"
-#include "services/lastfmcontext.h"
 
 int main(int argc, char *argv[])
 {
