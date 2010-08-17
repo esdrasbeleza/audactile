@@ -85,3 +85,37 @@ void MainWindow::handleVolume(qreal volume) {
 }
 
 
+// Handle keyboard events
+void MainWindow::keyPressEvent(QKeyEvent *event) {
+    switch (event->key()) {
+    case Qt::Key_Space:
+    case Qt::Key_Enter:
+    case Qt::Key_MediaPlay:
+    case Qt::Key_Play:
+    case Qt::Key_Return:
+        qDebug("Play key pressed!");
+        break;
+
+    // Full screen support!
+    case Qt::Key_F11:
+        if (windowState() != Qt::WindowFullScreen) {
+            originalWindowState = windowState();
+            showFullScreen();
+        }
+        else {
+            switch (originalWindowState) {
+            case Qt::WindowNoState:
+                showNormal();
+                break;
+            case Qt::WindowMinimized:
+                showMinimized();
+                break;
+            default:
+                showMaximized();
+                break;
+            }
+        }
+        break;
+    }
+}
+

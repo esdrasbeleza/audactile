@@ -367,8 +367,14 @@ void PlaylistWidget::selectAll() {
     }
 }
 
+/*
+ * Handle keyboard shortcuts to playlist widget.
+ *
+ * Del      = Removes selected items.
+ * Ctrl + A = Select all
+ *
+ */
 void PlaylistWidget::keyPressEvent(QKeyEvent *event) {
-
     if (event->key() == Qt::Key_Delete && event->modifiers() == Qt::NoModifier) {
         removeSelectedItems();
     }
@@ -376,5 +382,4 @@ void PlaylistWidget::keyPressEvent(QKeyEvent *event) {
         qDebug("Select all!");
         selectAll();
     }
-
 }

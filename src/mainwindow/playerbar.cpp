@@ -179,6 +179,7 @@ void PlayerBar::handleState(Phonon::State newState, Phonon::State oldState) {
     }
 }
 
+// TODO: deliver the play/stop buttons callback to PlaylistWidget using signals.
 
 /// @brief Callback for play button
 void PlayerBar::handlePlayButton() {
@@ -196,6 +197,13 @@ void PlayerBar::handlePlayButton() {
     updateSongPosition();
 }
 
+/// @brief Callback for stop button
+void PlayerBar::handleStopButton() {
+    if (mainMediaObject->state() > Phonon::StoppedState) {
+        resetDisplay();
+        mainMediaObject->stop();
+    }
+}
 
 /// @brief Callback for previous button
 void PlayerBar::handlePreviousButton() {
@@ -206,16 +214,6 @@ void PlayerBar::handlePreviousButton() {
 void PlayerBar::handleNextButton() {
     emit nextButtonClicked();
 }
-
-
-/// @brief Callback for stop button
-void PlayerBar::handleStopButton() {
-    if (mainMediaObject->state() > Phonon::StoppedState) {
-        resetDisplay();
-        mainMediaObject->stop();
-    }
-}
-
 
 /// @brief Update the song information in the bar
 /// 

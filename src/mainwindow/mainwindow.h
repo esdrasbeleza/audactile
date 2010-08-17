@@ -23,9 +23,11 @@ public:
     Phonon::AudioOutput *audioOutput;
 
 private:
+    Qt::WindowStates originalWindowState;
     qreal outputVolume;
     MainNotebook *mainNotebook;
     QSplitter *middleSplitter;
+    void keyPressEvent(QKeyEvent *event);
 
 private slots:
     void handleMute(bool mute);
