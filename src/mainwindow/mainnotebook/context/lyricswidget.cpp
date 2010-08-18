@@ -2,7 +2,7 @@
 
 LyricsWidget::LyricsWidget(QWidget *parent) : AbstractContainer(parent)
 {
-    setHtml("No music being listened!");
+    setHtml("<div class=\"title\">No music being listened!</div>");
 
     // Try to fetch lyrics
     lyricsProvider = new LyricsDownloader();
