@@ -15,8 +15,7 @@ ContextSettingsWidget::ContextSettingsWidget(QWidget *parent) :
     QVBoxLayout *layout = new QVBoxLayout(this);
     layout->addWidget(fetchSummary);
     layout->addWidget(fetchLyrics);
-
-    // TODO: make widgets appear on top
+    layout->addStretch(0);
 
     setLayout(layout);
 }

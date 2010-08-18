@@ -26,7 +26,7 @@ SettingsDialog::SettingsDialog(QWidget *parent) : QWidget(parent)
     folderSettingsWidget = new FolderSettingsWidget(this);
     QListWidgetItem *lastFmSettingsListItem = new QListWidgetItem(QIcon(":icons/lastfm.png"), "Last.fm");
     lastFmSettingsWidget = new LastFmSettingsWidget(this);
-    QListWidgetItem *contextSettingsListItem = new QListWidgetItem(IconFactory::fromTheme("system-file-manager"), "Context");
+    QListWidgetItem *contextSettingsListItem = new QListWidgetItem(IconFactory::fromTheme("emblem-web"), "Context");
     contextSettingsWidget = new ContextSettingsWidget(this);
 
     /*
