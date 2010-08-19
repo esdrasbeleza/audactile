@@ -28,12 +28,15 @@ private:
     MainNotebook *mainNotebook;
     QSplitter *middleSplitter;
     void keyPressEvent(QKeyEvent *event);
-    void toggleFullscreen();
 
 private slots:
     void handleMute(bool mute);
     void handleVolume(qreal volume);
     void saveSplitterSize(int pos, int index);
+    void toggleFullscreen();
+
+signals:
+    void windowStateChanged(Qt::WindowStates);
 
 };
 

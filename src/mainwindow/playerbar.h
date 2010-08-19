@@ -30,9 +30,8 @@ public slots:
     void updateSongInformation(QMap<QString,QString> newSongInformation);
     void handleState(Phonon::State oldState, Phonon::State newState);
     void handlePlayButton();
+    void handleWindowStateChange(Qt::WindowStates windowState);
     void handleStopButton();
-    void handleNextButton();
-    void handlePreviousButton();
     void exitApplication();
     void openSettings();
     void finish();
@@ -40,6 +39,7 @@ public slots:
 signals:
     void nextButtonClicked();
     void previousButtonClicked();
+    void toggleFullScreen();
 
 private:
     Phonon::MediaObject *mainMediaObject;
@@ -55,6 +55,7 @@ private:
     QToolButton *nextButton;
     QToolButton *previousButton;
     QToolButton *prefButton;
+    QToolButton *fullScreenButton;
 
     void resetDisplay();
 

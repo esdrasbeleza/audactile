@@ -63,7 +63,8 @@ HEADERS += src/mainwindow/mainnotebook/collection/collectiontreewidget.h \
     src/settings/contextsettings.h \
     src/settings/settingsdialog/widgets/contextsettingswidget.h
 FORMS += 
-RESOURCES += images.qrc
+RESOURCES += icons.qrc \
+    extra_images.qrc
 OTHER_FILES += README
 CONFIG += link_pkgconfig
 PKGCONFIG += taglib

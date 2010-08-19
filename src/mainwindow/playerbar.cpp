@@ -16,30 +16,34 @@ PlayerBar::PlayerBar(QWidget *parent, Phonon::MediaObject *mediaObject, Phonon::
     // Buttons
     playButton = new QToolButton(this);
     stopButton = new QToolButton(this);
-    exitButton = new QToolButton(this);
     nextButton = new QToolButton(this);
     previousButton = new QToolButton(this);
+    fullScreenButton = new QToolButton(this);
     prefButton = new QToolButton(this);
+    exitButton = new QToolButton(this);
 
     playButton->setIconSize(QSize(48, 48));
     stopButton->setIconSize(QSize(48, 48));
-    exitButton->setIconSize(QSize(48, 48));
     nextButton->setIconSize(QSize(48, 48));
     previousButton->setIconSize(QSize(48, 48));
+    fullScreenButton->setIconSize(QSize(48, 48));
     prefButton->setIconSize(QSize(48, 48));
+    exitButton->setIconSize(QSize(48, 48));
 
     playButton->setAutoRaise(true);
     stopButton->setAutoRaise(true);
-    exitButton->setAutoRaise(true);
     nextButton->setAutoRaise(true);
     previousButton->setAutoRaise(true);
     prefButton->setAutoRaise(true);
+    fullScreenButton->setAutoRaise(true);
+    exitButton->setAutoRaise(true);
 
     playButton->setIcon(IconFactory::fromTheme("media-playback-start"));
     stopButton->setIcon(IconFactory::fromTheme("media-playback-stop"));
     nextButton->setIcon(IconFactory::fromTheme("media-skip-forward"));
     previousButton->setIcon(IconFactory::fromTheme("media-skip-backward"));
     prefButton->setIcon(IconFactory::fromTheme("preferences-other"));
+    fullScreenButton->setIcon(IconFactory::fromTheme("view-fullscreen"));
     exitButton->setIcon(IconFactory::fromTheme("application-exit"));
 
     stopButton->setDisabled(true);
@@ -47,10 +51,11 @@ PlayerBar::PlayerBar(QWidget *parent, Phonon::MediaObject *mediaObject, Phonon::
     // Signals from buttons
     connect(playButton, SIGNAL(clicked()), this, SLOT(handlePlayButton()));
     connect(stopButton, SIGNAL(clicked()), this, SLOT(handleStopButton()));
-    connect(nextButton, SIGNAL(clicked()), this, SLOT(handleNextButton()));
-    connect(previousButton, SIGNAL(clicked()), this, SLOT(handlePreviousButton()));
+    connect(nextButton, SIGNAL(clicked()), this, SIGNAL(nextButtonClicked()));
+    connect(previousButton, SIGNAL(clicked()), this, SIGNAL(previousButtonClicked()));
     connect(prefButton, SIGNAL(clicked()), this, SLOT(openSettings()));
     connect(exitButton, SIGNAL(clicked()), this, SLOT(exitApplication()));
+    connect(fullScreenButton, SIGNAL(clicked()), this, SIGNAL(toggleFullScreen()));
 
     // Vertical box with slider and current song time labels
     QFrame *songPositionWidget = new QFrame(this);
@@ -110,6 +115,7 @@ PlayerBar::PlayerBar(QWidget *parent, Phonon::MediaObject *mediaObject, Phonon::
     playerBarLayout->addWidget(Separator::verticalSeparator(this));
     playerBarLayout->addWidget(volumeSlider);
     playerBarLayout->addWidget(Separator::verticalSeparator(this));
+    playerBarLayout->addWidget(fullScreenButton);
     playerBarLayout->addWidget(prefButton);
     playerBarLayout->addWidget(exitButton);
 
@@ -205,16 +211,6 @@ void PlayerBar::handleStopButton() {
     }
 }
 
-/// @brief Callback for previous button
-void PlayerBar::handlePreviousButton() {
-    emit previousButtonClicked();
-}
-
-/// @brief Callback for next button
-void PlayerBar::handleNextButton() {
-    emit nextButtonClicked();
-}
-
 /// @brief Update the song information in the bar
 /// 
 /// @param newSongInformation
@@ -245,4 +241,16 @@ void PlayerBar::exitApplication() {
 /// @brief Open settings
 void PlayerBar::openSettings() {
     SettingsDialog *dialog = new SettingsDialog(parentWidget());
+}
+
+/// @brief Set the correct button to screen button
+void PlayerBar::handleWindowStateChange(Qt::WindowStates windowState) {
+    if (windowState == Qt::WindowFullScreen) {
+        qDebug("Set icon to restore");
+        fullScreenButton->setIcon(IconFactory::fromTheme("view-restore"));
+    }
+    else {
+        qDebug("Set icon to full screen");
+        fullScreenButton->setIcon(IconFactory::fromTheme("view-fullscreen"));
+    }
 }

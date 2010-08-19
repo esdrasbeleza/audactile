@@ -51,6 +51,10 @@ MainWindow::MainWindow(QWidget *parent)
     connect(playlistWidget, SIGNAL(songInformationUpdated(QMap<QString,QString>)), playerbar, SLOT(updateSongInformation(QMap<QString,QString>)));
     connect(playerbar, SIGNAL(nextButtonClicked()), playlistWidget, SLOT(playNextSong()));
     connect(playerbar, SIGNAL(previousButtonClicked()), playlistWidget, SLOT(playPreviousSong()));
+    connect(playerbar, SIGNAL(toggleFullScreen()), this, SLOT(toggleFullscreen()));
+
+    // Makes playerbar change the window state button
+    connect(this, SIGNAL(windowStateChanged(Qt::WindowStates)), playerbar, SLOT(handleWindowStateChange(Qt::WindowStates)));
 
     // Create a vertical layout
     QWidget *mainVerticalWidget = new QWidget();
@@ -130,4 +134,5 @@ void MainWindow::toggleFullscreen() {
             break;
         }
     }
+    emit windowStateChanged(windowState());
 }
