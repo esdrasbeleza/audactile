@@ -20,6 +20,8 @@ FilesystemWidget::FilesystemWidget(QWidget *parent)
     // TODO: use placeholderText in Qt 4.7.
     filterEdit = new QLineEdit();
     QLabel* filterLabel = new QLabel(tr("Filter:"));
+    filterLabel->setContentsMargins(5, 0, 5, 0);
+    fsToolbar->addSeparator();
     fsToolbar->addWidget(filterLabel);
     fsToolbar->addWidget(filterEdit);
     connect(filterEdit, SIGNAL(textChanged(QString)), this, SLOT(setNameFilter(QString)));

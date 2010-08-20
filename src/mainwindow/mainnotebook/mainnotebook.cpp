@@ -19,12 +19,14 @@ MainNotebook::MainNotebook(QWidget *parent, PlaylistWidget *playlistWidget)
     // Widget of the Files tab
     filesystemWidget = new FilesystemWidget(this);
     connect(filesystemWidget, SIGNAL(askToAddItemToPlaylist(PlaylistItem*)), playlistWidget, SLOT(addSong(PlaylistItem*)));
-
+    QWidget *filesystemContainer = new QWidget(this);
+    QVBoxLayout *filesystemLayout = new QVBoxLayout(filesystemContainer);
+    filesystemLayout->setContentsMargins(5, 5, 5, 5);
+    filesystemLayout->addWidget(filesystemWidget);
 
     // Widget of the Context tab
     ContextWidget *contextWidget = new ContextWidget(this);
     connect(playlistWidget, SIGNAL(songInformationUpdated(QMap<QString,QString>)), contextWidget, SLOT(songInformationUpdated(QMap<QString,QString>)));
-
     contextContainer = new QWidget(this);
     QVBoxLayout *contextLayout = new QVBoxLayout(contextContainer);
     contextLayout->setContentsMargins(5, 5, 5, 5);
@@ -43,7 +45,7 @@ MainNotebook::MainNotebook(QWidget *parent, PlaylistWidget *playlistWidget)
     // Insert tabs
     for (int i = 0; i < 4; i++) {
         if (i == collectionPosition) { addTab(collectionWidget, IconFactory::fromTheme("audio-x-generic"), tr("Collection")); }
-        else if (i == filesystemPosition) { addTab(filesystemWidget, IconFactory::fromTheme("system-file-manager"), tr("Files")); }
+        else if (i == filesystemPosition) { addTab(filesystemContainer, IconFactory::fromTheme("system-file-manager"), tr("Files")); }
         else if (i == contextPosition) { addTab(contextContainer, IconFactory::fromTheme("emblem-web"), tr("Context")); }
         else if (i == playlistsPosition) { addTab(testLabel3, IconFactory::fromTheme("text-x-generic"), tr("Playlists")); }
     }
