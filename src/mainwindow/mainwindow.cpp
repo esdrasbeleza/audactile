@@ -8,7 +8,8 @@ MainWindow::MainWindow(QWidget *parent)
 {
     setObjectName("MainWindow");
     setWindowTitle("Audactile");
-    setMinimumWidth(800);
+    setMinimumWidth(900);
+    setMinimumHeight(600);
 
     // Set strong focus, to capture all keyboard events
     setFocusPolicy(Qt::StrongFocus);
@@ -97,8 +98,8 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
     switch (event->key()) {
     case Qt::Key_Space:
     case Qt::Key_Enter:
-    case Qt::Key_MediaPlay:
-    case Qt::Key_Play:
+    case Qt::Key_MediaPlay: // Will not work in Linux, verify Mac and Windows
+    case Qt::Key_Play:      // Will not work in Linux, verify Mac and Windows
     case Qt::Key_Return:
         qDebug("Play key pressed!");
         event->accept();

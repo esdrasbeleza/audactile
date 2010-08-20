@@ -11,6 +11,11 @@
 #include <phonon/MediaObject>
 #include "playlistitem.h"
 
+/*
+ * TODO: make a PlaylistEngine, which will make the work of handle the current songs.
+ *       PlaylistWidget will only make the work of handle the visualization.
+ *
+ */
 class PlaylistWidget : public QTreeWidget
 {
     Q_OBJECT
