@@ -10,6 +10,7 @@
 #include <QMap>
 #include <phonon/MediaObject>
 #include "playlistitem.h"
+#include "../../music.h"
 
 /*
  * TODO: make a PlaylistEngine, which will make the work of handle the current songs.

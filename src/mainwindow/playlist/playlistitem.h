@@ -5,6 +5,7 @@
 #include <QUrl>
 #include <taglib/tag.h>
 #include <taglib/fileref.h>
+#include "../../music.h"
 
 
 class PlaylistItem : public QTreeWidgetItem
@@ -13,29 +14,17 @@ class PlaylistItem : public QTreeWidgetItem
 public:
     PlaylistItem(QString);
     PlaylistItem(QUrl url);
+    Music * getMusic();
     bool isValid();
-    QUrl getFileUrl();
-    QString getArtist();
-    QString getTitle();
-    unsigned int getTrackNumber();
     void setBold();
     void removeBold();
-    QString getSongInfo();
-    unsigned int getDuration();
     int index; // Index where item must be inserted at PlaylistWidget
 
 
 private:
-    void loadFile();
     QUrl fileUrl;
-    unsigned int trackNumber;
-    QString artist;
-    QString title;
-    QString album;
-    unsigned int duration;
-    bool valid;
-
-
+    Music *music;
+    void loadFile();
 };
 
 #endif // PLAYLISTITEM_H

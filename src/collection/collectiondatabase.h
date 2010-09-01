@@ -1,30 +1,37 @@
 #ifndef COLLECTIONDATABASE_H
 #define COLLECTIONDATABASE_H
 
-#include <QMutex>
 #include <QObject>
 #include <QDir>
-#include "collectionitem.h"
+#include <QDesktopServices>
+#include <QApplication>
+#include <QSqlDatabase>
+#include <QSqlQuery>
+#include <QSqlRecord>
+#include <QSqlError>
+#include <QSqlRelationalTableModel>
+#include "../music.h"
 
 class CollectionDatabase : public QObject
 {
 Q_OBJECT
 public:
-    static CollectionDatabase* instance();
-    void scanDirectory(QDir directory);
-
-private:
-    static CollectionDatabase* m_Instance;
-    CollectionDatabase(QObject *parent);
-    CollectionDatabase(const CollectionDatabase&, QObject *parent);
-    CollectionDatabase& operator=(const CollectionDatabase&);
-
-    void addToDatabase();
+    explicit CollectionDatabase(QObject *parent = 0);
+    void addArtist(QString artistName);
+    void addAlbum(QString artistName, QString albumName);
+    void addMusic(Music *music);
 
 signals:
 
 public slots:
-    void addSong(CollectionItem *validFile);
+
+private:
+    QSqlDatabase db;
+    void createDatabase();
+
+    QSqlRelationalTableModel *artistModel;
+    QSqlRelationalTableModel *albumModel;
+    QSqlRelationalTableModel *musicModel;
 
 };
 

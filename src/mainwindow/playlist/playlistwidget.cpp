@@ -62,8 +62,8 @@ void PlaylistWidget::playSong(QTreeWidgetItem *doubleClickedItem) {
     qDebug("Trying to play song...");
     currentSong = item;
     item->setBold();
-    qDebug("Playing " + item->getFileUrl().path().toUtf8());
-    mainMediaObject->setCurrentSource(item->getFileUrl());
+    qDebug("Playing " + item->getMusic()->getFileUrl().path().toAscii());
+    mainMediaObject->setCurrentSource(item->getMusic()->getFileUrl());
     mainMediaObject->play();
 
     emitSongInformationUpdated();
@@ -91,7 +91,7 @@ void PlaylistWidget::enqueueNextSong() {
     qDebug("enqueueNextSong");
     nextSong = (PlaylistItem*)itemBelow(currentSong);
     if (nextSong != NULL) {
-        mainMediaObject->enqueue(nextSong->getFileUrl());
+        mainMediaObject->enqueue(nextSong->getMusic()->getFileUrl());
     }
 }
 
@@ -125,8 +125,8 @@ void PlaylistWidget::handleStateChange(Phonon::State newState) {
 void PlaylistWidget::emitSongInformationUpdated() {
     qDebug("emitSongInformationUpdated");
     QMap<QString, QString> songInfo;
-    songInfo.insert("artist", currentSong->getArtist());
-    songInfo.insert("title", currentSong->getTitle());
+    songInfo.insert("artist", currentSong->getMusic()->getArtist());
+    songInfo.insert("title", currentSong->getMusic()->getTitle());
     emit songInformationUpdated(songInfo);
 }
 
@@ -149,12 +149,9 @@ void PlaylistWidget::addSong(QUrl url, int index) {
 }
 
 void PlaylistWidget::insertValidItem(PlaylistItem *newItem) {
-    qDebug("Inserting item " + newItem->getArtist().toUtf8());
-
     if (mainMediaObject->currentSource().type() == Phonon::MediaSource::Empty) {
-        qDebug("First item added");
         currentSong = newItem;
-        mainMediaObject->enqueue(newItem->getFileUrl());
+        mainMediaObject->enqueue(newItem->getMusic()->getFileUrl());
     }
 
     int index = newItem->index;
@@ -244,7 +241,7 @@ void PlaylistWidget::mouseMoveEvent(QMouseEvent *event)
 
     foreach (QTreeWidgetItem *currentItem, selectedItems()) {
         PlaylistItem *playlistCurrentItem = static_cast<PlaylistItem *>(currentItem);
-        list.append(playlistCurrentItem->getFileUrl());
+        list.append(playlistCurrentItem->getMusic()->getFileUrl());
     }
 
     // mime stuff
