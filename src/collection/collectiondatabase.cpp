@@ -42,7 +42,8 @@ void CollectionDatabase::createDatabase() {
         return;
     }
 
-    QStringList tables = db.tables();
+    QStringList tables = db.tables(QSql::Tables);
+    QStringList views = db.tables(QSql::Views);
 
     // TODO: use titles as primary key?
 
@@ -69,6 +70,14 @@ void CollectionDatabase::createDatabase() {
                 "title varchar(120) NOT NULL,"
                 "path varchar(2048) UNIQUE NOT NULL"
                 ");");
+    }
+
+    if (!views.contains("collection")) {
+        db.exec("CREATE VIEW collection AS "
+                "SELECT artist.name, album.title, music.title, music.track_number, music.path"
+                "FROM artist, album, music"
+                "WHERE album.id_artist = artist.id AND music.id_album = album.id"
+                "ORDER BY artist.name, album.title, music.track_number");
     }
 
     if (db.lastError().type() != QSqlError::NoError) {
@@ -123,6 +132,11 @@ void CollectionDatabase::addAlbum(QString artistName, QString albumName) {
 }
 
 
+void CollectionDatabase::addMusic(QString path) {
+    Music *music = new Music(QUrl::fromLocalFile(path));
+    addMusic(music);
+}
+
 void CollectionDatabase::addMusic(Music *music) {
     QString artist = music->getArtist();
     QString album = music->getAlbum();
@@ -146,16 +160,13 @@ void CollectionDatabase::addMusic(Music *music) {
 
     QSqlQuery query;
     query.exec("SELECT * FROM music WHERE path='" + path + "'");
-    if (query.first()) {
-        int total = query.value(0).toInt();
-        qDebug("Music Total: " + QString::number(total).toUtf8());
-        if (total == 0) {
-            qDebug("Inserting music!");
-            db.exec("INSERT INTO music (id_album, track_number, title, path) VALUES ("
-                    "(SELECT id FROM album WHERE title='" + album + "' AND id_artist = (SELECT id FROM artist WHERE name = '" + artist +"')),"
-                    "" + QString::number(trackNumber) + ", \"" + title + "\", \"" + path + "\");"
-                    );
-        }
+    if (!query.first()) {
+        qDebug("Inserting music!");
+        db.exec("INSERT INTO music (id_album, track_number, title, path) VALUES ("
+                "(SELECT id FROM album WHERE title='" + album + "' AND id_artist = (SELECT id FROM artist WHERE name = '" + artist +"')),"
+                "" + QString::number(trackNumber) + ", \"" + title + "\", \"" + path + "\");"
+                );
+
     }
 
     if (db.lastError().type() != QSqlError::NoError) {
@@ -163,4 +174,33 @@ void CollectionDatabase::addMusic(Music *music) {
     }
 
     qDebug("addMusic end");
+}
+
+
+void CollectionDatabase::removeArtist(QString artistName) {
+    if (!db.open()) {
+        qDebug("ERROR! " + db.lastError().text().toUtf8());
+        return;
+    }
+    db.exec("DELETE FROM artist WHERE name='" + artistName + "'");
+}
+
+void CollectionDatabase::removeAlbum(QString artistName, QString albumName) {
+    if (!db.open()) {
+        qDebug("ERROR! " + db.lastError().text().toUtf8());
+        return;
+    }
+    db.exec("DELETE FROM album WHERE name='" + artistName + "' AND id_artist=(SELECT id FROM artist WHERE name='" + artistName + "')");
+}
+
+void CollectionDatabase::removeMusic(QString path) {
+    if (!db.open()) {
+        qDebug("ERROR! " + db.lastError().text().toUtf8());
+        return;
+    }
+    db.exec("DELETE FROM music WHERE path='" + path + "'");
+}
+
+void CollectionDatabase::removeMusic(Music *music) {
+    removeMusic(music->getFileUrl().path());
 }
