@@ -74,10 +74,10 @@ void CollectionDatabase::createDatabase() {
 
     if (!views.contains("collection")) {
         db.exec("CREATE VIEW collection AS "
-                "SELECT artist.name, album.title, music.title, music.track_number, music.path"
-                "FROM artist, album, music"
-                "WHERE album.id_artist = artist.id AND music.id_album = album.id"
-                "ORDER BY artist.name, album.title, music.track_number");
+                "SELECT artist.name, album.title, music.title, music.track_number, music.path "
+                "FROM artist, album, music "
+                "WHERE album.id_artist = artist.id AND music.id_album = album.id "
+                "ORDER BY artist.name, album.title, music.track_number;");
     }
 
     if (db.lastError().type() != QSqlError::NoError) {
