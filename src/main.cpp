@@ -20,11 +20,13 @@ int main(int argc, char *argv[])
 
     // Test collection database
     CollectionDatabase *collectionDb = new CollectionDatabase();
-    collectionDb->addMusic("/tmp/teste1.mp3");
-    collectionDb->addMusic("/tmp/teste2.mp3");
-    collectionDb->addMusic("/tmp/teste3.mp3");
-    collectionDb->addMusic("/tmp/teste4.mp3");
-    collectionDb->addMusic("/tmp/teste5.mp3");
+
+//    For test purposes
+//    collectionDb->addMusic("/tmp/test1.mp3");
+//    collectionDb->addMusic("/tmp/test2.mp3");
+//    collectionDb->addMusic("/tmp/test3.mp3");
+//    collectionDb->addMusic("/tmp/test4.mp3");
+//    collectionDb->addMusic("/tmp/test5.mp3");
 
 
 
