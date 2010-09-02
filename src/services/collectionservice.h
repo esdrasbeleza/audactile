@@ -10,6 +10,7 @@ class CollectionService : public QObject
 Q_OBJECT
 public:
     explicit CollectionService(QObject *parent = 0);
+    void refresh();
 
 signals:
 

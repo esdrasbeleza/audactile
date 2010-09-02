@@ -18,67 +18,35 @@ PlaylistItem::PlaylistItem(QUrl url) {
 
 void PlaylistItem::loadFile() {
     qDebug("File: " + fileUrl.toLocalFile().toUtf8());
-    TagLib::FileRef taglibFileRef = TagLib::FileRef(fileUrl.toLocalFile().toUtf8());
 
-    // Verify if some file is valid
-    if (!taglibFileRef.isNull()) {
-        trackNumber = taglibFileRef.tag()->track();
+    music = new Music(fileUrl);
 
-        // Read metadata
-        artist = QString(taglibFileRef.tag()->artist().toCString()).toAscii();
-        album = QString(taglibFileRef.tag()->album().toCString()).toAscii();
-        title = QString(taglibFileRef.tag()->title().toCString()).toAscii();
-        duration = taglibFileRef.audioProperties()->length();
+    if (music->getTrackNumber() > 0) { setData(0, Qt::DisplayRole, music->getTrackNumber()); }
+    else { setData(0, Qt::DisplayRole, QString("")); }
 
-        if (artist.isEmpty()) artist = "Undefined";
-        if (album.isEmpty())  album  = "Undefined";
-        if (title.isEmpty())  title  = "Undefined";
+    QString qStr;
+    int duration = music->getDuration();
+    int secs = duration % 60;
+    int mins = duration / 60;
+
+    setText(1, music->getTitle());
+    setText(2, music->getAlbum());
+    setText(3, music->getArtist());
+    setText(4, QString::number(mins) + ":" + qStr.sprintf("%02d", secs));
+ }
 
 
-        QString qStr;
-        int secs = duration % 60;
-        int mins = duration / 60;
-
-        // Set columns text
-        if (trackNumber > 0) { setData(0, Qt::DisplayRole, trackNumber); }
-        else { setData(0, Qt::DisplayRole, QString("")); }
-        setText(1, title);
-        setText(2, album);
-        setText(3, artist);
-        setText(4, QString::number(mins) + ":" + qStr.sprintf("%02d", secs));
-
-        qDebug("Valid!");
-        valid = true;
-    }
-    else {
-        qDebug("Invalid!");
-        valid = false;
-    }
-}
-
-unsigned int PlaylistItem::getDuration() {
-    return duration;
+Music * PlaylistItem::getMusic() {
+    return music;
 }
 
 bool PlaylistItem::isValid() {
-    return valid;
-}
-
-QUrl PlaylistItem::getFileUrl() {
-    qDebug("getFileUrl");
-    return fileUrl;
-}
-
-QString PlaylistItem::getArtist() {
-    return artist;
-}
-
-QString PlaylistItem::getTitle() {
-    return title;
-}
-
-unsigned int PlaylistItem::getTrackNumber() {
-    return trackNumber;
+    if (music != NULL) {
+       return music->isValid();
+    }
+    else {
+        return false;
+    }
 }
 
 void PlaylistItem::setBold() {

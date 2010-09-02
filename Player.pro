@@ -25,8 +25,6 @@ SOURCES += src/mainwindow/mainnotebook/collection/collectiontreewidget.cpp \
     src/services/lastfmscrobbler.cpp \
     src/services/lastfmcontext.cpp \
     src/iconfactory.cpp \
-    src/collection/collectiondatabase.cpp \
-    src/collection/collectionitem.cpp \
     src/separator.cpp \
     src/mainwindow/mainnotebook/context/lyricswidget.cpp \
     src/mainwindow/mainnotebook/context/artistinfowidget.cpp \
@@ -35,7 +33,9 @@ SOURCES += src/mainwindow/mainnotebook/collection/collectiontreewidget.cpp \
     src/mainwindow/mainnotebook/context/abstractcontainer.cpp \
     src/services/collectionservice.cpp \
     src/settings/contextsettings.cpp \
-    src/settings/settingsdialog/widgets/contextsettingswidget.cpp
+    src/settings/settingsdialog/widgets/contextsettingswidget.cpp \
+    src/music.cpp \
+    src/collection/collectiondatabase.cpp
 HEADERS += src/mainwindow/mainnotebook/collection/collectiontreewidget.h \
     src/mainwindow/mainnotebook/filesystem/filesystemwidget.h \
     src/mainwindow/mainnotebook/mainnotebook.h \
@@ -51,8 +51,6 @@ HEADERS += src/mainwindow/mainnotebook/collection/collectiontreewidget.h \
     src/services/lastfmscrobbler.h \
     src/services/lastfmcontext.h \
     src/iconfactory.h \
-    src/collection/collectiondatabase.h \
-    src/collection/collectionitem.h \
     src/separator.h \
     src/mainwindow/mainnotebook/context/lyricswidget.h \
     src/mainwindow/mainnotebook/context/artistinfowidget.h \
@@ -61,10 +59,11 @@ HEADERS += src/mainwindow/mainnotebook/collection/collectiontreewidget.h \
     src/mainwindow/mainnotebook/context/abstractcontainer.h \
     src/services/collectionservice.h \
     src/settings/contextsettings.h \
-    src/settings/settingsdialog/widgets/contextsettingswidget.h
-FORMS += 
-RESOURCES += icons.qrc \
-    extra_images.qrc
-OTHER_FILES += README
+    src/settings/settingsdialog/widgets/contextsettingswidget.h \
+    src/music.h \
+    src/collection/collectiondatabase.h
+RESOURCES = extra_images.qrc
+win32|macx:RESOURCES += icons.qrc
 CONFIG += link_pkgconfig
 PKGCONFIG += taglib
+OTHER_FILES += README

@@ -4,6 +4,7 @@ CollectionService::CollectionService(QObject *parent) :
     QObject(parent)
 {
     watcher = new QFileSystemWatcher(this);
+    qDebug("Collection service running!");
 
     // TODO: verify if every path is valid.
     watcher->addPaths(ApplicationSettings::collectionFolderList());
@@ -13,11 +14,15 @@ CollectionService::CollectionService(QObject *parent) :
 }
 
 void CollectionService::fileChanged(QString path) {
-    qDebug("CHANGED " + path.toUtf8());
+    qDebug("FILE CHANGED " + path.toUtf8());
 }
 
 void CollectionService::dirChanged(QString path) {
-    qDebug("CHANGED " + path.toUtf8());
+    qDebug("DIR CHANGED " + path.toUtf8());
+}
+
+void CollectionService::refresh() {
+    setPaths(ApplicationSettings::collectionFolderList());
 }
 
 void CollectionService::setPaths(QStringList paths) {

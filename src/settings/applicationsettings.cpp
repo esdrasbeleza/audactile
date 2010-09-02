@@ -117,9 +117,7 @@ void ApplicationSettings::setCollectionFolders(QStringList folders) {
         // If we're adding a folder that does not exist, scan it!
         if (!oldFolders.contains(folders.at(i), Qt::CaseSensitive)) {
             qDebug("Parsing directory...");
-            CollectionDatabase *cdb = CollectionDatabase::instance();
-            cdb->scanDirectory(folders.at(i));
-            delete cdb;
+            // TODO: scan directory
         }
     }
     settings.endArray();
