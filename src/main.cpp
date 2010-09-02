@@ -20,17 +20,7 @@ int main(int argc, char *argv[])
 
     // Test collection database
     CollectionDatabase *collectionDb = new CollectionDatabase();
-    collectionDb->addArtist("Artist 1");
-    collectionDb->addArtist("Artist 2");
-    collectionDb->addArtist("Artist 3");
 
-    collectionDb->addAlbum("Artist 1", "Album 1 of Artist 1");
-    collectionDb->addAlbum("Artist 2", "Album 2 of Artist 1");
-    collectionDb->addAlbum("Artist 2", "Album 1 of Artist 2");
-    collectionDb->addAlbum("Artist 2", "Album 1 of Artist 2");
-
-    Music *music = new Music(QUrl("file:///tmp/teste.mp3"));
-    collectionDb->addMusic(music);
 
     MainWindow w;
     w.showMaximized();

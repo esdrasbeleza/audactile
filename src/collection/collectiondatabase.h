@@ -29,6 +29,7 @@ private:
     QSqlDatabase db;
     void createDatabase();
 
+
     QSqlRelationalTableModel *artistModel;
     QSqlRelationalTableModel *albumModel;
     QSqlRelationalTableModel *musicModel;
