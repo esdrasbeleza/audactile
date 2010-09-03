@@ -11,6 +11,7 @@ CollectionService::CollectionService(QObject *parent) :
 
     connect(watcher, SIGNAL(fileChanged(QString)), this, SLOT(fileChanged(QString)));
     connect(watcher, SIGNAL(directoryChanged(QString)), this, SLOT(dirChanged(QString)));
+
 }
 
 void CollectionService::fileChanged(QString path) {
@@ -23,6 +24,11 @@ void CollectionService::dirChanged(QString path) {
 
 void CollectionService::refresh() {
     setPaths(ApplicationSettings::collectionFolderList());
+
+}
+
+void CollectionService::scan() {
+
 }
 
 void CollectionService::setPaths(QStringList paths) {

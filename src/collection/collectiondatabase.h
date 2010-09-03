@@ -20,6 +20,11 @@ public:
     void addArtist(QString artistName);
     void addAlbum(QString artistName, QString albumName);
     void addMusic(Music *music);
+    void addMusic(QString path);
+    void removeArtist(QString artistName);
+    void removeAlbum(QString artistName, QString albumName);
+    void removeMusic(Music *music);
+    void removeMusic(QString path);
 
 signals:
 
@@ -28,6 +33,7 @@ public slots:
 private:
     QSqlDatabase db;
     void createDatabase();
+
 
     QSqlRelationalTableModel *artistModel;
     QSqlRelationalTableModel *albumModel;
