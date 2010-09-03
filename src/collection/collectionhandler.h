@@ -1,18 +1,17 @@
-#ifndef COLLECTIONSERVICE_H
-#define COLLECTIONSERVICE_H
+#ifndef COLLECTIONHANDLER_H
+#define COLLECTIONHANDLER_H
 
 #include <QObject>
 #include <QFileSystemWatcher>
 #include "../settings/applicationsettings.h"
 #include "../collection/collectiondatabase.h"
 
-class CollectionService : public QObject
+class CollectionHandler : public QObject
 {
 Q_OBJECT
 public:
-    explicit CollectionService(QObject *parent = 0);
+    explicit CollectionHandler(QObject *parent = 0);
     void refresh();
-    void scan();
 
 signals:
 
@@ -22,6 +21,7 @@ private:
     void scanRecursive(QString path);
 
 public slots:
+    void scan();
     void setPaths(QStringList paths);
 
 private slots:
@@ -31,4 +31,4 @@ private slots:
 
 };
 
-#endif // COLLECTIONSERVICE_H
+#endif // COLLECTIONHANDLER_H

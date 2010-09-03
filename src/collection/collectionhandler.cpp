@@ -1,4 +1,4 @@
-#include "collectionservice.h"
+#include "collectionhandler.h"
 
 /*
  *
@@ -7,7 +7,7 @@
  * PUT THIS INTO A SEPARATE THREAD.
  *
  */
-CollectionService::CollectionService(QObject *parent) :
+CollectionHandler::CollectionHandler(QObject *parent) :
     QObject(parent)
 {
     watcher = new QFileSystemWatcher(this);
@@ -24,20 +24,20 @@ CollectionService::CollectionService(QObject *parent) :
 
 }
 
-void CollectionService::fileChanged(QString path) {
+void CollectionHandler::fileChanged(QString path) {
     qDebug("FILE CHANGED " + path.toUtf8());
 }
 
-void CollectionService::dirChanged(QString path) {
+void CollectionHandler::dirChanged(QString path) {
     qDebug("DIR CHANGED " + path.toUtf8());
 }
 
-void CollectionService::refresh() {
+void CollectionHandler::refresh() {
     setPaths(ApplicationSettings::collectionFolderList());
 
 }
 
-void CollectionService::scan() {
+void CollectionHandler::scan() {
     QStringList directories = ApplicationSettings::collectionFolderList();
     foreach (QString path, directories) {
         scanRecursive(path);
@@ -45,7 +45,7 @@ void CollectionService::scan() {
     qDebug("End of scan()");
 }
 
-void CollectionService::scanRecursive(QString path) {
+void CollectionHandler::scanRecursive(QString path) {
     qDebug("scanRecursive " + path.toUtf8());
 
     // You shouldn't call this to add files
@@ -66,7 +66,7 @@ void CollectionService::scanRecursive(QString path) {
     }
 }
 
-void CollectionService::setPaths(QStringList paths) {
+void CollectionHandler::setPaths(QStringList paths) {
     watcher->removePaths(watcher->directories());
 
     // TODO: verify if every path is valid
