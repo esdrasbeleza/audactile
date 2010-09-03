@@ -8,8 +8,8 @@ MainWindow::MainWindow(QWidget *parent)
 {
     setObjectName("MainWindow");
     setWindowTitle("Audactile");
-    setMinimumWidth(900);
-    setMinimumHeight(600);
+    setMinimumWidth(700);
+    setMinimumHeight(500);
 
     // Set strong focus, to capture all keyboard events
     setFocusPolicy(Qt::StrongFocus);

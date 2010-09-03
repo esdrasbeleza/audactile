@@ -19,7 +19,7 @@ int main(int argc, char *argv[])
     CollectionService *service = new CollectionService();
 
     // Test collection database
-    CollectionDatabase *collectionDb = new CollectionDatabase();
+//    CollectionDatabase *collectionDb = new CollectionDatabase();
 
 //    For test purposes
 //    collectionDb->addMusic("/tmp/test1.mp3");
@@ -28,6 +28,8 @@ int main(int argc, char *argv[])
 //    collectionDb->addMusic("/tmp/test4.mp3");
 //    collectionDb->addMusic("/tmp/test5.mp3");
 
+    // For test purpose, try to scan the folders and generate the database
+    service->scan();
 
 
 

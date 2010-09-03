@@ -14,11 +14,11 @@ Q_OBJECT
 public:
     AbstractContainer(QWidget *parent = 0);
     void setHtml(QString html);
+        QWebView *contentView;
 
 private:
     QString header;
     QString footer;
-    QWebView *contentView;
 
 private slots:
     void openLinksInExternalWindow(QUrl url);

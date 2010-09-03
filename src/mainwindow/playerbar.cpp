@@ -18,7 +18,7 @@ PlayerBar::PlayerBar(QWidget *parent, Phonon::MediaObject *mediaObject, Phonon::
     stopButton = new QToolButton(this);
     nextButton = new QToolButton(this);
     previousButton = new QToolButton(this);
-    fullScreenButton = new QToolButton(this);
+    //fullScreenButton = new QToolButton(this);
     prefButton = new QToolButton(this);
     exitButton = new QToolButton(this);
 
@@ -26,7 +26,7 @@ PlayerBar::PlayerBar(QWidget *parent, Phonon::MediaObject *mediaObject, Phonon::
     stopButton->setIconSize(QSize(48, 48));
     nextButton->setIconSize(QSize(48, 48));
     previousButton->setIconSize(QSize(48, 48));
-    fullScreenButton->setIconSize(QSize(48, 48));
+    //fullScreenButton->setIconSize(QSize(48, 48));
     prefButton->setIconSize(QSize(48, 48));
     exitButton->setIconSize(QSize(48, 48));
 
@@ -35,7 +35,7 @@ PlayerBar::PlayerBar(QWidget *parent, Phonon::MediaObject *mediaObject, Phonon::
     nextButton->setAutoRaise(true);
     previousButton->setAutoRaise(true);
     prefButton->setAutoRaise(true);
-    fullScreenButton->setAutoRaise(true);
+    //fullScreenButton->setAutoRaise(true);
     exitButton->setAutoRaise(true);
 
     playButton->setIcon(IconFactory::fromTheme("media-playback-start"));
@@ -43,7 +43,7 @@ PlayerBar::PlayerBar(QWidget *parent, Phonon::MediaObject *mediaObject, Phonon::
     nextButton->setIcon(IconFactory::fromTheme("media-skip-forward"));
     previousButton->setIcon(IconFactory::fromTheme("media-skip-backward"));
     prefButton->setIcon(IconFactory::fromTheme("preferences-other"));
-    fullScreenButton->setIcon(IconFactory::fromTheme("view-fullscreen"));
+    //fullScreenButton->setIcon(IconFactory::fromTheme("view-fullscreen"));
     exitButton->setIcon(IconFactory::fromTheme("application-exit"));
 
     stopButton->setDisabled(true);
@@ -55,7 +55,7 @@ PlayerBar::PlayerBar(QWidget *parent, Phonon::MediaObject *mediaObject, Phonon::
     connect(previousButton, SIGNAL(clicked()), this, SIGNAL(previousButtonClicked()));
     connect(prefButton, SIGNAL(clicked()), this, SLOT(openSettings()));
     connect(exitButton, SIGNAL(clicked()), this, SLOT(exitApplication()));
-    connect(fullScreenButton, SIGNAL(clicked()), this, SIGNAL(toggleFullScreen()));
+    //connect(fullScreenButton, SIGNAL(clicked()), this, SIGNAL(toggleFullScreen()));
 
     // Vertical box with slider and current song time labels
     QFrame *songPositionWidget = new QFrame(this);
@@ -115,7 +115,7 @@ PlayerBar::PlayerBar(QWidget *parent, Phonon::MediaObject *mediaObject, Phonon::
     playerBarLayout->addWidget(Separator::verticalSeparator(this));
     playerBarLayout->addWidget(volumeSlider);
     playerBarLayout->addWidget(Separator::verticalSeparator(this));
-    playerBarLayout->addWidget(fullScreenButton);
+    //playerBarLayout->addWidget(fullScreenButton);
     playerBarLayout->addWidget(prefButton);
     playerBarLayout->addWidget(exitButton);
 

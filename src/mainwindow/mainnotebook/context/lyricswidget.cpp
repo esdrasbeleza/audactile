@@ -25,6 +25,6 @@ void LyricsWidget::showLyrics(QWebElement webElement) {
     setHtml(html + "<p>" + webElement.toOuterXml() + "</p>");
 
     // Code to try to remove some tags
-    //    QString code = "$('object').remove()";
-    //    view->page()->mainFrame()->evaluateJavaScript(code);
+    QString code = "$('object').remove()";
+    contentView->page()->mainFrame()->evaluateJavaScript(code);
 }

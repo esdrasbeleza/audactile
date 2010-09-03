@@ -88,8 +88,8 @@ void CollectionDatabase::createDatabase() {
 }
 
 void CollectionDatabase::addArtist(QString artistName) {
-    if (!db.open()) {
-        qDebug("ERROR! " + db.lastError().text().toUtf8());
+    if (!db.isOpen()) {
+        if (!db.open()) qDebug("ERROR! " + db.lastError().text().toUtf8());
         return;
     }
 
@@ -110,8 +110,8 @@ void CollectionDatabase::addAlbum(QString artistName, QString albumName) {
 
     addArtist(artistName);
 
-    if (!db.open()) {
-        qDebug("ERROR! " + db.lastError().text().toUtf8());
+    if (!db.isOpen()) {
+        if (!db.open()) qDebug("ERROR! " + db.lastError().text().toUtf8());
         return;
     }
 
@@ -138,6 +138,8 @@ void CollectionDatabase::addMusic(QString path) {
 }
 
 void CollectionDatabase::addMusic(Music *music) {
+    if (!music->isValid()) return;
+
     QString artist = music->getArtist();
     QString album = music->getAlbum();
     QString title = music->getTitle();
@@ -146,15 +148,8 @@ void CollectionDatabase::addMusic(Music *music) {
 
     qDebug("addMusic");
 
-    /*
-     * Assert that artist and album exists.
-     * addAlbum() asserts artist existence.
-     *
-     */
-    addAlbum(artist, album);
-
-    if (!db.open()) {
-        qDebug("ERROR! " + db.lastError().text().toUtf8());
+    if (!db.isOpen()) {
+        if (!db.open()) qDebug("ERROR! " + db.lastError().text().toUtf8());
         return;
     }
 
@@ -162,6 +157,14 @@ void CollectionDatabase::addMusic(Music *music) {
     query.exec("SELECT * FROM music WHERE path='" + path + "'");
     if (!query.first()) {
         qDebug("Inserting music!");
+
+        /*
+         * Assert that artist and album exists.
+         * addAlbum() asserts artist existence.
+         *
+         */
+        addAlbum(artist, album);
+
         db.exec("INSERT INTO music (id_album, track_number, title, path) VALUES ("
                 "(SELECT id FROM album WHERE title='" + album + "' AND id_artist = (SELECT id FROM artist WHERE name = '" + artist +"')),"
                 "" + QString::number(trackNumber) + ", \"" + title + "\", \"" + path + "\");"

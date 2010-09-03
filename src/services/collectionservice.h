@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QFileSystemWatcher>
 #include "../settings/applicationsettings.h"
+#include "../collection/collectiondatabase.h"
 
 class CollectionService : public QObject
 {
@@ -17,6 +18,8 @@ signals:
 
 private:
     QFileSystemWatcher *watcher;
+    CollectionDatabase *collectionDb;
+    void scanRecursive(QString path);
 
 public slots:
     void setPaths(QStringList paths);
