@@ -9,6 +9,8 @@
 #include <QSqlQuery>
 #include <QSqlRecord>
 #include <QSqlError>
+#include <QSqlDriver>
+#include <QDateTime>
 #include <QSqlRelationalTableModel>
 #include "../music.h"
 
@@ -19,8 +21,8 @@ public:
     explicit CollectionDatabase(QObject *parent = 0);
     void addArtist(QString artistName);
     void addAlbum(QString artistName, QString albumName);
-    void addMusic(Music *music);
-    void addMusic(QString path);
+    void addOrUpdateMusic(Music *music);
+    void addOrUpdateMusic(QString path);
     void removeArtist(QString artistName);
     void removeAlbum(QString artistName, QString albumName);
     void removeMusic(Music *music);

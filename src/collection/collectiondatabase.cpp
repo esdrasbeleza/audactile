@@ -3,6 +3,8 @@
 
 /*
  * TODO:
+ * - When some music is removed, verify if the album must exist
+ * - When some album is removed, verify if the artist must exist
  * - Handle errors
  * - Improve indexes
  * - Use some mechanism to speed up the process to add multiple songs of the same artist
@@ -68,7 +70,8 @@ void CollectionDatabase::createDatabase() {
                 "id_album int, "
                 "track_number int, "
                 "title varchar(120) NOT NULL,"
-                "path varchar(2048) UNIQUE NOT NULL"
+                "path varchar(2048) UNIQUE NOT NULL, "
+                "last_modified int "
                 ");");
     }
 
@@ -93,12 +96,19 @@ void CollectionDatabase::addArtist(QString artistName) {
         return;
     }
 
-    QSqlQuery query;
-    query.exec("SELECT count('name') FROM artist WHERE name='" + artistName + "';");
+    QSqlQuery query(db);
+    query.prepare("SELECT count('name') FROM artist WHERE name=:artist;");
+    query.bindValue(":artist", artistName);
+    query.exec();
     if (query.first()) {
         int total = query.value(0).toInt();
         qDebug("Artist Total: " + QString::number(total).toUtf8());
-        if (total == 0) db.exec("INSERT INTO artist (name) VALUES ('" + artistName + "');");
+        if (total == 0) {
+            QSqlQuery insertQuery(db);
+            insertQuery.prepare("INSERT INTO artist (name) VALUES (:artist);");
+            insertQuery.bindValue(":artist", artistName);
+            insertQuery.exec();
+        }
     }
 
     qDebug("addArtist end");
@@ -115,12 +125,21 @@ void CollectionDatabase::addAlbum(QString artistName, QString albumName) {
         return;
     }
 
-    QSqlQuery query;
-    query.exec("SELECT count('title') FROM album WHERE title='" + albumName + "' AND id_artist=(SELECT id FROM artist WHERE name='" + artistName + "');");
+    QSqlQuery query(db);
+    query.prepare("SELECT count('title') FROM album WHERE title=:album AND id_artist=(SELECT id FROM artist WHERE name=:artist);");
+    query.bindValue(":album", albumName);
+    query.bindValue(":artist", artistName);
+    query.exec();
     if (query.first()) {
         int total = query.value(0).toInt();
         qDebug("Album Total: " + QString::number(total).toUtf8());
-        if (total == 0) db.exec("INSERT INTO album (id_artist, title) VALUES ((SELECT id FROM artist WHERE name='" + artistName + "'),'" + albumName + "');");
+        if (total == 0) {
+            QSqlQuery insertQuery(db);
+            insertQuery.prepare("INSERT INTO album (id_artist, title) VALUES ((SELECT id FROM artist WHERE name=:artist),:album);");
+            insertQuery.bindValue(":album", albumName);
+            insertQuery.bindValue(":artist", artistName);
+            insertQuery.exec();
+        }
     }
     query.clear();
 
@@ -131,13 +150,13 @@ void CollectionDatabase::addAlbum(QString artistName, QString albumName) {
     qDebug("addAlbum end");
 }
 
-
-void CollectionDatabase::addMusic(QString path) {
+// TODO: swap the methods to optimize insert verifying path before creating a Music object
+void CollectionDatabase::addOrUpdateMusic(QString path) {
     Music *music = new Music(QUrl::fromLocalFile(path));
-    addMusic(music);
+    addOrUpdateMusic(music);
 }
 
-void CollectionDatabase::addMusic(Music *music) {
+void CollectionDatabase::addOrUpdateMusic(Music *music) {
     if (!music->isValid()) return;
 
     QString artist = music->getArtist();
@@ -145,6 +164,7 @@ void CollectionDatabase::addMusic(Music *music) {
     QString title = music->getTitle();
     QString path = music->getFileUrl().path();
     unsigned int trackNumber = music->getTrackNumber();
+    unsigned int lastModified = QFileInfo(path).lastModified().toTime_t();
 
     qDebug("addMusic");
 
@@ -154,10 +174,12 @@ void CollectionDatabase::addMusic(Music *music) {
     }
 
     QSqlQuery query;
-    query.exec("SELECT * FROM music WHERE path='" + path + "'");
-    if (!query.first()) {
-        qDebug("Inserting music!");
-
+    query.prepare("SELECT count(*) FROM music WHERE path=?");
+    query.bindValue(":path", path);
+    query.exec();
+    query.first();
+    unsigned int total = query.value(0).toUInt();
+    if (total == 0) {
         /*
          * Assert that artist and album exists.
          * addAlbum() asserts artist existence.
@@ -165,15 +187,55 @@ void CollectionDatabase::addMusic(Music *music) {
          */
         addAlbum(artist, album);
 
-        db.exec("INSERT INTO music (id_album, track_number, title, path) VALUES ("
-                "(SELECT id FROM album WHERE title='" + album + "' AND id_artist = (SELECT id FROM artist WHERE name = '" + artist +"')),"
-                "" + QString::number(trackNumber) + ", \"" + title + "\", \"" + path + "\");"
+        qDebug("Inserting music " + title.toUtf8());
+        QSqlQuery insertQuery(db);
+        insertQuery.prepare(
+                "INSERT INTO music (id_album, track_number, title, path, last_modified) VALUES ("
+                "(SELECT id FROM album WHERE title=:album AND id_artist = (SELECT id FROM artist WHERE name = :artist)),"
+                ":tracknumber, :title, :path, :lastmodified);"
                 );
+        insertQuery.bindValue(":album", album);
+        insertQuery.bindValue(":artist", artist);
+        insertQuery.bindValue(":tracknumber", trackNumber);
+        insertQuery.bindValue(":title", title);
+        insertQuery.bindValue(":path", path);
+        insertQuery.bindValue(":lastmodified", lastModified);
+        insertQuery.exec();
 
+        if (db.lastError().type() != QSqlError::NoError) {
+            qDebug("ERROR! " + db.lastError().text().toUtf8());
+            qDebug(path.toUtf8());
+            qDebug(insertQuery.executedQuery().toUtf8());
+            sleep(50);
+        }
     }
-
-    if (db.lastError().type() != QSqlError::NoError) {
-        qDebug("ERROR! " + db.lastError().text().toUtf8());
+    else {
+        qDebug("File exists");
+        // If the file was updated, we must update the database.
+        query.prepare("SELECT last_modified FROM music WHERE path=:path");
+        query.bindValue(":path", path);
+        query.exec();
+        query.first();
+        unsigned int lastModifiedInDb = query.value(0).toUInt();
+        if (lastModified > lastModifiedInDb) {
+            qDebug("Updating file "  + path.toUtf8() + " ::: " + QString::number(lastModified).toUtf8() + " > " + QString::number(lastModifiedInDb).toUtf8());
+            QSqlQuery updateQuery(db);
+            updateQuery.prepare(
+                    "UPDATE music SET "
+                    "track_number = :tracknumber, "
+                    "title = :title, "
+                    "id_album = (SELECT id FROM album WHERE title=:album AND id_artist = (SELECT id FROM artist WHERE name = :artist)), "
+                    "last_modified = :lastmodified "
+                    "WHERE path = :path"
+                    );
+            updateQuery.bindValue(":album", album);
+            updateQuery.bindValue(":artist", artist);
+            updateQuery.bindValue(":tracknumber", trackNumber);
+            updateQuery.bindValue(":title", title);
+            updateQuery.bindValue(":path", path);
+            updateQuery.bindValue(":lastmodified", lastModified);
+            updateQuery.exec();
+        }
     }
 
     qDebug("addMusic end");

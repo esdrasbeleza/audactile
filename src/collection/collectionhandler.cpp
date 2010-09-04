@@ -1,12 +1,5 @@
 #include "collectionhandler.h"
 
-/*
- *
- * URGENT TODO:
- *
- * PUT THIS INTO A SEPARATE THREAD.
- *
- */
 CollectionHandler::CollectionHandler(QObject *parent) :
     QObject(parent)
 {
@@ -61,7 +54,7 @@ void CollectionHandler::scanRecursive(QString path) {
         }
         else if (QFileInfo(fileEntry).isFile()) {
             // TODO: should I add this directly or emit a signal?
-            collectionDb->addMusic(fileEntry);
+            collectionDb->addOrUpdateMusic(fileEntry);
         }
     }
 }
