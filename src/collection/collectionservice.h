@@ -5,15 +5,15 @@
 #include <QThread>
 #include "collectionhandler.h"
 
-class CollectionService : public QObject
+class CollectionService : public QThread
 {
 Q_OBJECT
 public:
     explicit CollectionService(QObject *parent = 0);
-    void start();
+    void run();
 
 private:
-    QThread *t;
+    CollectionHandler *handler;
 
 signals:
     void scan();
