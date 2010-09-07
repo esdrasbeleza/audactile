@@ -11,15 +11,15 @@ MainNotebook::MainNotebook(QWidget *parent, PlaylistWidget *playlistWidget)
     // Set tabs movable
     setMovable(true);
     QTabBar *tabbar = tabBar();
-    connect(tabbar, SIGNAL(tabMoved(int,int)), this, SLOT(saveTabOrder(int,int)));
+    connect(tabbar, SIGNAL(tabMoved(int,int)), this, SLOT(saveTabOrder()));
 
     // Widget of the Collection tab
     collectionWidget = new CollectionTreeWidget();
 
     // Widget of the Files tab
-    filesystemWidget = new FilesystemWidget(this);
+    FilesystemWidget *filesystemWidget = new FilesystemWidget(this);
     connect(filesystemWidget, SIGNAL(askToAddItemToPlaylist(PlaylistItem*)), playlistWidget, SLOT(addSong(PlaylistItem*)));
-    QWidget *filesystemContainer = new QWidget(this);
+    filesystemContainer = new QWidget(this);
     QVBoxLayout *filesystemLayout = new QVBoxLayout(filesystemContainer);
     filesystemLayout->setContentsMargins(5, 5, 5, 5);
     filesystemLayout->addWidget(filesystemWidget);
@@ -53,11 +53,11 @@ MainNotebook::MainNotebook(QWidget *parent, PlaylistWidget *playlistWidget)
     show();
 }
 
-void MainNotebook::saveTabOrder(int from, int to) {
+void MainNotebook::saveTabOrder() {
 
     for (int i = 0; i < count(); i++) {
         if (widget(i) == collectionWidget) collectionPosition = i;
-        else if (widget(i) == filesystemWidget) filesystemPosition = i;
+        else if (widget(i) == filesystemContainer) filesystemPosition = i;
         else if (widget(i) == contextContainer) contextPosition = i;
         else if (widget(i) == testLabel3) playlistsPosition = i;
     }

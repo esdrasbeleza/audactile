@@ -20,7 +20,7 @@ public:
     MainNotebook(QWidget *parent, PlaylistWidget *playlistWidget);
 
 private slots:
-    void saveTabOrder(int, int);
+    void saveTabOrder();
 
 private:
     int collectionPosition;
@@ -31,7 +31,7 @@ private:
     // Widgets
     CollectionTreeWidget *collectionWidget;
     QWidget *contextContainer;
-    FilesystemWidget *filesystemWidget;
+    QWidget *filesystemContainer;
     QLabel *testLabel3;
 
 };
