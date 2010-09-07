@@ -15,10 +15,6 @@ int main(int argc, char *argv[])
     ApplicationSettings::createAppDirIfNeeded();
     ApplicationSettings::initialisation();
 
-    // Start collection service
-    CollectionService *service = new CollectionService();
-    service->start();
-
     MainWindow w;
     w.showMaximized();
     return a.exec();
