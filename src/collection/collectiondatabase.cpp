@@ -20,31 +20,20 @@ CollectionDatabase::CollectionDatabase(QObject *parent) :
     db.setDatabaseName(database);
 
     createDatabase();
-
-    artistModel = new QSqlRelationalTableModel(this);
-    artistModel->setTable("artist");
-    artistModel->setEditStrategy(QSqlTableModel::OnFieldChange);
-    artistModel->select();
-
-    albumModel = new QSqlRelationalTableModel(this);
-    albumModel->setTable("album");
-    albumModel->setEditStrategy(QSqlTableModel::OnFieldChange);
-    albumModel->setRelation(albumModel->fieldIndex("id_artist"), QSqlRelation("artist", "id", "artist_name"));
-    albumModel->select();
-
-    musicModel = new QSqlRelationalTableModel(this);
-    musicModel->setTable("music");
-    musicModel->setEditStrategy(QSqlTableModel::OnFieldChange);
-    musicModel->setRelation(musicModel->fieldIndex("id_album"), QSqlRelation("album", "id", "album_title"));
-    musicModel->select();
 }
 
-QSqlRelationalTableModel *CollectionDatabase::model() {
-    artistModel->select();
-    albumModel->select();
-    musicModel->select();
-    return artistModel;
+QSqlTableModel *CollectionDatabase::collectionModel() {
+    QSqlTableModel *model = new QSqlTableModel();
+    model->setTable("collection");
+    model->setSort(model->fieldIndex("artist"), Qt::AscendingOrder);
+    model->setSort(model->fieldIndex("album"), Qt::AscendingOrder); // TODO: sort by year
+    model->setSort(model->fieldIndex("track_number"), Qt::AscendingOrder);
+    model->select();
+
+    return model;
 }
+
+
 
 void CollectionDatabase::createDatabase() {
     if (!db.open()) {
@@ -85,7 +74,7 @@ void CollectionDatabase::createDatabase() {
 
     if (!views.contains("collection")) {
         db.exec("CREATE VIEW collection AS "
-                "SELECT artist.name, album.title as album, music.title as music, music.track_number, music.path "
+                "SELECT artist.name as artist, album.title as album, music.title as music, music.track_number as track_number, music.path as path "
                 "FROM artist, album, music "
                 "WHERE album.id_artist = artist.id AND music.id_album = album.id "
                 "ORDER BY artist.name, album.title, music.track_number;");
@@ -214,8 +203,8 @@ void CollectionDatabase::addOrUpdateMusic(Music *music) {
             qDebug("ERROR! " + db.lastError().text().toUtf8());
             qDebug(path.toUtf8());
             qDebug(insertQuery.executedQuery().toUtf8());
-            sleep(50);
         }
+
     }
     else {
         qDebug("File exists");
@@ -243,6 +232,11 @@ void CollectionDatabase::addOrUpdateMusic(Music *music) {
             updateQuery.bindValue(":path", path);
             updateQuery.bindValue(":lastmodified", lastModified);
             updateQuery.exec();
+
+            if (db.lastError().type() != QSqlError::NoError) {
+                qDebug("ERROR! " + db.lastError().text().toUtf8());
+                qDebug(path.toUtf8());
+            }
         }
     }
 
@@ -263,7 +257,7 @@ void CollectionDatabase::removeAlbum(QString artistName, QString albumName) {
         qDebug("ERROR! " + db.lastError().text().toUtf8());
         return;
     }
-    db.exec("DELETE FROM album WHERE name='" + artistName + "' AND id_artist=(SELECT id FROM artist WHERE name='" + artistName + "')");
+    db.exec("DELETE FROM album WHERE name='" + albumName + "' AND id_artist=(SELECT id FROM artist WHERE name='" + artistName + "')");
 }
 
 void CollectionDatabase::removeMusic(QString path) {

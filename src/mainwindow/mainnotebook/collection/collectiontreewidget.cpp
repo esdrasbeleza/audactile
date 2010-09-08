@@ -6,39 +6,29 @@
 /// @brief Constructor
 CollectionTreeWidget::CollectionTreeWidget()
 {
-    setColumnCount(2);
+    setColumnCount(1);
     header()->hide(); // hide headers
     hideColumn(1); // hide id column
 
+    service = new CollectionService();
 
-    /*
-     * Code for test-only
-     * TODO: remove this.
-     */
-    addArtist("Artista 1");
-    addArtist("Artista 1");
-    addArtist("Artista 1");
-    addArtist("Artista 2");
-    addAlbum("Artista 1", "Album 1");
-    addAlbum("Artista 3", "Album 1");
-    addAlbum("Artista 3", "Album 1");
-    addAlbum("Artista 3", "Album 1");
-    addAlbum("Artista 3", "Album 2");
-    addMusic("Artista 2", "Album 1 do artista 2", "Musica 1");
-    addMusic("Artista 2", "Album 1 do artista 2", "Musica 2");
-    addMusic("Artista 4", "Album 1 do artista 4", "Musica 1");
-    addMusic("Artista 4", "Album 1 do artista 4", "Musica 2");
-    addMusic("Artista 4", "Album 1 do artista 4", "Musica 3");
-    addMusic("Artista 4", "Album 2 do artista 4", "Musica 1");
-    addMusic("Artista 4", "Album 2 do artista 4", "Musica 2");
-    addMusic("Artista 4", "Album 2 do artista 4", "Musica 3");
-    addAlbum("Artista 5", "Album 1");
-    addAlbum("Artista 5", "Album 2");
-    removeAlbum("Artista 3", "Album 1");
-    removeMusic("Artista 5", "Album 2 do artista 4", "Musica 3");
-    removeMusic("Artista 4", "Album 2 do artista 4", "Musica 3");
+    // Add songs that currently exist on database
+    QSqlTableModel *collectionModel = service->model();
+    for (int i = 0; i < collectionModel->rowCount(); i++) {
+        QString path = collectionModel->record(i).value(collectionModel->fieldIndex("path")).toString();
+
+        // TODO: this loop sucks!! Improve this!
+        Music *music = new Music(QUrl(path));
+        addMusic(music);
+        delete music;
+    }
+
     cleanUp(NULL, CollectionTreeWidget::LevelNone);
-    // End of test code.
+
+    connect(service, SIGNAL(songAdded(Music*)), this, SLOT(addMusic(Music*)));
+
+    // Start service to find new songs and remove the inexistent ones
+    service->start();
 
 }
 
@@ -70,7 +60,7 @@ QTreeWidgetItem *CollectionTreeWidget::addArtist(QString artist) {
         return item;
     }
     else {
-       return artistList.first();
+        return artistList.first();
     }
 }
 
@@ -132,24 +122,21 @@ bool CollectionTreeWidget::removeAlbum(QString artist, QString album) {
 }
 
 
-QTreeWidgetItem *CollectionTreeWidget::addMusic(QString artist, QString album, QString music) {
-    // Looks for the album
-    QTreeWidgetItem *newMusicNode; // The node with the music, whether it exists or not
-    QTreeWidgetItem *albumItem = addAlbum(artist, album);
-
-    // Look for music
-    for (int i = 0; i < albumItem->childCount(); i++) {
-        if (albumItem->child(i)->text(0) == music) {
-            newMusicNode = albumItem->child(i);
-            return newMusicNode;
-        }
+QTreeWidgetItem *CollectionTreeWidget::addMusic(Music *music) {
+    if (!music->isValid()) {
+        return NULL;
     }
 
+    // Looks for the album
+    QTreeWidgetItem *newMusicNode; // The node with the music, whether it exists or not
+    QTreeWidgetItem *albumItem = addAlbum(music->getArtist(), music->getAlbum());
+
     // Create our new music node and add it if it was not found
-    newMusicNode = new QTreeWidgetItem((QTreeWidget*)0, toColumns(music));
+    newMusicNode = new QTreeWidgetItem((QTreeWidget*)0);
 
     // Set icon
     newMusicNode->setIcon(0, IconFactory::fromTheme("sound"));
+    newMusicNode->setText(0, music->getTitle());
 
     albumItem->addChild(newMusicNode);
     albumItem->sortChildren(0, Qt::AscendingOrder);
@@ -197,7 +184,7 @@ bool CollectionTreeWidget::removeMusic(QString artist, QString album, QString mu
 void CollectionTreeWidget::cleanUp(QTreeWidgetItem *parent = NULL, CollectionTreeWidget::TreeLevel level = CollectionTreeWidget::LevelNone) {
     // If parent is null, process all artists and its children nodes
     if (parent == NULL) {
-      cleanUp(invisibleRootItem(), CollectionTreeWidget::LevelNone);
+        cleanUp(invisibleRootItem(), CollectionTreeWidget::LevelNone);
     }
 
     // if we have a parent, process it

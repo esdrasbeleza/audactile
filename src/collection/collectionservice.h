@@ -5,6 +5,7 @@
 #include <QFileSystemWatcher>
 #include "../settings/applicationsettings.h"
 #include "../collection/collectiondatabase.h"
+#include "../music.h"
 
 class CollectionService : public QThread
 {
@@ -13,10 +14,11 @@ public:
     explicit CollectionService(QObject *parent = 0);
     void refresh();
     void run();
-    QSqlRelationalTableModel *model();
+    QSqlTableModel *model();
 
 signals:
     void listUpdated();
+    void songAdded(Music *music);
 
 private:
     QFileSystemWatcher *watcher;

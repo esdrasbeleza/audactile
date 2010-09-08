@@ -14,7 +14,7 @@ MainNotebook::MainNotebook(QWidget *parent, PlaylistWidget *playlistWidget)
     connect(tabbar, SIGNAL(tabMoved(int,int)), this, SLOT(saveTabOrder()));
 
     // Widget of the Collection tab
-    collectionWidget = new CollectionTreeView();
+    collectionWidget = new CollectionTreeWidget();
 
     // Widget of the Files tab
     FilesystemWidget *filesystemWidget = new FilesystemWidget(this);

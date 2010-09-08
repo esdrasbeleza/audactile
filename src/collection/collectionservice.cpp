@@ -21,8 +21,8 @@ void CollectionService::run() {
     scan();
 }
 
-QSqlRelationalTableModel *CollectionService::model() {
-    return collectionDb->model();
+QSqlTableModel *CollectionService::model() {
+    return collectionDb->collectionModel();
 }
 
 
@@ -65,6 +65,8 @@ void CollectionService::scanRecursive(QString path) {
         else if (QFileInfo(fileEntry).isFile()) {
             // TODO: should I add this directly or emit a signal?
             collectionDb->addOrUpdateMusic(fileEntry);
+            Music *music = new Music(QUrl(fileEntry));
+            emit songAdded(music);
         }
     }
 }

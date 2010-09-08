@@ -11,7 +11,7 @@
 #include <QSqlError>
 #include <QSqlDriver>
 #include <QDateTime>
-#include <QSqlRelationalTableModel>
+#include <QSqlTableModel>
 #include "../music.h"
 
 class CollectionDatabase : public QObject
@@ -27,7 +27,7 @@ public:
     void removeAlbum(QString artistName, QString albumName);
     void removeMusic(Music *music);
     void removeMusic(QString path);
-    QSqlRelationalTableModel *model();
+    QSqlTableModel *collectionModel();
 
 signals:
 
@@ -36,11 +36,6 @@ public slots:
 private:
     QSqlDatabase db;
     void createDatabase();
-
-
-    QSqlRelationalTableModel *artistModel;
-    QSqlRelationalTableModel *albumModel;
-    QSqlRelationalTableModel *musicModel;
 
 };
 
