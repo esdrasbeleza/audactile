@@ -42,7 +42,7 @@ QStringList CollectionTreeWidget::toColumns(QString string) {
 QTreeWidgetItem *CollectionTreeWidget::addArtist(QString artist) {
     QList<QTreeWidgetItem*> artistList = findItems(artist, Qt::MatchExactly, 0);
     if (artistList.isEmpty()) {
-        QTreeWidgetItem *item = new QTreeWidgetItem(this, toColumns(artist));
+        QTreeWidgetItem *item = new QTreeWidgetItem((QTreeWidget*)0, toColumns(artist));
 
         // Set font to bold
         QFont font = item->font(0);
@@ -88,7 +88,7 @@ QTreeWidgetItem *CollectionTreeWidget::addAlbum(QString artist, QString album) {
     }
 
     // Create our new album node and add it if it was not found
-    newAlbumNode = new QTreeWidgetItem(this, toColumns(album));
+    newAlbumNode = new QTreeWidgetItem((QTreeWidget*)0, toColumns(album));
 
     // Set icon
     newAlbumNode->setIcon(0, IconFactory::fromTheme("media-cdrom"));
@@ -130,8 +130,8 @@ CollectionTreeWidgetItem *CollectionTreeWidget::addMusic(Music *music) {
     QTreeWidgetItem *albumItem = addAlbum(music->getArtist(), music->getAlbum());
 
     // Create our new music node and add it if it was not found
-    removeMusic(music->getFileUrl().path());
-    CollectionTreeWidgetItem *newMusicNode = new CollectionTreeWidgetItem(music, this);
+//    removeMusic(music->getFileUrl().path());
+    CollectionTreeWidgetItem *newMusicNode = new CollectionTreeWidgetItem(music, (QTreeWidget*)0);
 
     albumItem->addChild(newMusicNode);
     albumItem->sortChildren(0, Qt::AscendingOrder);
@@ -150,7 +150,8 @@ bool CollectionTreeWidget::removeMusic(QString path) {
 
         for (int j = 0; j < albumTotal; j++) {
             CollectionTreeWidgetItem *musicNode = (CollectionTreeWidgetItem *)artistNode->child(j);
-            if (musicNode->getMusic()->getFileUrl() == path) {
+            qDebug(musicNode->getMusic()->getArtist().toUtf8());
+            if (musicNode->getMusic()->getFileUrl().path() == path) {
                 delete musicNode;
                 return true;
             }
