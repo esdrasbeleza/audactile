@@ -9,7 +9,7 @@
 #include "../../settings/applicationsettings.h"
 #include "../playlist/playlistwidget.h"
 #include "filesystem/filesystemwidget.h"
-#include "collection/collectiontreewidget.h"
+#include "collection/collectiontreeview.h"
 #include "context/contextwidget.h"
 
 class MainNotebook : public QTabWidget
@@ -29,7 +29,7 @@ private:
     int playlistsPosition;
 
     // Widgets
-    CollectionTreeWidget *collectionWidget;
+    CollectionTreeView *collectionWidget;
     QWidget *contextContainer;
     QWidget *filesystemContainer;
     QLabel *testLabel3;

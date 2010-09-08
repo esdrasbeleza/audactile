@@ -13,8 +13,10 @@ public:
     explicit CollectionService(QObject *parent = 0);
     void refresh();
     void run();
+    QSqlRelationalTableModel *model();
 
 signals:
+    void listUpdated();
 
 private:
     QFileSystemWatcher *watcher;

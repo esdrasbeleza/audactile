@@ -35,7 +35,8 @@ SOURCES += src/mainwindow/mainnotebook/collection/collectiontreewidget.cpp \
     src/settings/settingsdialog/widgets/contextsettingswidget.cpp \
     src/music.cpp \
     src/collection/collectiondatabase.cpp \
-    src/collection/collectionservice.cpp
+    src/collection/collectionservice.cpp \
+    src/mainwindow/mainnotebook/collection/collectiontreeview.cpp
 HEADERS += src/mainwindow/mainnotebook/collection/collectiontreewidget.h \
     src/mainwindow/mainnotebook/filesystem/filesystemwidget.h \
     src/mainwindow/mainnotebook/mainnotebook.h \
@@ -62,7 +63,8 @@ HEADERS += src/mainwindow/mainnotebook/collection/collectiontreewidget.h \
     src/settings/settingsdialog/widgets/contextsettingswidget.h \
     src/music.h \
     src/collection/collectiondatabase.h \
-    src/collection/collectionservice.h
+    src/collection/collectionservice.h \
+    src/mainwindow/mainnotebook/collection/collectiontreeview.h
 RESOURCES = extra_images.qrc
 win32|macx:RESOURCES += icons.qrc
 CONFIG += link_pkgconfig

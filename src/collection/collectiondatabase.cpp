@@ -24,19 +24,27 @@ CollectionDatabase::CollectionDatabase(QObject *parent) :
     artistModel = new QSqlRelationalTableModel(this);
     artistModel->setTable("artist");
     artistModel->setEditStrategy(QSqlTableModel::OnFieldChange);
+    artistModel->select();
 
     albumModel = new QSqlRelationalTableModel(this);
     albumModel->setTable("album");
     albumModel->setEditStrategy(QSqlTableModel::OnFieldChange);
     albumModel->setRelation(albumModel->fieldIndex("id_artist"), QSqlRelation("artist", "id", "artist_name"));
+    albumModel->select();
 
     musicModel = new QSqlRelationalTableModel(this);
     musicModel->setTable("music");
     musicModel->setEditStrategy(QSqlTableModel::OnFieldChange);
     musicModel->setRelation(musicModel->fieldIndex("id_album"), QSqlRelation("album", "id", "album_title"));
-
+    musicModel->select();
 }
 
+QSqlRelationalTableModel *CollectionDatabase::model() {
+    artistModel->select();
+    albumModel->select();
+    musicModel->select();
+    return artistModel;
+}
 
 void CollectionDatabase::createDatabase() {
     if (!db.open()) {

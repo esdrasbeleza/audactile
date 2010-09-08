@@ -27,6 +27,7 @@ public:
     void removeAlbum(QString artistName, QString albumName);
     void removeMusic(Music *music);
     void removeMusic(QString path);
+    QSqlRelationalTableModel *model();
 
 signals:
 

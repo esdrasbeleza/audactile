@@ -21,6 +21,11 @@ void CollectionService::run() {
     scan();
 }
 
+QSqlRelationalTableModel *CollectionService::model() {
+    return collectionDb->model();
+}
+
+
 void CollectionService::fileChanged(QString path) {
     qDebug("FILE CHANGED " + path.toUtf8());
 }
@@ -39,6 +44,7 @@ void CollectionService::scan() {
     foreach (QString path, directories) {
         scanRecursive(path);
     }
+    emit listUpdated();
     qDebug("End of scan()");
 }
 
