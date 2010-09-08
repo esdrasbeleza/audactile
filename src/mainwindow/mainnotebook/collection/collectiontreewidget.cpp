@@ -8,7 +8,6 @@ CollectionTreeWidget::CollectionTreeWidget()
 {
     setColumnCount(1);
     header()->hide(); // hide headers
-    hideColumn(1); // hide id column
 
     service = new CollectionService();
 
@@ -43,7 +42,7 @@ QStringList CollectionTreeWidget::toColumns(QString string) {
 QTreeWidgetItem *CollectionTreeWidget::addArtist(QString artist) {
     QList<QTreeWidgetItem*> artistList = findItems(artist, Qt::MatchExactly, 0);
     if (artistList.isEmpty()) {
-        QTreeWidgetItem *item = new QTreeWidgetItem((QTreeWidget*)0, toColumns(artist));
+        QTreeWidgetItem *item = new QTreeWidgetItem(this, toColumns(artist));
 
         // Set font to bold
         QFont font = item->font(0);
@@ -89,7 +88,7 @@ QTreeWidgetItem *CollectionTreeWidget::addAlbum(QString artist, QString album) {
     }
 
     // Create our new album node and add it if it was not found
-    newAlbumNode = new QTreeWidgetItem((QTreeWidget*)0, toColumns(album));
+    newAlbumNode = new QTreeWidgetItem(this, toColumns(album));
 
     // Set icon
     newAlbumNode->setIcon(0, IconFactory::fromTheme("media-cdrom"));
@@ -122,27 +121,44 @@ bool CollectionTreeWidget::removeAlbum(QString artist, QString album) {
 }
 
 
-QTreeWidgetItem *CollectionTreeWidget::addMusic(Music *music) {
+CollectionTreeWidgetItem *CollectionTreeWidget::addMusic(Music *music) {
     if (!music->isValid()) {
         return NULL;
     }
 
     // Looks for the album
-    QTreeWidgetItem *newMusicNode; // The node with the music, whether it exists or not
     QTreeWidgetItem *albumItem = addAlbum(music->getArtist(), music->getAlbum());
 
     // Create our new music node and add it if it was not found
-    newMusicNode = new QTreeWidgetItem((QTreeWidget*)0);
-
-    // Set icon
-    newMusicNode->setIcon(0, IconFactory::fromTheme("sound"));
-    newMusicNode->setText(0, music->getTitle());
+    removeMusic(music->getFileUrl().path());
+    CollectionTreeWidgetItem *newMusicNode = new CollectionTreeWidgetItem(music, this);
 
     albumItem->addChild(newMusicNode);
     albumItem->sortChildren(0, Qt::AscendingOrder);
 
     return newMusicNode;
 }
+
+bool CollectionTreeWidget::removeMusic(QString path) {
+    int artistTotal = invisibleRootItem()->childCount();
+    if (artistTotal == 0) return false;
+
+    for (int i = 0; i < artistTotal; i++) {
+        QTreeWidgetItem *artistNode = invisibleRootItem()->child(i);
+        int albumTotal = artistNode->childCount();
+        if (albumTotal == 0) { continue; }
+
+        for (int j = 0; j < albumTotal; j++) {
+            CollectionTreeWidgetItem *musicNode = (CollectionTreeWidgetItem *)artistNode->child(j);
+            if (musicNode->getMusic()->getFileUrl() == path) {
+                delete musicNode;
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
 
 bool CollectionTreeWidget::removeMusic(QString artist, QString album, QString music) {
     QList<QTreeWidgetItem*> artistList = findItems(artist, Qt::MatchExactly, 0);

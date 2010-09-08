@@ -8,6 +8,7 @@
 #include "../../../music.h"
 #include "../../../iconfactory.h"
 #include "../../../collection/collectionservice.h"
+#include "collectiontreewidgetitem.h"
 
 class CollectionTreeWidget : public QTreeWidget
 {
@@ -20,6 +21,7 @@ public:
     bool removeArtist(QString artist);
     bool removeAlbum(QString artist, QString album);
     bool removeMusic(QString artist, QString album, QString music);
+    bool removeMusic(QString path);
 
 private:
     QStringList toColumns(QString string);
@@ -29,7 +31,7 @@ private:
 
 
 private slots:
-    QTreeWidgetItem *addMusic(Music *music);
+    CollectionTreeWidgetItem *addMusic(Music *music);
 
 
 
