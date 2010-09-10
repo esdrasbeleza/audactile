@@ -10,6 +10,7 @@
 Music::Music(QUrl fileUrl)
     {
     this->fileUrl = fileUrl;
+
     TagLib::FileRef taglibFileRef = TagLib::FileRef(fileUrl.toLocalFile().toUtf8());
 
     // Verify if some file is valid

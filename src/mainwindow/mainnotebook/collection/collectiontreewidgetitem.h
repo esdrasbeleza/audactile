@@ -9,10 +9,10 @@ class CollectionTreeWidgetItem : public QTreeWidgetItem
 {
 public:
     explicit CollectionTreeWidgetItem(Music *music, QTreeWidget *parent = 0);
-    Music *getMusic();
+    Music getMusic();
 
 private:
-    Music *music;
+    Music music;
 
 signals:
 

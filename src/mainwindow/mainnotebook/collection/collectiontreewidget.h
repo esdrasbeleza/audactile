@@ -18,6 +18,7 @@ public:
     CollectionTreeWidget();
     QTreeWidgetItem *addArtist(QString artist);
     QTreeWidgetItem *addAlbum(QString artist, QString album);
+    QList<CollectionTreeWidgetItem*> musicList;
     bool removeArtist(QString artist);
     bool removeAlbum(QString artist, QString album);
     bool removeMusic(QString artist, QString album, QString music);

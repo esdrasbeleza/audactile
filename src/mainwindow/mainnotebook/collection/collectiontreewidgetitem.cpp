@@ -7,9 +7,9 @@ CollectionTreeWidgetItem::CollectionTreeWidgetItem(Music *music, QTreeWidget *pa
 
     // Set icon
     setIcon(0, IconFactory::fromTheme("sound"));
-    setText(0, music->getTitle());
+    setText(0, this->music.getTitle());
 }
 
-Music *CollectionTreeWidgetItem::getMusic() {
+Music CollectionTreeWidgetItem::getMusic() {
     return music;
 }

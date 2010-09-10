@@ -130,33 +130,35 @@ CollectionTreeWidgetItem *CollectionTreeWidget::addMusic(Music *music) {
     QTreeWidgetItem *albumItem = addAlbum(music->getArtist(), music->getAlbum());
 
     // Create our new music node and add it if it was not found
-//    removeMusic(music->getFileUrl().path());
+    qDebug("add " + music->getFileUrl().path().toUtf8());
+    removeMusic(music->getFileUrl().path());
+
     CollectionTreeWidgetItem *newMusicNode = new CollectionTreeWidgetItem(music, (QTreeWidget*)0);
 
     albumItem->addChild(newMusicNode);
     albumItem->sortChildren(0, Qt::AscendingOrder);
 
+    musicList.append(newMusicNode);
+
     return newMusicNode;
 }
 
 bool CollectionTreeWidget::removeMusic(QString path) {
-    int artistTotal = invisibleRootItem()->childCount();
-    if (artistTotal == 0) return false;
+    qDebug("remove " + path.toUtf8());
+    int total = musicList.count();
+    qDebug("Total: " + QString::number(total).toUtf8());
 
-    for (int i = 0; i < artistTotal; i++) {
-        QTreeWidgetItem *artistNode = invisibleRootItem()->child(i);
-        int albumTotal = artistNode->childCount();
-        if (albumTotal == 0) { continue; }
-
-        for (int j = 0; j < albumTotal; j++) {
-            CollectionTreeWidgetItem *musicNode = (CollectionTreeWidgetItem *)artistNode->child(j);
-            qDebug(musicNode->getMusic()->getArtist().toUtf8());
-            if (musicNode->getMusic()->getFileUrl().path() == path) {
-                delete musicNode;
-                return true;
-            }
+    if (total == 0) return false;
+    for (int i = 0; i < total; i++) {
+        CollectionTreeWidgetItem *item = musicList[i];
+        qDebug("Pos " + item->text(0).toUtf8());
+        if (item->getMusic().getFileUrl().path() == path) {
+            musicList.removeAt(i);
+            delete item;
+            return true;
         }
     }
+
     return false;
 }
 
