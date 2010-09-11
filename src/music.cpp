@@ -4,13 +4,22 @@
 /*
  * TODO:
  * - Watch file for changes. If it's changed, update playlist.
- *
- *
  */
+Music::Music(QString artist, QString album, QString title, QString path, unsigned int trackNumber) {
+    this->artist = artist;
+    this->album = album;
+    this->title = title;
+    this->fileUrl = QUrl(path);
+    this->trackNumber = trackNumber;
+}
+
 Music::Music(QUrl fileUrl)
     {
     this->fileUrl = fileUrl;
+    readMetaData();
+}
 
+void Music::readMetaData() {
     TagLib::FileRef taglibFileRef = TagLib::FileRef(fileUrl.toLocalFile().toUtf8());
 
     // Verify if some file is valid

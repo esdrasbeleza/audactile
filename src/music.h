@@ -8,6 +8,8 @@
 class Music
 {
 public:
+    Music() { };
+    Music(QString artist, QString album, QString title, QString path, unsigned int trackNumber);
     Music(QUrl fileUrl);
     QUrl getFileUrl();
     QString getArtist();
@@ -19,6 +21,7 @@ public:
     bool isValid();
 
 private:
+    void readMetaData();
     bool valid;
     QUrl fileUrl;
     unsigned int trackNumber;

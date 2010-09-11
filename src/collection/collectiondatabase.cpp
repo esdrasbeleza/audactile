@@ -147,14 +147,8 @@ void CollectionDatabase::addAlbum(QString artistName, QString albumName) {
     qDebug("addAlbum end");
 }
 
-// TODO: swap the methods to optimize insert verifying path before creating a Music object
-void CollectionDatabase::addOrUpdateMusic(QString path) {
-    Music *music = new Music(QUrl::fromLocalFile(path));
-    addOrUpdateMusic(music);
-}
-
-void CollectionDatabase::addOrUpdateMusic(Music *music) {
-    if (!music->isValid()) return;
+bool CollectionDatabase::addOrUpdateMusic(Music *music) {
+    if (!music->isValid()) return false;
 
     QString artist = music->getArtist();
     QString album = music->getAlbum();
@@ -167,7 +161,7 @@ void CollectionDatabase::addOrUpdateMusic(Music *music) {
 
     if (!db.isOpen()) {
         if (!db.open()) qDebug("ERROR! " + db.lastError().text().toUtf8());
-        return;
+        return false;
     }
 
     QSqlQuery query;
@@ -203,7 +197,9 @@ void CollectionDatabase::addOrUpdateMusic(Music *music) {
             qDebug("ERROR! " + db.lastError().text().toUtf8());
             qDebug(path.toUtf8());
             qDebug(insertQuery.executedQuery().toUtf8());
+            return false;
         }
+        return true;
 
     }
     else {
@@ -236,11 +232,13 @@ void CollectionDatabase::addOrUpdateMusic(Music *music) {
             if (db.lastError().type() != QSqlError::NoError) {
                 qDebug("ERROR! " + db.lastError().text().toUtf8());
                 qDebug(path.toUtf8());
+                return false;
             }
+            return true;
         }
     }
-
-    qDebug("addMusic end");
+    qDebug("Music not added");
+    return false;
 }
 
 

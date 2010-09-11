@@ -63,10 +63,10 @@ void CollectionService::scanRecursive(QString path) {
             scanRecursive(fileEntry);
         }
         else if (QFileInfo(fileEntry).isFile()) {
-            // TODO: should I add this directly or emit a signal?
-            collectionDb->addOrUpdateMusic(fileEntry);
             Music *music = new Music(QUrl(fileEntry));
-            emit songAdded(music);
+            if (collectionDb->addOrUpdateMusic(music)) {
+                emit songAdded(music);
+            }
         }
     }
 }

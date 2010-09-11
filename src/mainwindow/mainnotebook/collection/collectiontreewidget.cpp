@@ -13,14 +13,28 @@ CollectionTreeWidget::CollectionTreeWidget()
 
     // Add songs that currently exist on database
     QSqlTableModel *collectionModel = service->model();
-    for (int i = 0; i < collectionModel->rowCount(); i++) {
-        QString path = collectionModel->record(i).value(collectionModel->fieldIndex("path")).toString();
 
-        // TODO: this loop sucks!! Improve this!
-        Music *music = new Music(QUrl(path));
+    while (collectionModel->canFetchMore()) collectionModel->fetchMore();
+    int total = collectionModel->rowCount();
+
+    for (int i = 0; i < total; i++) {
+        /*
+         * Instead of reading all data from database again, we simply read from database
+         * in order to avoid memory problems.
+         */
+        QString artist = collectionModel->record(i).value(collectionModel->fieldIndex("artist")).toString();
+        QString album = collectionModel->record(i).value(collectionModel->fieldIndex("album")).toString();
+        QString title = collectionModel->record(i).value(collectionModel->fieldIndex("music")).toString();
+        QString path = collectionModel->record(i).value(collectionModel->fieldIndex("path")).toString();
+        unsigned int trackNumber = collectionModel->record(i).value(collectionModel->fieldIndex("track_number")).toInt();
+
+        qDebug(QString::number(i).toUtf8() + " - Adding " + path.toUtf8());
+
+        Music *music = new Music(artist, album, title, path, trackNumber);
         addMusic(music);
         delete music;
     }
+
 
     cleanUp(NULL, CollectionTreeWidget::LevelNone);
 
@@ -122,15 +136,10 @@ bool CollectionTreeWidget::removeAlbum(QString artist, QString album) {
 
 
 CollectionTreeWidgetItem *CollectionTreeWidget::addMusic(Music *music) {
-    if (!music->isValid()) {
-        return NULL;
-    }
-
     // Looks for the album
     QTreeWidgetItem *albumItem = addAlbum(music->getArtist(), music->getAlbum());
 
     // Create our new music node and add it if it was not found
-    qDebug("add " + music->getFileUrl().path().toUtf8());
     removeMusic(music->getFileUrl().path());
 
     CollectionTreeWidgetItem *newMusicNode = new CollectionTreeWidgetItem(music, (QTreeWidget*)0);
@@ -146,13 +155,12 @@ CollectionTreeWidgetItem *CollectionTreeWidget::addMusic(Music *music) {
 bool CollectionTreeWidget::removeMusic(QString path) {
     qDebug("remove " + path.toUtf8());
     int total = musicList.count();
-    qDebug("Total: " + QString::number(total).toUtf8());
 
     if (total == 0) return false;
     for (int i = 0; i < total; i++) {
         CollectionTreeWidgetItem *item = musicList[i];
-        qDebug("Pos " + item->text(0).toUtf8());
         if (item->getMusic().getFileUrl().path() == path) {
+            qDebug("Removing " + path.toUtf8());
             musicList.removeAt(i);
             delete item;
             return true;

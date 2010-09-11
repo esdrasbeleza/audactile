@@ -21,8 +21,7 @@ public:
     explicit CollectionDatabase(QObject *parent = 0);
     void addArtist(QString artistName);
     void addAlbum(QString artistName, QString albumName);
-    void addOrUpdateMusic(Music *music);
-    void addOrUpdateMusic(QString path);
+    bool addOrUpdateMusic(Music *music);
     void removeArtist(QString artistName);
     void removeAlbum(QString artistName, QString albumName);
     void removeMusic(Music *music);
