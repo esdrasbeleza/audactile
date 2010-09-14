@@ -7,9 +7,9 @@
 class CollectionTreeWidgetItem : public QTreeWidgetItem
 {
 public:
-    enum TreeLevel { LevelNone = 0, LevelArtist = 1, LevelAlbum = 2, LevelMusic = 3 };
-    explicit CollectionTreeWidgetItem(TreeLevel level, QTreeWidget *parent = 0);
-    unsigned int getNodeLevel();
+    // TODO: use TreeLevel instead of unsigned int
+    explicit CollectionTreeWidgetItem(unsigned int level, QTreeWidget *parent = 0);
+    unsigned int  getNodeLevel();
     QList<QUrl> getUrlList();
 
 private:

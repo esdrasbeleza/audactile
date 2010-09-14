@@ -26,14 +26,11 @@ public:
     bool removeArtist(QString artist);
     bool removeAlbum(QString artist, QString album);
     bool removeMusic(QString artist, QString album, QString music);
-    bool removeMusic(QString path);
+    enum TreeLevel { LevelNone = 0, LevelArtist = 1, LevelAlbum = 2, LevelMusic = 3 };
 
 private:
     QStringList toColumns(QString string);
-
-    // TODO: TreeLevel now is in CollectionTreeWidgetItem, need to improve the code
-    enum TreeLevel { LevelNone = 0, LevelArtist = 1, LevelAlbum = 2, LevelMusic = 3 };
-    void cleanUp(QTreeWidgetItem *parent, CollectionTreeWidget::TreeLevel level);
+    void cleanUp(QTreeWidgetItem *parent, int level);
     CollectionService *service;
 
     // Override drag and drop methods
@@ -42,6 +39,7 @@ private:
 
 private slots:
     CollectionTreeWidgetSong *addMusic(Music *music);
+    bool removeMusic(QString path);
     void doubleClickAt(QModelIndex);
 
 signals:

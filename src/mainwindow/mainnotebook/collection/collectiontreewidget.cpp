@@ -12,8 +12,6 @@ CollectionTreeWidget::CollectionTreeWidget()
     setAcceptDrops(true);
     setSelectionMode(QAbstractItemView::ExtendedSelection);
 
-    // TODO: enable drops to add music to collection
-
     service = new CollectionService();
 
     // Add songs that currently exist on database
@@ -39,11 +37,12 @@ CollectionTreeWidget::CollectionTreeWidget()
         addMusic(music);
         delete music;
     }
-
+    delete collectionModel;
 
     cleanUp(NULL, CollectionTreeWidget::LevelNone);
 
     connect(service, SIGNAL(songAdded(Music*)), this, SLOT(addMusic(Music*)));
+    connect(service, SIGNAL(songRemoved(QString)), this, SLOT(removeMusic(QString)));
     connect(this, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(doubleClickAt(QModelIndex)));
 
     // Start service to find new songs and remove the inexistent ones
@@ -163,9 +162,10 @@ bool CollectionTreeWidget::removeMusic(QString path) {
     for (int i = 0; i < total; i++) {
         CollectionTreeWidgetSong *item = musicList[i];
         if (item->getMusic().getFileUrl().path() == path) {
-            qDebug("Removing " + path.toUtf8());
+            CollectionTreeWidgetItem *album = (CollectionTreeWidgetItem*)item->parent();
             musicList.removeAt(i);
             delete item;
+            cleanUp(album, CollectionTreeWidget::LevelAlbum);
             return true;
         }
     }
@@ -210,7 +210,7 @@ bool CollectionTreeWidget::removeMusic(QString artist, QString album, QString mu
     return false;
 }
 
-void CollectionTreeWidget::cleanUp(QTreeWidgetItem *parent = NULL, CollectionTreeWidget::TreeLevel level = CollectionTreeWidget::LevelNone) {
+void CollectionTreeWidget::cleanUp(QTreeWidgetItem *parent = NULL, int level = CollectionTreeWidget::LevelNone) {
     // If parent is null, process all artists and its children nodes
     if (parent == NULL) {
         cleanUp(invisibleRootItem(), CollectionTreeWidget::LevelNone);
@@ -236,7 +236,6 @@ void CollectionTreeWidget::cleanUp(QTreeWidgetItem *parent = NULL, CollectionTre
 
                 // If artist has no more albums, remove it too
                 if (parentParent->childCount() == 0) delete parentParent;
-
             }
         }
     }

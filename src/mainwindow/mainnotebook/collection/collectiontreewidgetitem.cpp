@@ -1,7 +1,8 @@
 #include "collectiontreewidgetitem.h"
 #include "collectiontreewidgetsong.h"
+#include "collectiontreewidget.h"
 
-CollectionTreeWidgetItem::CollectionTreeWidgetItem(TreeLevel level, QTreeWidget *parent) :
+CollectionTreeWidgetItem::CollectionTreeWidgetItem(unsigned int level, QTreeWidget *parent) :
     QTreeWidgetItem(parent, 0)
 {
     this->level = level;
@@ -23,7 +24,7 @@ QList<QUrl> CollectionTreeWidgetItem::getUrlList() {
             CollectionTreeWidgetItem *childNode = (CollectionTreeWidgetItem*)child(i);
             int nodeLevel = childNode->getNodeLevel();
             qDebug("Level " + QString::number(nodeLevel).toUtf8());
-            if (childNode->getNodeLevel() > LevelMusic) {
+            if (childNode->getNodeLevel() > CollectionTreeWidget::LevelMusic) {
                 urlList.append(childNode->getUrlList());
             }
             else {
@@ -34,7 +35,7 @@ QList<QUrl> CollectionTreeWidgetItem::getUrlList() {
     }
     // If we do not have children, maybe it's an song
     else {
-        if (getNodeLevel() == LevelMusic) {
+        if (getNodeLevel() == CollectionTreeWidget::LevelMusic) {
             CollectionTreeWidgetSong *song = (CollectionTreeWidgetSong*)this;
             urlList.append(song->getUrlList());
         }

@@ -29,7 +29,6 @@ QSqlTableModel *CollectionDatabase::collectionModel() {
     model->setSort(model->fieldIndex("album"), Qt::AscendingOrder); // TODO: sort by year
     model->setSort(model->fieldIndex("track_number"), Qt::AscendingOrder);
     model->select();
-
     return model;
 }
 

@@ -1,7 +1,8 @@
 #include "collectiontreewidgetsong.h"
+#include "collectiontreewidget.h"
 
 CollectionTreeWidgetSong::CollectionTreeWidgetSong(Music *music, QTreeWidget *parent)
-    : CollectionTreeWidgetItem(LevelMusic, parent)
+    : CollectionTreeWidgetItem(CollectionTreeWidget::LevelMusic, parent)
 {
     this->music = *music;
 

@@ -19,6 +19,7 @@ public:
 signals:
     void listUpdated();
     void songAdded(Music *music);
+    void songRemoved(QString path);
 
 private:
     QFileSystemWatcher *watcher;
@@ -26,6 +27,7 @@ private:
     void scanRecursive(QString path);
 
 public slots:
+    void verifyFiles();
     void scan();
     void setPaths(QStringList paths);
 

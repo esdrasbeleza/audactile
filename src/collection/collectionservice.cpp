@@ -18,6 +18,7 @@ CollectionService::CollectionService(QObject *parent) :
 }
 
 void CollectionService::run() {
+    verifyFiles();
     scan();
 }
 
@@ -36,9 +37,33 @@ void CollectionService::dirChanged(QString path) {
 
 void CollectionService::refresh() {
     setPaths(ApplicationSettings::collectionFolderList());
-
 }
 
+/*
+ * Verify if all files in database exist.
+ */
+void CollectionService::verifyFiles() {
+    qDebug("Verifying files...");
+    QSqlTableModel *collectionModel = model();
+    while (collectionModel->canFetchMore()) collectionModel->fetchMore();
+    int total = collectionModel->rowCount();
+
+    for (int i = 0; i < total; i++) {
+        QString path = collectionModel->record(i).value(collectionModel->fieldIndex("path")).toString();
+        if (!QFileInfo(path).exists()) {
+            qDebug("Removing from database: " + path.toUtf8());
+            collectionDb->removeMusic(path);
+            emit songRemoved(path);
+        }
+    }
+
+    delete collectionModel;
+}
+
+/*
+ * Scan collection folders in order to assert that
+ * all files in folders are in collection.
+ */
 void CollectionService::scan() {
     QStringList directories = ApplicationSettings::collectionFolderList();
     foreach (QString path, directories) {
