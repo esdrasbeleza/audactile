@@ -89,7 +89,9 @@ void CollectionService::scanRecursive(QString path) {
 }
 
 void CollectionService::setPaths(QStringList paths) {
-    watcher->removePaths(watcher->directories());
+    if (!watcher->directories().isEmpty()) {
+        watcher->removePaths(watcher->directories());
+    }
 
     // TODO: verify if every path is valid
     QStringList directories = ApplicationSettings::collectionFolderList();

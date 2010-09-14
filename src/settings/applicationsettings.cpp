@@ -1,14 +1,11 @@
 #include "applicationsettings.h"
 
 void ApplicationSettings::initialisation() {
-    qDebug("initialisation()");
-    
     QSettings settings(QSettings::UserScope, QApplication::organizationName(), QApplication::applicationName());
     settings.beginGroup("General");
     settings.setValue("version", QApplication::applicationVersion());
     settings.endGroup();
 }
-
 
 void ApplicationSettings::setTabOrder(QString tab, int value) {
     QSettings settings(QSettings::UserScope, QApplication::organizationName(), QApplication::applicationName());
@@ -16,7 +13,6 @@ void ApplicationSettings::setTabOrder(QString tab, int value) {
     settings.setValue(tab, value);
     settings.endGroup();
 }
-
 
 int ApplicationSettings::getTabOrder(QString tab) {
     QSettings settings(QSettings::UserScope, QApplication::organizationName(), QApplication::applicationName());
@@ -46,8 +42,6 @@ float ApplicationSettings::getSplitterSize() {
     return size;
 }
 
-
-
 void ApplicationSettings::createAppDirIfNeeded() {
     QString storageLocation = QDesktopServices::storageLocation(QDesktopServices::DataLocation);
     QDir dir(storageLocation);
@@ -65,8 +59,6 @@ void ApplicationSettings::createAppDirIfNeeded() {
 }
 
 QStringList ApplicationSettings::collectionFolderList() {
-    qDebug("collectionFolderList()");
-
     QSettings settings(QSettings::UserScope, QApplication::organizationName(), QApplication::applicationName());
 
     QStringList folders;
@@ -78,13 +70,12 @@ QStringList ApplicationSettings::collectionFolderList() {
     folders.removeDuplicates();
 
     settings.endArray();
-    // TODO: remove paths that do not exists.
+    // TODO: remove paths that do not exist.
 
     return folders;
 }
 
 void ApplicationSettings::addCollectionFolder(QString location) {
-    
     QSettings settings(QSettings::UserScope, QApplication::organizationName(), QApplication::applicationName());
 
     QStringList folders = collectionFolderList();
@@ -93,7 +84,6 @@ void ApplicationSettings::addCollectionFolder(QString location) {
     settings.beginWriteArray("folders");
     for (int i = 0; i < folders.size(); ++i) {
         settings.setArrayIndex(i);
-        qDebug(folders.at(i).toUtf8());
         settings.setValue("path", folders.at(i));
     }
     settings.endArray();
@@ -114,10 +104,12 @@ void ApplicationSettings::setCollectionFolders(QStringList folders) {
         settings.setArrayIndex(i);
         settings.setValue("path", folders.at(i));
 
-        // If we're adding a folder that does not exist, scan it!
+        /*
+         *  If we're adding a folder that does not exist, call service to scan it!
+         */
         if (!oldFolders.contains(folders.at(i), Qt::CaseSensitive)) {
             qDebug("Parsing directory...");
-            // TODO: scan directory
+            // TODO: scan directory - #1
         }
     }
     settings.endArray();
@@ -125,9 +117,7 @@ void ApplicationSettings::setCollectionFolders(QStringList folders) {
 
 
 void ApplicationSettings::removeColletionFolder(QString location) {
-    
     QSettings settings(QSettings::UserScope, QApplication::organizationName(), QApplication::applicationName());
-
     QStringList folders = collectionFolderList();
     folders.append(location);
     folders.removeAll(location);
