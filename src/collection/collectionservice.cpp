@@ -6,11 +6,8 @@ CollectionService::CollectionService(QObject *parent) :
     watcher = new QFileSystemWatcher(this);
     collectionDb = new CollectionDatabase(this);
 
-    QStringList directories = ApplicationSettings::collectionFolderList();
-    if (!directories.isEmpty()) {
-        // TODO: verify if every path is valid.
-        watcher->addPaths(ApplicationSettings::collectionFolderList());
-    }
+    // Set watcher paths to paths in settings file
+    refresh();
 
     connect(watcher, SIGNAL(fileChanged(QString)), this, SLOT(fileChanged(QString)));
     connect(watcher, SIGNAL(directoryChanged(QString)), this, SLOT(dirChanged(QString)));
@@ -100,5 +97,8 @@ void CollectionService::setPaths(QStringList paths) {
     watcher->removePaths(watcher->directories());
 
     // TODO: verify if every path is valid
-    watcher->addPaths(paths);
+    QStringList directories = ApplicationSettings::collectionFolderList();
+    if (!directories.isEmpty()) {
+        watcher->addPaths(ApplicationSettings::collectionFolderList());
+    }
 }
