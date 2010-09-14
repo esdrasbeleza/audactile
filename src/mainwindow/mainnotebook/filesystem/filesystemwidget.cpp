@@ -8,7 +8,6 @@ FilesystemWidget::FilesystemWidget(QWidget *parent)
     QToolBar *fsToolbar = new QToolBar();
     fsToolbar->setMovable(false);
 
-
     goUpAction = new QAction(IconFactory::fromTheme("go-up"), tr("Go up"), this);
     connect(goUpAction, SIGNAL(triggered()), this, SLOT(goUp()));
     fsToolbar->addAction(goUpAction);
@@ -25,7 +24,6 @@ FilesystemWidget::FilesystemWidget(QWidget *parent)
     fsToolbar->addWidget(filterLabel);
     fsToolbar->addWidget(filterEdit);
     connect(filterEdit, SIGNAL(textChanged(QString)), this, SLOT(setNameFilter(QString)));
-
 
     // Create the filesystem view
     fsWidgetModel = new QFileSystemModel();
@@ -49,7 +47,6 @@ FilesystemWidget::FilesystemWidget(QWidget *parent)
     goHome();
 
     this->setLayout(vlayout);
-
 }
 
 
@@ -91,7 +88,6 @@ void FilesystemWidget::pathChanged(QString newPath) {
     else { goUpAction->setEnabled(true); }
     updateWidget();
 }
-
 
 void FilesystemWidget::doubleClickAt(QModelIndex modelIndex) {
     // It it's a dir, we must change path

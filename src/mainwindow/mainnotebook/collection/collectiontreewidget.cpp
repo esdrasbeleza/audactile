@@ -31,8 +31,6 @@ CollectionTreeWidget::CollectionTreeWidget()
         QString path = collectionModel->record(i).value(collectionModel->fieldIndex("path")).toString();
         unsigned int trackNumber = collectionModel->record(i).value(collectionModel->fieldIndex("track_number")).toInt();
 
-        qDebug(QString::number(i).toUtf8() + " - Adding " + path.toUtf8());
-
         Music *music = new Music(artist, album, title, path, trackNumber);
         addMusic(music);
         delete music;
@@ -155,7 +153,6 @@ CollectionTreeWidgetSong *CollectionTreeWidget::addMusic(Music *music) {
 }
 
 bool CollectionTreeWidget::removeMusic(QString path) {
-    qDebug("remove " + path.toUtf8());
     int total = musicList.count();
 
     if (total == 0) return false;
@@ -194,11 +191,9 @@ bool CollectionTreeWidget::removeMusic(QString artist, QString album, QString mu
     if (albumItem != NULL) {
         for (int i = 0; i < albumItem->childCount(); i++) {
             if (albumItem->child(i)->text(0) == music) {
-                qDebug("Deleting music");
                 delete albumItem->child(i);
 
                 if (albumItem->childCount() == 0) {
-                    qDebug("Removing album");
                     delete albumItem;
                 }
 
@@ -264,13 +259,11 @@ void CollectionTreeWidget::mouseMoveEvent(QMouseEvent *event) {
     drag->setMimeData(mimeData);
 
     // start drag
-    qDebug("Starting drag");
     QList<QTreeWidgetItem *> itemsToRemove = selectedItems();
     drag->exec(Qt::CopyAction | Qt::MoveAction);
 }
 
 void CollectionTreeWidget::doubleClickAt(QModelIndex index) {
-    qDebug("Double click");
     QList<QUrl> list;
     CollectionTreeWidgetItem *item = (CollectionTreeWidgetItem *)itemFromIndex(index);
     if (item->getNodeLevel() == LevelMusic) {

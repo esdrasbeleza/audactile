@@ -40,7 +40,6 @@ void CollectionService::refresh() {
  * Verify if all files in database exist.
  */
 void CollectionService::verifyFiles() {
-    qDebug("Verifying files...");
     QSqlTableModel *collectionModel = model();
     while (collectionModel->canFetchMore()) collectionModel->fetchMore();
     int total = collectionModel->rowCount();
@@ -48,7 +47,6 @@ void CollectionService::verifyFiles() {
     for (int i = 0; i < total; i++) {
         QString path = collectionModel->record(i).value(collectionModel->fieldIndex("path")).toString();
         if (!QFileInfo(path).exists()) {
-            qDebug("Removing from database: " + path.toUtf8());
             collectionDb->removeMusic(path);
             emit songRemoved(path);
         }
@@ -67,12 +65,9 @@ void CollectionService::scan() {
         scanRecursive(path);
     }
     emit listUpdated();
-    qDebug("End of scan()");
 }
 
 void CollectionService::scanRecursive(QString path) {
-    qDebug("scanRecursive " + path.toUtf8());
-
     // You shouldn't call this to add files
     if (QFileInfo(path).isFile()) return;
 

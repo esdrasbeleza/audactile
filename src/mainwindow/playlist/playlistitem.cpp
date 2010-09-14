@@ -5,20 +5,16 @@
 
 PlaylistItem::PlaylistItem(QString itemFilePath)
 {
-    qDebug("PlaylistItem by path");
     fileUrl = QUrl().fromLocalFile(itemFilePath);
     loadFile();
 }
 
 PlaylistItem::PlaylistItem(QUrl url) {
-    qDebug("PlaylistItem by URL");
     fileUrl = url;
     loadFile();
 }
 
 void PlaylistItem::loadFile() {
-    qDebug("File: " + fileUrl.toLocalFile().toUtf8());
-
     music = new Music(fileUrl);
 
     if (music->getTrackNumber() > 0) { setData(0, Qt::DisplayRole, music->getTrackNumber()); }
@@ -64,4 +60,3 @@ void PlaylistItem::removeBold() {
         setFont(i, itemFont);
     }
 }
-

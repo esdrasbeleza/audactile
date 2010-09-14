@@ -177,7 +177,6 @@ void PlayerBar::handleState(Phonon::State newState, Phonon::State oldState) {
 
     // Handle stop button
     if (newState <= Phonon::StoppedState) {
-        qDebug("Stopped state");
         stopButton->setDisabled(true);
     }
     else {
@@ -192,13 +191,8 @@ void PlayerBar::handlePlayButton() {
     if (mainMediaObject->state() == Phonon::PlayingState) {
         mainMediaObject->pause();
     }
-    else {
-        if (mainMediaObject->currentSource().type() != MediaSource::Empty) {
-           mainMediaObject->play();
-        }
-        else {
-            qDebug("Playlist is empty!");
-        }
+    else if (mainMediaObject->currentSource().type() != MediaSource::Empty) {
+        mainMediaObject->play();
     }
     updateSongPosition();
 }
@@ -246,11 +240,9 @@ void PlayerBar::openSettings() {
 /// @brief Set the correct button to screen button
 void PlayerBar::handleWindowStateChange(Qt::WindowStates windowState) {
     if (windowState == Qt::WindowFullScreen) {
-        qDebug("Set icon to restore");
         fullScreenButton->setIcon(IconFactory::fromTheme("view-restore"));
     }
     else {
-        qDebug("Set icon to full screen");
         fullScreenButton->setIcon(IconFactory::fromTheme("view-fullscreen"));
     }
 }

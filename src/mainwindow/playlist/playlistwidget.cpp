@@ -53,25 +53,18 @@ PlaylistWidget::PlaylistWidget(QWidget *parent, Phonon::MediaObject *mediaObject
 }
 
 void PlaylistWidget::playSong(QTreeWidgetItem *doubleClickedItem) {
-    qDebug("playSong ");
     PlaylistItem *item = (PlaylistItem*) doubleClickedItem;
     if (currentSong != NULL) {
-        qDebug("Removing bold...");
         currentSong->removeBold();
     }
-    qDebug("Trying to play song...");
     currentSong = item;
     item->setBold();
-    qDebug("Playing " + item->getMusic()->getFileUrl().path().toAscii());
     mainMediaObject->setCurrentSource(item->getMusic()->getFileUrl());
     mainMediaObject->play();
-
     emitSongInformationUpdated();
 }
 
-
 void PlaylistWidget::playPreviousSong() {
-    qDebug("playPreviousSong");
     QModelIndex index = indexAbove(indexFromItem(currentSong));
     if (index.isValid()) {
        playSong(itemFromIndex(index));
@@ -79,7 +72,6 @@ void PlaylistWidget::playPreviousSong() {
 }
 
 void PlaylistWidget::playNextSong() {
-    qDebug("playNextSong");
     QModelIndex index = indexBelow(indexFromItem(currentSong));
     if (index.isValid()) {
        playSong(itemFromIndex(index));
@@ -88,7 +80,6 @@ void PlaylistWidget::playNextSong() {
 
 
 void PlaylistWidget::enqueueNextSong() {
-    qDebug("enqueueNextSong");
     nextSong = (PlaylistItem*)itemBelow(currentSong);
     if (nextSong != NULL) {
         mainMediaObject->enqueue(nextSong->getMusic()->getFileUrl());
@@ -100,7 +91,6 @@ void PlaylistWidget::removeBold() {
 }
 
 void PlaylistWidget::fileChanged() {
-    qDebug("fileChanged");
     if (nextSong != NULL) {
         currentSong->removeBold();
         currentSong = nextSong;
@@ -111,7 +101,6 @@ void PlaylistWidget::fileChanged() {
 
 void PlaylistWidget::handleStateChange(Phonon::State newState) {
     if (newState > Phonon::StoppedState) {
-        qDebug("Asking to update song information after changing to state " + QString::number(newState).toUtf8());
         currentSong->setBold();
         emitSongInformationUpdated();
     }
@@ -123,7 +112,6 @@ void PlaylistWidget::handleStateChange(Phonon::State newState) {
 }
 
 void PlaylistWidget::emitSongInformationUpdated() {
-    qDebug("emitSongInformationUpdated");
     QMap<QString, QString> songInfo;
     songInfo.insert("artist", currentSong->getMusic()->getArtist());
     songInfo.insert("title", currentSong->getMusic()->getTitle());
@@ -131,7 +119,6 @@ void PlaylistWidget::emitSongInformationUpdated() {
 }
 
 void PlaylistWidget::addSong(PlaylistItem *newItem, int index) {
-    qDebug("addSong file");
     newItem->index = index;
 
     if (newItem->isValid()) {
@@ -148,7 +135,6 @@ void PlaylistWidget::addSong(QUrl url, int index) {
 }
 
 void PlaylistWidget::addSong(QList<QUrl> urlList) {
-    qDebug("Add song from URL list!");
     foreach (QUrl url, urlList) {
         addSong(url);
     }
@@ -174,8 +160,6 @@ void PlaylistWidget::deleteInvalidItem(PlaylistItem *invalidItem) {
 }
 
 void PlaylistWidget::addFolder(QUrl url, int &index) {
-    qDebug("addFolder " + url.path().toUtf8());
-
     // You shouldn't call this to add files, man.
     if (QFileInfo(url.path()).isFile()) return;
 
@@ -183,13 +167,10 @@ void PlaylistWidget::addFolder(QUrl url, int &index) {
     foreach (QString fileEntry, directory.entryList(directory.AllEntries | directory.NoDotAndDotDot, directory.DirsFirst | directory.Name)) {
         // Change file entry to a full path
         fileEntry = directory.absolutePath() + directory.separator() + fileEntry;
-        qDebug("Parsing " + fileEntry.toUtf8());
         if (QFileInfo(fileEntry).isDir()) {
-            qDebug("Adding folder " + fileEntry.toUtf8());
             addFolder(QUrl(fileEntry), index);
         }
         else if (QFileInfo(fileEntry).isFile()) {
-            qDebug("Adding file " + fileEntry.toUtf8() + "at index " + QString::number(index).toUtf8());
             addSong(QUrl(fileEntry), index);
 
             /*
@@ -202,22 +183,14 @@ void PlaylistWidget::addFolder(QUrl url, int &index) {
     }
 }
 
-
-
 void PlaylistWidget::dragEnterEvent(QDragEnterEvent *event) {
-    qDebug("dragEnterEvent ");
-
-
     if (event->mimeData()->hasFormat("text/uri-list")) {
-        qDebug("Accepted!");
         event->accept();
     }
     else {
-        qDebug("Ignored!");
         event->ignore();
     }
 }
-
 
 void PlaylistWidget::dragMoveEvent(QDragMoveEvent *event)
 {
@@ -229,8 +202,6 @@ void PlaylistWidget::dragMoveEvent(QDragMoveEvent *event)
 
 void PlaylistWidget::mouseMoveEvent(QMouseEvent *event)
 {
-    qDebug("mouseMoveEvent");
-
     // if not left button - return
     if (!(event->buttons() & Qt::LeftButton)) return;
 
@@ -255,26 +226,21 @@ void PlaylistWidget::mouseMoveEvent(QMouseEvent *event)
     drag->setMimeData(mimeData);
 
     // start drag
-    qDebug("Starting drag");
     QList<QTreeWidgetItem *> itemsToRemove = selectedItems();
     drag->exec(Qt::CopyAction | Qt::MoveAction);
 }
 
 
 void PlaylistWidget::dropEvent(QDropEvent *event) {
-    qDebug("dropEvent ");
-
     if (event->mimeData()->hasFormat("text/uri-list")) {
-
         /*
          * If the dropped objects come from outside, we parse them as
          * a list of files, if they are a list of files.
          */
 
-        // TODO: change mouse cursor - Issue GH-45
+        // TODO: change mouse cursor
 
         if (event->source() != this) {
-            qDebug("Parsing uri-list");
             QList<QUrl> urlList = event->mimeData()->urls();
             int indexToInsert = indexOfTopLevelItem(itemAt(event->pos()));
             foreach (QUrl url, urlList) {
@@ -290,7 +256,6 @@ void PlaylistWidget::dropEvent(QDropEvent *event) {
                 }
                 // If it's a folder, add it recursively
                 else if (QFileInfo(url.path()).isDir()) {                    
-                    qDebug("Add folder");
                     addFolder(url, indexToInsert);
                 }
             }
@@ -301,7 +266,6 @@ void PlaylistWidget::dropEvent(QDropEvent *event) {
          * so we are moving the items from list.
          */
         else {
-            qDebug("Moving from inside");
             QList<QTreeWidgetItem *> itemsToInsert;
 
             // Create the list of items to add...
@@ -340,7 +304,6 @@ Qt::DropActions PlaylistWidget::supportedDropActions() const
 
 
 void PlaylistWidget::dndActionChanged(Qt::DropAction newAction) {
-    qDebug("dndActionChanged()");
     dndAction = newAction;
     if (newAction == Qt::MoveAction) {
         qDebug("Move action");
@@ -354,10 +317,8 @@ void PlaylistWidget::removeSelectedItems() {
     if (selectedItems().count() > 0) {
         foreach(QTreeWidgetItem *item, selectedItems()) {
             // Avoid wrong references
-            qDebug("Deleting currentSong");
             if (currentSong == item) { currentSong = NULL; }
             else if (nextSong == item) {
-                qDebug("nextSong");
                 if (itemBelow(nextSong) != NULL) nextSong = (PlaylistItem*)itemBelow(nextSong);
                 else nextSong = NULL;
             }

@@ -7,7 +7,6 @@ LyricsWidget::LyricsWidget(QWidget *parent) : AbstractContainer(parent)
     // Try to fetch lyrics
     lyricsProvider = new LyricsDownloader();
     connect(lyricsProvider, SIGNAL(lyricsReady(QWebElement)), this, SLOT(showLyrics(QWebElement)));
-
 }
 
 void LyricsWidget::songInformationUpdated(QMap<QString, QString> newContextInformation) {
@@ -16,7 +15,6 @@ void LyricsWidget::songInformationUpdated(QMap<QString, QString> newContextInfor
     setHtml(html);
     lyricsProvider->getLyrics(newContextInformation.value("artist"), newContextInformation.value("title"));
 }
-
 
 void LyricsWidget::showLyrics(QWebElement webElement) {
     // FIXME: if you change song before the lyrics are loaded, the lyrics shown are for the previous song

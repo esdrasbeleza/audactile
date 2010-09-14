@@ -36,11 +36,9 @@ void Music::readMetaData() {
         if (album.isEmpty())  album  = "Undefined";
         if (title.isEmpty())  title  = "Undefined";
 
-        qDebug("Valid!");
         valid = true;
     }
     else {
-        qDebug("Invalid!");
         valid = false;
         // TODO: throw some exception
     }

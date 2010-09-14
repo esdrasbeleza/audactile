@@ -13,7 +13,6 @@ unsigned int CollectionTreeWidgetItem::getNodeLevel() {
 }
 
 QList<QUrl> CollectionTreeWidgetItem::getUrlList() {
-    qDebug("CollectionTreeWidgetItem getUrlList");
     QList<QUrl> urlList;
 
     int childrenTotal = childCount();
@@ -23,7 +22,6 @@ QList<QUrl> CollectionTreeWidgetItem::getUrlList() {
         for (int i = 0; i < childrenTotal; i++) {
             CollectionTreeWidgetItem *childNode = (CollectionTreeWidgetItem*)child(i);
             int nodeLevel = childNode->getNodeLevel();
-            qDebug("Level " + QString::number(nodeLevel).toUtf8());
             if (childNode->getNodeLevel() > CollectionTreeWidget::LevelMusic) {
                 urlList.append(childNode->getUrlList());
             }

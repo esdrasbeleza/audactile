@@ -42,7 +42,6 @@ ContextWidget::ContextWidget(QWidget *parent) : QWidget(parent)
     QWidget *buttonsWidget = new QWidget(this);
     buttonsWidget->setLayout(buttonsLayout);
 
-
     // Create layout
     QVBoxLayout *vlayout = new QVBoxLayout();
     vlayout->addWidget(buttonsWidget);

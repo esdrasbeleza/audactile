@@ -101,7 +101,6 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
     case Qt::Key_MediaPlay: // Will not work in Linux, verify Mac and Windows
     case Qt::Key_Play:      // Will not work in Linux, verify Mac and Windows
     case Qt::Key_Return:
-        qDebug("Play key pressed!");
         event->accept();
         break;
 
