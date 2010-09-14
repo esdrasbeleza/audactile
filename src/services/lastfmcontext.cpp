@@ -7,7 +7,7 @@ LastFmContext::LastFmContext(QObject *parent) :
 }
 
 void LastFmContext::getInfo(QString artist) {
-    qDebug("Requesting information for the artist " + artist.toUtf8());
+    qDebug("LastFmContext: Requesting information for the artist " + artist.toUtf8());
 
     QUrl url("http://ws.audioscrobbler.com/2.0/");
     url.addQueryItem("method", "artist.getinfo");
@@ -21,11 +21,10 @@ void LastFmContext::getInfo(QString artist) {
 }
 
 void LastFmContext::readContextReply() {
-    qDebug("Got reply!");
+    qDebug("LastFmContext: Got reply!");
     QString replyString = QString::fromUtf8(contextReply->readAll());
 
     if (replyString.isEmpty()) {
-        emit contextError();
         return; // Avoid empty parsing of XML
     }
 
@@ -41,7 +40,7 @@ void LastFmContext::readContextReply() {
     query.setQuery("lfm[@status = 'ok']/count(artist)");
     query.evaluateTo(&status);
     status = status.trimmed();
-    qDebug("Status: " + status.toUtf8());
+    qDebug("LastFmContext: Status: " + status.toUtf8());
 
     /*
      * If we got the data successfully, let's read it.
@@ -76,7 +75,7 @@ void LastFmContext::readContextReply() {
         emit contextUpdated(contextData);
     }
     else {
-        qDebug("FAIL!");
+        qDebug("LastFmContext: FAIL!");
         emit contextError();
     }
 }

@@ -7,7 +7,7 @@ LyricsDownloader::LyricsDownloader(QObject *parent) :
 }
 
 void LyricsDownloader::getLyrics(QString artist, QString song) {
-    qDebug("Requesting lyrics for the song " + song.toUtf8());
+    qDebug("LyricsDownloader: Requesting lyrics for the song " + song.toUtf8());
 
     QUrl url("http://lyrics.wikia.com/api.php");
     url.addQueryItem("func", "getSong");
@@ -22,7 +22,7 @@ void LyricsDownloader::getLyrics(QString artist, QString song) {
 }
 
 void LyricsDownloader::readContextReply() {
-    qDebug("Got reply!");
+    qDebug("LyricsDownloader: Got reply!");
     QString replyString = QString::fromUtf8(contextReply->readAll());
 
     if (replyString.isEmpty()) {
@@ -36,7 +36,7 @@ void LyricsDownloader::readContextReply() {
     query.setQuery("LyricsResult/lyrics/text()");
     query.evaluateTo(&status);
     status = status.trimmed();
-    qDebug("Status: " + status.toUtf8());
+    qDebug("LyricsDownloader: Status: " + status.toUtf8());
 
     /*
      * If we got the data successfully, let's read it.
@@ -52,7 +52,7 @@ void LyricsDownloader::readContextReply() {
         fetchLyrics(url);
     }
     else {
-        qDebug("FAIL!");
+        qDebug("LyricsDownloader: FAIL!");
         emit lyricsError();
     }
 }
@@ -71,6 +71,6 @@ void LyricsDownloader::render() {
     // TODO: remove mobile ringtone ad
     QWebElement lyricsDiv = document.findFirst("div.lyricbox");
 
-    qDebug("Emitting lyrics!");
+    qDebug("LyricsDownloader: Emitting lyrics!");
     emit lyricsReady(lyricsDiv);
 }

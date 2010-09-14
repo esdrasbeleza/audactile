@@ -13,11 +13,11 @@ class LyricsWidget : public AbstractContainer
 public:
     LyricsWidget(QWidget *parent);
     void songInformationUpdated(QMap<QString, QString> newContextInformation);
+    void resetLabels();
 
 private:
     LyricsDownloader *lyricsProvider;
     QMap<QString, QString> lastRequest;
-
 
 private slots:
     void showLyrics(QWebElement webElement);

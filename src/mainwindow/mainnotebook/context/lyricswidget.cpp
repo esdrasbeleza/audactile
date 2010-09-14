@@ -2,7 +2,7 @@
 
 LyricsWidget::LyricsWidget(QWidget *parent) : AbstractContainer(parent)
 {
-    setHtml("<div class=\"title\">No music being listened!</div>");
+    resetLabels();
 
     // Try to fetch lyrics
     lyricsProvider = new LyricsDownloader();
@@ -18,11 +18,14 @@ void LyricsWidget::songInformationUpdated(QMap<QString, QString> newContextInfor
 
 void LyricsWidget::showLyrics(QWebElement webElement) {
     // FIXME: if you change song before the lyrics are loaded, the lyrics shown are for the previous song
-    qDebug("Trying to show lyrics...");
     QString html("<div class=\"title\">" + lastRequest.value("artist") + " - " + lastRequest.value("title") +  "</div>");
     setHtml(html + "<p>" + webElement.toOuterXml() + "</p>");
 
     // Code to try to remove some tags
     QString code = "$('object').remove()";
     contentView->page()->mainFrame()->evaluateJavaScript(code);
+}
+
+void LyricsWidget::resetLabels() {
+    setHtml("<div class=\"title\">Listen a song and push the <i>Fetch</i> button above to get the song lyrics!</div>");
 }

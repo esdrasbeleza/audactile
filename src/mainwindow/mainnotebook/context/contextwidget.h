@@ -2,11 +2,7 @@
 #define CONTEXTWIDGET_H
 
 #include <QWidget>
-#include <QButtonGroup>
 #include <QPushButton>
-#include <QVBoxLayout>
-#include <QHBoxLayout>
-#include <QStackedWidget>
 #include "artistinfowidget.h"
 #include "lyricswidget.h"
 
@@ -21,10 +17,15 @@ private:
     QButtonGroup *buttonGroup;
     ArtistInfoWidget *artistInfoWidget;
     LyricsWidget *lyricsWidget;
+    QMap<QString, QString> currentContext;
+
+    QPushButton *artistButton;
+    QPushButton *lyricsButton;
 
 
 public slots:
     void songInformationUpdated(QMap<QString, QString> newContextInformation);
+    void fetchButtonPressed();
 };
 
 #endif // CONTEXTWIDGET_H

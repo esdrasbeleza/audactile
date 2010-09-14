@@ -24,13 +24,12 @@ Q_OBJECT
 public:
     explicit ArtistInfoWidget(QWidget *parent = 0);
     void songInformationUpdated(QMap<QString, QString> newContextInformation);
+    void resetLabels();
 
 private:
     LastFmContext *context;
     QMap<QString, QString> lastRequest;
-
     QImage pictureData;
-    void resetLabels();
     QNetworkReply *contextReply;
 
 

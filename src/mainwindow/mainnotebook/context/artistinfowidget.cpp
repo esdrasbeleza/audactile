@@ -37,5 +37,5 @@ void ArtistInfoWidget::showContextError() {
 }
 
 void ArtistInfoWidget::resetLabels() {
-    setHtml("<div class=\"title\">No music being listened!</div>");
+    setHtml("<div class=\"title\">Listen a song and push the <i>Fetch</i> button above to get informations about artists!</div>");
 }

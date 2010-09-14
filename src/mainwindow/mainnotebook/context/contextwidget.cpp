@@ -1,4 +1,13 @@
+#include <QToolButton>
+#include <QButtonGroup>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QStackedWidget>
+
 #include "contextwidget.h"
+#include "../../../settings/contextsettings.h"
+#include "../../../separator.h"
+#include "../../../iconfactory.h"
 
 ContextWidget::ContextWidget(QWidget *parent) : QWidget(parent)
 {
@@ -11,8 +20,8 @@ ContextWidget::ContextWidget(QWidget *parent) : QWidget(parent)
     buttonGroup->setExclusive(true);
 
     // The amazing buttons
-    QPushButton *artistButton = new QPushButton("Last.fm summary", this);
-    QPushButton *lyricsButton = new QPushButton("Lyrics", this);
+    artistButton = new QPushButton("Last.fm summary", this);
+    lyricsButton = new QPushButton("Lyrics", this);
 
     artistButton->setIconSize(QSize(24, 24));
     artistButton->setCheckable(true);
@@ -33,10 +42,18 @@ ContextWidget::ContextWidget(QWidget *parent) : QWidget(parent)
     // Connect buttons to container
     connect(buttonGroup, SIGNAL(buttonClicked(int)), contextContainer, SLOT(setCurrentIndex(int)));
 
+    // Fetch button
+    QToolButton *fetchButton = new QToolButton(this);
+    fetchButton->setIcon(IconFactory::fromTheme("go-down"));
+    fetchButton->setIconSize(QSize(24, 24));
+    connect(fetchButton, SIGNAL(clicked()), this, SLOT(fetchButtonPressed()));
+
     // The button group needs a layout
     QHBoxLayout *buttonsLayout = new QHBoxLayout();
     buttonsLayout->addWidget(artistButton);
     buttonsLayout->addWidget(lyricsButton);
+    buttonsLayout->addWidget(Separator::verticalSeparator());
+    buttonsLayout->addWidget(fetchButton);
     buttonsLayout->setSpacing(5);
     buttonsLayout->setMargin(0);
     QWidget *buttonsWidget = new QWidget(this);
@@ -51,6 +68,16 @@ ContextWidget::ContextWidget(QWidget *parent) : QWidget(parent)
 }
 
 void ContextWidget::songInformationUpdated(QMap<QString, QString> newContextInformation) {
-    artistInfoWidget->songInformationUpdated(newContextInformation);
-    lyricsWidget->songInformationUpdated(newContextInformation);
+    currentContext = newContextInformation;
+
+    artistInfoWidget->resetLabels();
+    lyricsWidget->resetLabels();
+
+    if (ContextSettings::isFetchArtistInfoActive()) artistInfoWidget->songInformationUpdated(currentContext);
+    if (ContextSettings::isFetchLyricsActive()) lyricsWidget->songInformationUpdated(currentContext);
+}
+
+void ContextWidget::fetchButtonPressed() {
+    if (artistButton->isChecked()) artistInfoWidget->songInformationUpdated(currentContext);
+    else if (lyricsButton->isChecked()) lyricsWidget->songInformationUpdated(currentContext);
 }

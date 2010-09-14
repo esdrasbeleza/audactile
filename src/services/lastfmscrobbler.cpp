@@ -4,7 +4,6 @@ LastFmScrobbler::LastFmScrobbler(Phonon::MediaObject *mediaObject)
 {
     resetSongStatus();
     this->mediaObject = mediaObject;
-    qDebug("Tick interval: " + QString::number(mediaObject->tickInterval()).toUtf8());
     songsToScrobble = new QList<SongInfo>();
     connect(mediaObject, SIGNAL(stateChanged(Phonon::State,Phonon::State)), this, SLOT(handleStateChange(Phonon::State,Phonon::State)));
 
@@ -33,7 +32,7 @@ void LastFmScrobbler::handshake() {
     state = LastFmStateWaitingToken;
     QNetworkRequest netRequest;
     netRequest.setUrl(url);
-    qDebug("Asking to login to Last.fm...");
+    qDebug("LastFmScrobbler: Asking to login to Last.fm...");
     authReply = netManager->get(netRequest);
     connect(authReply, SIGNAL(finished()), this, SLOT(readAuthenticationReply())); // TODO: handle error() signal
 
@@ -45,22 +44,22 @@ void LastFmScrobbler::handshake() {
 }
 
 void LastFmScrobbler::readAuthenticationReply() {
-    qDebug("Got reply!");
+    qDebug("LastFmScrobbler: Got reply!");
     QString replyString = authReply->readAll();
     if (state == LastFmStateWaitingToken) {
         QStringList lines = replyString.split('\n');
-        qDebug("Last.fm answer: " + QString(lines.at(0)).toUtf8());
+        qDebug("LastFmScrobbler: Last.fm answer: " + QString(lines.at(0)).toUtf8());
         if (lines.at(0) == "OK") {
             state = LastFmGotToken;
             sessionId = lines.at(1);
             nowPlayingUrl = lines.at(2);
             submissionUrl = lines.at(3);
-            qDebug("Last.fm token: " + sessionId.toUtf8());
+            qDebug("LastFmScrobbler: Last.fm token: " + sessionId.toUtf8());
         }
         // TODO: better feedback for the user of what's wrong.
         // BANNED / BADAUTH / BADTIME / FAILED <reason>
         else {
-            qDebug("Authentication problem! Disabling Last.fm");
+            qDebug("LastFmScrobbler: Authentication problem! Disabling Last.fm");
             LastFmSettings::setActive(false);
             state = LastFmStateNone;
         }
@@ -121,7 +120,7 @@ void LastFmScrobbler::resetSongStatus() {
 
 
 void LastFmScrobbler::tryToScrobble() {
-    qDebug("Trying to scrobble queued songs");
+    qDebug("LastFmScrobbler: Trying to scrobble queued songs");
     // If we got no token or queue, nothing done.
     if (state != LastFmGotToken || songsToScrobble->count() == 0) return;
 
@@ -142,11 +141,11 @@ void LastFmScrobbler::tryToScrobble() {
                       "o[" + QString::number(i) + "]=P";
     }
     //dataToPost = dataToPost.replace(' ',"%20");
-    qDebug("Data to post to " + submissionUrl.toUtf8() + ": " + dataToPost.toUtf8());
+    qDebug("LastFmScrobbler: Data to post to " + submissionUrl.toUtf8() + ": " + dataToPost.toUtf8());
 
     QNetworkRequest netRequest;
     netRequest.setUrl(url);
-    qDebug("Scrobbling...");
+    qDebug("LastFmScrobbler: Scrobbling...");
 
     submissionReply = netManager->post(netRequest,dataToPost.toUtf8());
     connect(submissionReply, SIGNAL(readyRead()), this, SLOT(readSubmissionReply()));
@@ -154,13 +153,13 @@ void LastFmScrobbler::tryToScrobble() {
 
 
 void LastFmScrobbler::readSubmissionReply() {
-    qDebug("Got submission reply!");
+    qDebug("LastFmScrobbler: Got submission reply!");
     QString replyString = QString::fromUtf8(submissionReply->readAll().replace('\n', ""));
-    qDebug("Reply: " + QString(replyString).toAscii());
+    qDebug("LastFmScrobbler: Reply: " + QString(replyString).toAscii());
 
     // If we get an OK, clear our list of songs to scrobble.
     if (replyString == "OK") {
-            songsToScrobble->clear();
+        songsToScrobble->clear();
     }
     // BADSESSION? Handshake again. And try to scrobble the songs after.
     else if (replyString == "BADSESSION") {
