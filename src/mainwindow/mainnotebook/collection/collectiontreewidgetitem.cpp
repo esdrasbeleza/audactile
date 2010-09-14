@@ -17,15 +17,25 @@ QList<QUrl> CollectionTreeWidgetItem::getUrlList() {
 
     int childrenTotal = childCount();
 
-    for (int i = 0; i < childrenTotal; i++) {
-        CollectionTreeWidgetItem *childNode = (CollectionTreeWidgetItem*)child(i);
-        if (childNode->getNodeLevel() > LevelMusic) {
-            qDebug("Level " + QString::number(childNode->getNodeLevel()).toUtf8());
-            urlList.append(childNode->getUrlList());
+    // If we have children, we must be at an album or artist
+    if (childrenTotal > 0) {
+        for (int i = 0; i < childrenTotal; i++) {
+            CollectionTreeWidgetItem *childNode = (CollectionTreeWidgetItem*)child(i);
+            if (childNode->getNodeLevel() > LevelMusic) {
+                qDebug("Level " + QString::number(childNode->getNodeLevel()).toUtf8());
+                urlList.append(childNode->getUrlList());
+            }
+            else {
+                qDebug("Level " + QString::number(childNode->getNodeLevel()).toUtf8());
+                CollectionTreeWidgetSong *song = (CollectionTreeWidgetSong*)childNode;
+                urlList.append(song->getUrlList());
+            }
         }
-        else {
-            qDebug("Level " + QString::number(childNode->getNodeLevel()).toUtf8());
-            CollectionTreeWidgetSong *song = (CollectionTreeWidgetSong*)childNode;
+    }
+    // If we do not have children, maybe it's an song
+    else {
+        if (getNodeLevel() == LevelMusic) {
+            CollectionTreeWidgetSong *song = (CollectionTreeWidgetSong*)this;
             urlList.append(song->getUrlList());
         }
     }
