@@ -143,9 +143,15 @@ void PlaylistWidget::addSong(PlaylistItem *newItem, int index) {
 }
 
 void PlaylistWidget::addSong(QUrl url, int index) {
-    qDebug("addSong URL " + QString::number(Phonon::MediaSource(url).type()).toUtf8());
     PlaylistItem *newItem = new PlaylistItem(url);
     addSong(newItem, index);
+}
+
+void PlaylistWidget::addSong(QList<QUrl> urlList) {
+    qDebug("Add song from URL list!");
+    foreach (QUrl url, urlList) {
+        addSong(url);
+    }
 }
 
 void PlaylistWidget::insertValidItem(PlaylistItem *newItem) {
@@ -272,7 +278,12 @@ void PlaylistWidget::dropEvent(QDropEvent *event) {
             QList<QUrl> urlList = event->mimeData()->urls();
             int indexToInsert = indexOfTopLevelItem(itemAt(event->pos()));
             foreach (QUrl url, urlList) {
-                qDebug("Trying to add new file: " + url.path().toUtf8());                
+                if (!QFileInfo(url.path()).exists()) {
+                    qDebug("FILE DO NOT EXISTS");
+                    // TODO: emit error;
+                    continue;
+                }
+
                 // If it's not a dir, add it using addSong
                 if (QFileInfo(url.path()).isFile()) {
                     addSong(url, indexToInsert);
@@ -350,7 +361,6 @@ void PlaylistWidget::removeSelectedItems() {
                 if (itemBelow(nextSong) != NULL) nextSong = (PlaylistItem*)itemBelow(nextSong);
                 else nextSong = NULL;
             }
-
             delete item;
         }
     }

@@ -102,6 +102,10 @@ void FilesystemWidget::doubleClickAt(QModelIndex modelIndex) {
     
     // If it's a file, we must add it to playlist
     else {
+        /*
+         *  TODO: emit signal using URL, not path.
+         *        Let PlaylistWidget handle this.
+         */
         PlaylistItem *newItem = new PlaylistItem(fsWidgetModel->filePath(modelIndex));
         emit askToAddItemToPlaylist(newItem);
     }

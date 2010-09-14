@@ -42,7 +42,10 @@ private:
 
 private slots:
     CollectionTreeWidgetSong *addMusic(Music *music);
+    void doubleClickAt(QModelIndex);
 
+signals:
+    void askToAddItemToPlaylist(QList<QUrl>);
 
 
 };

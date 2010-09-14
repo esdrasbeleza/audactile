@@ -9,11 +9,11 @@ class CollectionTreeWidgetItem : public QTreeWidgetItem
 public:
     enum TreeLevel { LevelNone = 0, LevelArtist = 1, LevelAlbum = 2, LevelMusic = 3 };
     explicit CollectionTreeWidgetItem(TreeLevel level, QTreeWidget *parent = 0);
-    int getNodeLevel();
+    unsigned int getNodeLevel();
     QList<QUrl> getUrlList();
 
 private:
-    TreeLevel level;
+    unsigned int level;
 
 signals:
 

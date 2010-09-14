@@ -10,6 +10,7 @@ CollectionTreeWidget::CollectionTreeWidget()
     header()->hide(); // hide headers
     setDragEnabled(true);
     setAcceptDrops(true);
+    setSelectionMode(QAbstractItemView::ExtendedSelection);
 
     // TODO: enable drops to add music to collection
 
@@ -43,6 +44,7 @@ CollectionTreeWidget::CollectionTreeWidget()
     cleanUp(NULL, CollectionTreeWidget::LevelNone);
 
     connect(service, SIGNAL(songAdded(Music*)), this, SLOT(addMusic(Music*)));
+    connect(this, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(doubleClickAt(QModelIndex)));
 
     // Start service to find new songs and remove the inexistent ones
     service->start();
@@ -266,4 +268,13 @@ void CollectionTreeWidget::mouseMoveEvent(QMouseEvent *event) {
     qDebug("Starting drag");
     QList<QTreeWidgetItem *> itemsToRemove = selectedItems();
     drag->exec(Qt::CopyAction | Qt::MoveAction);
+}
+
+void CollectionTreeWidget::doubleClickAt(QModelIndex index) {
+    qDebug("Double click");
+    QList<QUrl> list;
+    CollectionTreeWidgetItem *item = (CollectionTreeWidgetItem *)itemFromIndex(index);
+    if (item->getNodeLevel() == LevelMusic) {
+        emit askToAddItemToPlaylist(item->getUrlList());
+    }
 }

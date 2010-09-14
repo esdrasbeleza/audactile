@@ -7,7 +7,7 @@ CollectionTreeWidgetItem::CollectionTreeWidgetItem(TreeLevel level, QTreeWidget 
     this->level = level;
 }
 
-int CollectionTreeWidgetItem::getNodeLevel() {
+unsigned int CollectionTreeWidgetItem::getNodeLevel() {
     return level;
 }
 
@@ -21,12 +21,12 @@ QList<QUrl> CollectionTreeWidgetItem::getUrlList() {
     if (childrenTotal > 0) {
         for (int i = 0; i < childrenTotal; i++) {
             CollectionTreeWidgetItem *childNode = (CollectionTreeWidgetItem*)child(i);
+            int nodeLevel = childNode->getNodeLevel();
+            qDebug("Level " + QString::number(nodeLevel).toUtf8());
             if (childNode->getNodeLevel() > LevelMusic) {
-                qDebug("Level " + QString::number(childNode->getNodeLevel()).toUtf8());
                 urlList.append(childNode->getUrlList());
             }
             else {
-                qDebug("Level " + QString::number(childNode->getNodeLevel()).toUtf8());
                 CollectionTreeWidgetSong *song = (CollectionTreeWidgetSong*)childNode;
                 urlList.append(song->getUrlList());
             }

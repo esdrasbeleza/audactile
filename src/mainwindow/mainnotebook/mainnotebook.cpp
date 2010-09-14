@@ -15,6 +15,7 @@ MainNotebook::MainNotebook(QWidget *parent, PlaylistWidget *playlistWidget)
 
     // Widget of the Collection tab
     collectionWidget = new CollectionTreeWidget();
+    connect(collectionWidget, SIGNAL(askToAddItemToPlaylist(QList<QUrl>)), playlistWidget, SLOT(addSong(QList<QUrl>)));
 
     // Widget of the Files tab
     FilesystemWidget *filesystemWidget = new FilesystemWidget(this);

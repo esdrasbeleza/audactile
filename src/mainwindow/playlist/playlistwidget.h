@@ -34,6 +34,7 @@ private slots:
     void deleteInvalidItem(PlaylistItem *invalidItem);
     void addSong(PlaylistItem *newItem, int index = -1);
     void addSong(QUrl url, int index = -1);
+    void addSong(QList<QUrl> urlList);
 
 signals:
     void songInformationUpdated(QMap<QString, QString> newSongInformation);
