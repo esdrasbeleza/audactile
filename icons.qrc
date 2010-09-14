@@ -92,5 +92,10 @@
         <file>icons/gnome/32x32/actions/view-restore.png</file>
         <file>icons/gnome/48x48/actions/view-fullscreen.png</file>
         <file>icons/gnome/48x48/actions/view-restore.png</file>
+        <file>icons/gnome/16x16/actions/go-down.png</file>
+        <file>icons/gnome/22x22/actions/go-down.png</file>
+        <file>icons/gnome/24x24/actions/go-down.png</file>
+        <file>icons/gnome/32x32/actions/go-down.png</file>
+        <file>icons/gnome/48x48/actions/go-down.png</file>
     </qresource>
 </RCC>
