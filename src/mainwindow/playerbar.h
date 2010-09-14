@@ -28,7 +28,7 @@ public:
 public slots:
     void updateSongPosition();
     void updateSongInformation(QMap<QString,QString> newSongInformation);
-    void handleState(Phonon::State oldState, Phonon::State newState);
+    void handleState(Phonon::State newState);
     void handlePlayButton();
     void handleWindowStateChange(Qt::WindowStates windowState);
     void handleStopButton();

@@ -37,7 +37,7 @@ FilesystemWidget::FilesystemWidget(QWidget *parent)
     // We shall use this to filter available file extensions from Phonon
     //fsWidgetModel->setFilter(getPhononExtensions());
 
-    connect(fsWidgetModel, SIGNAL(rootPathChanged(QString)), this, SLOT(pathChanged(QString)));
+    connect(fsWidgetModel, SIGNAL(rootPathChanged(QString)), this, SLOT(pathChanged()));
     connect(fsListView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(doubleClickAt(QModelIndex)));
 
     // Create a new horizontal box
@@ -78,7 +78,7 @@ void FilesystemWidget::goHome() {
     updateWidget();
 }
 
-void FilesystemWidget::pathChanged(QString newPath) {
+void FilesystemWidget::pathChanged() {
     // Enable/disable go up button
     if (dir.absolutePath() == QDir::rootPath()) {
         goUpAction->setDisabled(true);

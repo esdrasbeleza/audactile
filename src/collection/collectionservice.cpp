@@ -33,7 +33,15 @@ void CollectionService::dirChanged(QString path) {
 }
 
 void CollectionService::refresh() {
-    setPaths(ApplicationSettings::collectionFolderList());
+    if (!watcher->directories().isEmpty()) {
+        watcher->removePaths(watcher->directories());
+    }
+
+    // TODO: verify if every path is valid
+    QStringList directories = ApplicationSettings::collectionFolderList();
+    if (!directories.isEmpty()) {
+        watcher->addPaths(ApplicationSettings::collectionFolderList());
+    }
 }
 
 /*
@@ -88,14 +96,3 @@ void CollectionService::scanRecursive(QString path) {
     }
 }
 
-void CollectionService::setPaths(QStringList paths) {
-    if (!watcher->directories().isEmpty()) {
-        watcher->removePaths(watcher->directories());
-    }
-
-    // TODO: verify if every path is valid
-    QStringList directories = ApplicationSettings::collectionFolderList();
-    if (!directories.isEmpty()) {
-        watcher->addPaths(ApplicationSettings::collectionFolderList());
-    }
-}

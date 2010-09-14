@@ -29,7 +29,6 @@ private:
 public slots:
     void verifyFiles();
     void scan();
-    void setPaths(QStringList paths);
 
 private slots:
     void fileChanged(QString path);

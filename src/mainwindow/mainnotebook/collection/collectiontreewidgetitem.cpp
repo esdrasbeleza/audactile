@@ -21,7 +21,6 @@ QList<QUrl> CollectionTreeWidgetItem::getUrlList() {
     if (childrenTotal > 0) {
         for (int i = 0; i < childrenTotal; i++) {
             CollectionTreeWidgetItem *childNode = (CollectionTreeWidgetItem*)child(i);
-            int nodeLevel = childNode->getNodeLevel();
             if (childNode->getNodeLevel() > CollectionTreeWidget::LevelMusic) {
                 urlList.append(childNode->getUrlList());
             }

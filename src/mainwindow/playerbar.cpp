@@ -123,7 +123,7 @@ PlayerBar::PlayerBar(QWidget *parent, Phonon::MediaObject *mediaObject, Phonon::
 
     // Signals from media source
     connect(mainMediaObject, SIGNAL(tick(qint64)), this, SLOT(updateSongPosition()));
-    connect(mainMediaObject, SIGNAL(stateChanged(Phonon::State,Phonon::State)), this, SLOT(handleState(Phonon::State,Phonon::State)));
+    connect(mainMediaObject, SIGNAL(stateChanged(Phonon::State,Phonon::State)), this, SLOT(handleState(Phonon::State)));
     connect(mainMediaObject, SIGNAL(finished()), this, SLOT(finish()));
 
     show();
@@ -163,7 +163,7 @@ void PlayerBar::updateSongPosition() {
 /// 
 /// @param newState New state
 /// @param oldState Old state
-void PlayerBar::handleState(Phonon::State newState, Phonon::State oldState) {
+void PlayerBar::handleState(Phonon::State newState) {
     // Handle play button
     if (newState == Phonon::PlayingState) {
         playButton->setIcon(IconFactory::fromTheme("media-playback-pause"));

@@ -11,7 +11,6 @@
 #include <QLineEdit>
 #include <QLabel>
 #include "../../../iconfactory.h"
-//#include "../../mainwindow.h"
 #include "../../playlist/playlistitem.h"
 #include "../../../iconfactory.h"
 
@@ -27,7 +26,7 @@ private slots:
     void updateWidget();
     void goUp();
     void goHome();    
-    void pathChanged(QString newPath);
+    void pathChanged();
     void doubleClickAt(QModelIndex modelIndex);
     void setNameFilter(QString filter);
 
