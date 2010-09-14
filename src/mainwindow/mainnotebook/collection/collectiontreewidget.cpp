@@ -8,6 +8,10 @@ CollectionTreeWidget::CollectionTreeWidget()
 {
     setColumnCount(1);
     header()->hide(); // hide headers
+    setDragEnabled(true);
+    setAcceptDrops(true);
+
+    // TODO: enable drops to add music to collection
 
     service = new CollectionService();
 
@@ -135,18 +139,15 @@ bool CollectionTreeWidget::removeAlbum(QString artist, QString album) {
 }
 
 
-CollectionTreeWidgetItem *CollectionTreeWidget::addMusic(Music *music) {
+CollectionTreeWidgetSong *CollectionTreeWidget::addMusic(Music *music) {
     // Looks for the album
     QTreeWidgetItem *albumItem = addAlbum(music->getArtist(), music->getAlbum());
 
     // Create our new music node and add it if it was not found
     removeMusic(music->getFileUrl().path());
 
-    CollectionTreeWidgetItem *newMusicNode = new CollectionTreeWidgetItem(music, (QTreeWidget*)0);
-
+    CollectionTreeWidgetSong *newMusicNode = new CollectionTreeWidgetSong(music, (QTreeWidget*)0);
     albumItem->addChild(newMusicNode);
-    albumItem->sortChildren(0, Qt::AscendingOrder);
-
     musicList.append(newMusicNode);
 
     return newMusicNode;
@@ -158,7 +159,7 @@ bool CollectionTreeWidget::removeMusic(QString path) {
 
     if (total == 0) return false;
     for (int i = 0; i < total; i++) {
-        CollectionTreeWidgetItem *item = musicList[i];
+        CollectionTreeWidgetSong *item = musicList[i];
         if (item->getMusic().getFileUrl().path() == path) {
             qDebug("Removing " + path.toUtf8());
             musicList.removeAt(i);
@@ -169,7 +170,6 @@ bool CollectionTreeWidget::removeMusic(QString path) {
 
     return false;
 }
-
 
 bool CollectionTreeWidget::removeMusic(QString artist, QString album, QString music) {
     QList<QTreeWidgetItem*> artistList = findItems(artist, Qt::MatchExactly, 0);
@@ -239,4 +239,31 @@ void CollectionTreeWidget::cleanUp(QTreeWidgetItem *parent = NULL, CollectionTre
         }
     }
 
+}
+
+
+void CollectionTreeWidget::mouseMoveEvent(QMouseEvent *event) {
+    // if not left button - return
+    if (!(event->buttons() & Qt::LeftButton)) return;
+
+    QDrag *drag = new QDrag(this);
+    QMimeData *mimeData = new QMimeData;
+
+    // construct list of QUrls
+    // other widgets accept this mime type, we can drop to them
+    QList<QUrl> list;
+
+    foreach (QTreeWidgetItem *currentItem, selectedItems()) {
+        CollectionTreeWidgetItem *collectionCurrentItem = static_cast<CollectionTreeWidgetItem *>(currentItem);
+        list.append(collectionCurrentItem->getUrlList());
+    }
+
+    // mime stuff
+    mimeData->setUrls(list);
+    drag->setMimeData(mimeData);
+
+    // start drag
+    qDebug("Starting drag");
+    QList<QTreeWidgetItem *> itemsToRemove = selectedItems();
+    drag->exec(Qt::CopyAction | Qt::MoveAction);
 }

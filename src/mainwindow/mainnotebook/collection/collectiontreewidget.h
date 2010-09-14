@@ -5,10 +5,14 @@
 #include <QLabel>
 #include <QHeaderView>
 #include <QSqlTableModel>
+#include <QMimeData>
+#include <QDrag>
+#include <QMouseEvent>
 #include "../../../music.h"
 #include "../../../iconfactory.h"
 #include "../../../collection/collectionservice.h"
 #include "collectiontreewidgetitem.h"
+#include "collectiontreewidgetsong.h"
 
 class CollectionTreeWidget : public QTreeWidget
 {
@@ -18,7 +22,7 @@ public:
     CollectionTreeWidget();
     QTreeWidgetItem *addArtist(QString artist);
     QTreeWidgetItem *addAlbum(QString artist, QString album);
-    QList<CollectionTreeWidgetItem*> musicList;
+    QList<CollectionTreeWidgetSong*> musicList;
     bool removeArtist(QString artist);
     bool removeAlbum(QString artist, QString album);
     bool removeMusic(QString artist, QString album, QString music);
@@ -26,13 +30,18 @@ public:
 
 private:
     QStringList toColumns(QString string);
+
+    // TODO: TreeLevel now is in CollectionTreeWidgetItem, need to improve the code
     enum TreeLevel { LevelNone = 0, LevelArtist = 1, LevelAlbum = 2, LevelMusic = 3 };
     void cleanUp(QTreeWidgetItem *parent, CollectionTreeWidget::TreeLevel level);
     CollectionService *service;
 
+    // Override drag and drop methods
+    void mouseMoveEvent(QMouseEvent *event);
+
 
 private slots:
-    CollectionTreeWidgetItem *addMusic(Music *music);
+    CollectionTreeWidgetSong *addMusic(Music *music);
 
 
 

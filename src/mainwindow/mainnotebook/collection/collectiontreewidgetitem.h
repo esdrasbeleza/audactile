@@ -2,17 +2,18 @@
 #define COLLECTIONTREEWIDGETITEM_H
 
 #include <QTreeWidgetItem>
-#include "../../../iconfactory.h"
-#include "../../../music.h"
+#include <QUrl>
 
 class CollectionTreeWidgetItem : public QTreeWidgetItem
 {
 public:
-    explicit CollectionTreeWidgetItem(Music *music, QTreeWidget *parent = 0);
-    Music getMusic();
+    enum TreeLevel { LevelNone = 0, LevelArtist = 1, LevelAlbum = 2, LevelMusic = 3 };
+    explicit CollectionTreeWidgetItem(TreeLevel level, QTreeWidget *parent = 0);
+    int getNodeLevel();
+    QList<QUrl> getUrlList();
 
 private:
-    Music music;
+    TreeLevel level;
 
 signals:
 
