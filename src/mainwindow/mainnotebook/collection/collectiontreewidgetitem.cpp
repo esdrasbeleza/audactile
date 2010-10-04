@@ -2,14 +2,19 @@
 #include "collectiontreewidgetsong.h"
 #include "collectiontreewidget.h"
 
-CollectionTreeWidgetItem::CollectionTreeWidgetItem(unsigned int level, QTreeWidget *parent) :
+CollectionTreeWidgetItem::CollectionTreeWidgetItem(unsigned int level, unsigned int id, QTreeWidget *parent) :
     QTreeWidgetItem(parent, 0)
 {
     this->level = level;
+    this->id = id;
 }
 
 unsigned int CollectionTreeWidgetItem::getNodeLevel() {
     return level;
+}
+
+unsigned int CollectionTreeWidgetItem::getId() {
+    return id;
 }
 
 QList<QUrl> CollectionTreeWidgetItem::getUrlList() {

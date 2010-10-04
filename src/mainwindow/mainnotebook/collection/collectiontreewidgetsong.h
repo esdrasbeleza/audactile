@@ -8,7 +8,7 @@
 class CollectionTreeWidgetSong : public CollectionTreeWidgetItem
 {
 public:
-    CollectionTreeWidgetSong(Music *music, QTreeWidget *parent);
+    CollectionTreeWidgetSong(Music *music, unsigned int id = 0, QTreeWidget *parent = 0);
     QList<QUrl> getUrlList();
     Music getMusic();
 

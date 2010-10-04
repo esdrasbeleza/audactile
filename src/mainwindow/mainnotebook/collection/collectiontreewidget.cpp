@@ -16,36 +16,28 @@ CollectionTreeWidget::CollectionTreeWidget()
     service = new CollectionService();
 
     // Add songs that currently exist on database
-    QSqlTableModel *collectionModel = service->model();
+    QSqlTableModel *artistModel = service->artistModel();
+    artistModel->select();
 
-    // TODO: add only artists, fetch children while they're double clicked
     // TODO: verify if we can put fetchmore() inside the for loop.
     // TODO: put this task in background... URGENT
-    while (collectionModel->canFetchMore()) collectionModel->fetchMore();
-    int total = collectionModel->rowCount();
+    while (artistModel->canFetchMore()) artistModel->fetchMore();
+    int total = artistModel->rowCount();
 
     for (int i = 0; i < total; i++) {
-        /*
-         * Instead of reading all data from database again, we simply read from database
-         * in order to avoid memory problems.
-         */
-        QString artist = collectionModel->record(i).value(collectionModel->fieldIndex("artist")).toString();
-        QString album = collectionModel->record(i).value(collectionModel->fieldIndex("album")).toString();
-        QString title = collectionModel->record(i).value(collectionModel->fieldIndex("music")).toString();
-        QString path = collectionModel->record(i).value(collectionModel->fieldIndex("path")).toString();
-        unsigned int trackNumber = collectionModel->record(i).value(collectionModel->fieldIndex("track_number")).toInt();
-
-        Music *music = new Music(artist, album, title, path, trackNumber);
-        addMusic(music);
-        delete music;
+        QString artist = artistModel->record(i).value(artistModel->fieldIndex("name")).toString();
+        unsigned int id = artistModel->record(i).value(artistModel->fieldIndex("id")).toInt();
+        addArtist(artist, id);
     }
-    delete collectionModel;
+    delete artistModel;
 
-    cleanUp(NULL, CollectionTreeWidget::LevelNone);
-
+    /*
+     * TODO: modify the slots in order to add only the artist, not the music.
+     */
     connect(service, SIGNAL(songAdded(Music*)), this, SLOT(addMusic(Music*)));
     connect(service, SIGNAL(songRemoved(QString)), this, SLOT(removeMusic(QString)));
     connect(this, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(doubleClickAt(QModelIndex)));
+    connect(this, SIGNAL(expanded(QModelIndex)), this, SLOT(showChildrenOf(QModelIndex)));
 
     // Start service to find new songs and remove the inexistent ones
     service->start(QThread::LowestPriority);
@@ -59,11 +51,66 @@ QStringList CollectionTreeWidget::toColumns(QString string) {
     return columns;
 }
 
+void CollectionTreeWidget::showChildrenOf(QModelIndex index) {
+    CollectionTreeWidgetItem *item = (CollectionTreeWidgetItem*)itemFromIndex(index);
 
-QTreeWidgetItem *CollectionTreeWidget::addArtist(QString artist) {
+    // If the item pressed was an artist, add albums
+    if (item->getNodeLevel() == LevelArtist) {
+        QString artist = item->text(0).toUtf8();
+
+        // Looks for artist id
+        QString artistId = QString::number(item->getId());
+
+        // Looks for artist albums
+        QSqlTableModel *albumModel = service->albumModel();
+        albumModel->setFilter("id_artist = " + artistId);
+        albumModel->select();
+
+        while (albumModel->canFetchMore()) albumModel->fetchMore();
+        int total = albumModel->rowCount();
+
+        for (int i = 0; i < total; i++) {
+            QString album = albumModel->record(i).value(albumModel->fieldIndex("title")).toString();
+            unsigned int id = albumModel->record(i).value(albumModel->fieldIndex("id")).toInt();
+            qDebug("Adding album " + album.toUtf8());
+            addAlbum(artist, album, id);
+        }
+
+        delete albumModel;
+    }
+    // If the item pressed was an album, add songs
+    else if (item->getNodeLevel() == LevelAlbum) {
+        QString albumId = QString::number(item->getId());
+
+        QSqlTableModel *musicModel = service->musicModel();
+        musicModel->setFilter("id_album = " + albumId);
+        musicModel->setSort(musicModel->fieldIndex("track_number"), Qt::AscendingOrder);
+        musicModel->select();
+
+        while (musicModel->canFetchMore()) musicModel->fetchMore();
+        int total = musicModel->rowCount();
+
+        for (int i = 0; i < total; i++) {
+            QString path = musicModel->record(i).value(musicModel->fieldIndex("path")).toString();
+            unsigned int id = musicModel->record(i).value(musicModel->fieldIndex("id")).toInt();
+
+            Music *music = new Music(QUrl(path));
+            addMusic(music, id);
+            delete music;
+        }
+    }
+
+    expand(index);
+}
+
+QTreeWidgetItem *CollectionTreeWidget::addArtist(QString artist, unsigned int id) {
+    // TODO: find in in database if we don't have it
+
     QList<QTreeWidgetItem*> artistList = findItems(artist, Qt::MatchExactly, 0);
     if (artistList.isEmpty()) {
-        QTreeWidgetItem *item = new QTreeWidgetItem((QTreeWidget*)0, toColumns(artist));
+        CollectionTreeWidgetItem *item = new CollectionTreeWidgetItem(LevelArtist, id, (QTreeWidget*)0);
+        item->setText(0, artist);
+        item->setChildIndicatorPolicy(QTreeWidgetItem::ShowIndicator);
 
         // Set font to bold
         QFont font = item->font(0);
@@ -94,7 +141,9 @@ bool CollectionTreeWidget::removeArtist(QString artist) {
 }
 
 
-QTreeWidgetItem *CollectionTreeWidget::addAlbum(QString artist, QString album) {
+QTreeWidgetItem *CollectionTreeWidget::addAlbum(QString artist, QString album, unsigned int albumId) {
+    // TODO: find in in database if we don't have it
+
     // Looks for the artist
     QTreeWidgetItem *newAlbumNode; // The node with the album, whether it exists or not
     QTreeWidgetItem *artistItem;
@@ -109,7 +158,9 @@ QTreeWidgetItem *CollectionTreeWidget::addAlbum(QString artist, QString album) {
     }
 
     // Create our new album node and add it if it was not found
-    newAlbumNode = new QTreeWidgetItem((QTreeWidget*)0, toColumns(album));
+    newAlbumNode = new CollectionTreeWidgetItem(LevelAlbum, albumId, (QTreeWidget*)0);
+    newAlbumNode->setText(0, album);
+    newAlbumNode->setChildIndicatorPolicy(QTreeWidgetItem::ShowIndicator);
 
     // Set icon
     newAlbumNode->setIcon(0, IconFactory::fromTheme("media-cdrom"));
@@ -142,14 +193,16 @@ bool CollectionTreeWidget::removeAlbum(QString artist, QString album) {
 }
 
 
-CollectionTreeWidgetSong *CollectionTreeWidget::addMusic(Music *music) {
+CollectionTreeWidgetSong *CollectionTreeWidget::addMusic(Music *music, unsigned int id) {
+    // TODO: find in in database if we don't have it
+
     // Looks for the album
     QTreeWidgetItem *albumItem = addAlbum(music->getArtist(), music->getAlbum());
 
     // Create our new music node and add it if it was not found
     removeMusic(music->getFileUrl().path());
 
-    CollectionTreeWidgetSong *newMusicNode = new CollectionTreeWidgetSong(music, (QTreeWidget*)0);
+    CollectionTreeWidgetSong *newMusicNode = new CollectionTreeWidgetSong(music, id, (QTreeWidget*)0);
     albumItem->addChild(newMusicNode);
     musicList.append(newMusicNode);
 

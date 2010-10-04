@@ -19,10 +19,21 @@ void CollectionService::run() {
     scan();
 }
 
-QSqlTableModel *CollectionService::model() {
+QSqlTableModel *CollectionService::collectionModel() {
     return collectionDb->collectionModel();
 }
 
+QSqlTableModel *CollectionService::artistModel() {
+    return collectionDb->artistModel();
+}
+
+QSqlTableModel *CollectionService::albumModel() {
+    return collectionDb->albumModel();
+}
+
+QSqlTableModel *CollectionService::musicModel() {
+    return collectionDb->musicModel();
+}
 
 void CollectionService::fileChanged(QString path) {
     qDebug("FILE CHANGED " + path.toUtf8());
@@ -48,19 +59,20 @@ void CollectionService::refresh() {
  * Verify if all files in database exist.
  */
 void CollectionService::verifyFiles() {
-    QSqlTableModel *collectionModel = model();
-    while (collectionModel->canFetchMore()) collectionModel->fetchMore();
-    int total = collectionModel->rowCount();
+    QSqlTableModel *model = collectionModel();
+    model->select();
+    while (model->canFetchMore()) model->fetchMore();
+    int total = model->rowCount();
 
     for (int i = 0; i < total; i++) {
-        QString path = collectionModel->record(i).value(collectionModel->fieldIndex("path")).toString();
+        QString path = model->record(i).value(model->fieldIndex("path")).toString();
         if (!QFileInfo(path).exists()) {
             collectionDb->removeMusic(path);
             emit songRemoved(path);
         }
     }
 
-    delete collectionModel;
+    delete model;
 }
 
 /*

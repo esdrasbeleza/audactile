@@ -27,6 +27,9 @@ public:
     void removeMusic(Music *music);
     void removeMusic(QString path);
     QSqlTableModel *collectionModel();
+    QSqlTableModel *artistModel();
+    QSqlTableModel *albumModel();
+    QSqlTableModel *musicModel();
 
 signals:
 

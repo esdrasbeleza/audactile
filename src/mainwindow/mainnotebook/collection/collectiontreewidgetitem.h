@@ -8,12 +8,14 @@ class CollectionTreeWidgetItem : public QTreeWidgetItem
 {
 public:
     // TODO: use TreeLevel instead of unsigned int
-    explicit CollectionTreeWidgetItem(unsigned int level, QTreeWidget *parent = 0);
+    explicit CollectionTreeWidgetItem(unsigned int level, unsigned int id, QTreeWidget *parent = 0);
     unsigned int  getNodeLevel();
+    unsigned int getId();
     QList<QUrl> getUrlList();
 
 private:
     unsigned int level;
+    unsigned int id;
 
 signals:
 

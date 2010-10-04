@@ -14,7 +14,10 @@ public:
     explicit CollectionService(QObject *parent = 0);
     void refresh();
     void run();
-    QSqlTableModel *model();
+    QSqlTableModel *collectionModel();
+    QSqlTableModel *artistModel();
+    QSqlTableModel *albumModel();
+    QSqlTableModel *musicModel();
 
 signals:
     void listUpdated();

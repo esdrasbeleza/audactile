@@ -18,8 +18,8 @@ class CollectionTreeWidget : public QTreeWidget
 
 public:
     CollectionTreeWidget();
-    QTreeWidgetItem *addArtist(QString artist);
-    QTreeWidgetItem *addAlbum(QString artist, QString album);
+    QTreeWidgetItem *addArtist(QString artist, unsigned int id = 0);
+    QTreeWidgetItem *addAlbum(QString artist, QString album, unsigned int albumId = 0);
     QList<CollectionTreeWidgetSong*> musicList;
     bool removeArtist(QString artist);
     bool removeAlbum(QString artist, QString album);
@@ -36,9 +36,10 @@ private:
 
 
 private slots:
-    CollectionTreeWidgetSong *addMusic(Music *music);
+    CollectionTreeWidgetSong *addMusic(Music *music,  unsigned int id = 0);
     bool removeMusic(QString path);
     void doubleClickAt(QModelIndex);
+    void showChildrenOf(QModelIndex index);
 
 signals:
     void askToAddItemToPlaylist(QList<QUrl>);

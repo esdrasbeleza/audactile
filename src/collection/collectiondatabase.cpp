@@ -27,11 +27,28 @@ QSqlTableModel *CollectionDatabase::collectionModel() {
     model->setSort(model->fieldIndex("artist"), Qt::AscendingOrder);
     model->setSort(model->fieldIndex("album"), Qt::AscendingOrder); // TODO: sort by year
     model->setSort(model->fieldIndex("track_number"), Qt::AscendingOrder);
-    model->select();
     return model;
 }
 
+QSqlTableModel *CollectionDatabase::artistModel() {
+    QSqlTableModel *model = new QSqlTableModel();
+    model->setTable("artist");
+    model->setSort(model->fieldIndex("name"), Qt::AscendingOrder);
+    return model;
+}
 
+QSqlTableModel *CollectionDatabase::albumModel() {
+    QSqlTableModel *model = new QSqlTableModel();
+    model->setTable("album");
+    model->setSort(model->fieldIndex("title"), Qt::AscendingOrder);
+    return model;
+}
+
+QSqlTableModel *CollectionDatabase::musicModel() {
+    QSqlTableModel *model = new QSqlTableModel();
+    model->setTable("music");
+    return model;
+}
 
 void CollectionDatabase::createDatabase() {
     if (!db.open()) {
