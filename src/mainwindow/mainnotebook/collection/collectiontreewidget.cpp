@@ -1,5 +1,6 @@
 #include "collectiontreewidget.h"
-
+#include <QMimeData>
+#include <QDrag>
 
 // TODO: cleanup
 
@@ -17,6 +18,9 @@ CollectionTreeWidget::CollectionTreeWidget()
     // Add songs that currently exist on database
     QSqlTableModel *collectionModel = service->model();
 
+    // TODO: add only artists, fetch children while they're double clicked
+    // TODO: verify if we can put fetchmore() inside the for loop.
+    // TODO: put this task in background... URGENT
     while (collectionModel->canFetchMore()) collectionModel->fetchMore();
     int total = collectionModel->rowCount();
 
@@ -44,7 +48,7 @@ CollectionTreeWidget::CollectionTreeWidget()
     connect(this, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(doubleClickAt(QModelIndex)));
 
     // Start service to find new songs and remove the inexistent ones
-    service->start();
+    service->start(QThread::LowestPriority);
 
 }
 
@@ -250,7 +254,7 @@ void CollectionTreeWidget::mouseMoveEvent(QMouseEvent *event) {
     QList<QUrl> list;
 
     foreach (QTreeWidgetItem *currentItem, selectedItems()) {
-        CollectionTreeWidgetItem *collectionCurrentItem = static_cast<CollectionTreeWidgetItem *>(currentItem);
+        CollectionTreeWidgetItem *collectionCurrentItem = (CollectionTreeWidgetItem *)currentItem;
         list.append(collectionCurrentItem->getUrlList());
     }
 
@@ -259,12 +263,10 @@ void CollectionTreeWidget::mouseMoveEvent(QMouseEvent *event) {
     drag->setMimeData(mimeData);
 
     // start drag
-    QList<QTreeWidgetItem *> itemsToRemove = selectedItems();
     drag->exec(Qt::CopyAction | Qt::MoveAction);
 }
 
 void CollectionTreeWidget::doubleClickAt(QModelIndex index) {
-    QList<QUrl> list;
     CollectionTreeWidgetItem *item = (CollectionTreeWidgetItem *)itemFromIndex(index);
     if (item->getNodeLevel() == LevelMusic) {
         emit askToAddItemToPlaylist(item->getUrlList());

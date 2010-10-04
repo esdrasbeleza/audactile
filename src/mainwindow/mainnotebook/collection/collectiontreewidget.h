@@ -5,8 +5,6 @@
 #include <QLabel>
 #include <QHeaderView>
 #include <QSqlTableModel>
-#include <QMimeData>
-#include <QDrag>
 #include <QMouseEvent>
 #include "../../../music.h"
 #include "../../../iconfactory.h"
