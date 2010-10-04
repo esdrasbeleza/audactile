@@ -8,7 +8,7 @@
 class Music
 {
 public:
-    Music() { };
+    Music();
     Music(QString artist, QString album, QString title, QString path, unsigned int trackNumber);
     Music(QUrl fileUrl);
     QUrl getFileUrl();

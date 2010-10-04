@@ -5,6 +5,8 @@
  * TODO:
  * - Watch file for changes. If it's changed, update playlist.
  */
+Music::Music() { }
+
 Music::Music(QString artist, QString album, QString title, QString path, unsigned int trackNumber) {
     this->artist = artist;
     this->album = album;
