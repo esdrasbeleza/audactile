@@ -17,7 +17,8 @@ void LastFmContext::getInfo(QString artist) {
     QNetworkRequest netRequest;
     netRequest.setUrl(url);
     contextReply = netManager->get(netRequest);
-    connect(contextReply, SIGNAL(finished()), this, SLOT(readContextReply())); // TODO: handle error() signal
+    connect(contextReply, SIGNAL(finished()), this, SLOT(readContextReply()));
+    connect(contextReply, SIGNAL(error(QNetworkReply::NetworkError)), this, SIGNAL(contextError())); // TODO: specify which error was given
 }
 
 void LastFmContext::readContextReply() {

@@ -21,7 +21,8 @@ void ArtistInfoWidget::songInformationUpdated(QMap<QString, QString> newContextI
 
 void ArtistInfoWidget::updateContextInformation(QMap<QString, QString>newContextInformation) {
     QString artist = newContextInformation.value("artist");
-    if (artist.toLower().trimmed() != lastRequest.value("artist").toLower().trimmed()) return;
+
+    if (artist.toLower().trimmed() != Qt::escape(lastRequest.value("artist").toLower().trimmed())) return;
 
     QString html = "<div class=\"title\">" + artist + "</div>";
     if (!newContextInformation.value("picture").isEmpty()) {
