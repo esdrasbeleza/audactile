@@ -199,7 +199,7 @@ CollectionTreeWidgetItem *CollectionTreeWidget::addMusic(Music *music, unsigned 
     QTreeWidgetItem *albumItem = addAlbum(music->getArtist(), music->getAlbum());
 
     // Create our new music node and add it if it was not found
-    removeMusic(id);
+    // removeMusic(id); FIXME: BUGGY
 
     CollectionTreeWidgetItem *newMusicNode = new CollectionTreeWidgetItem(LevelMusic, id, (QTreeWidget*)0);
     newMusicNode->setText(0, music->getTitle());
