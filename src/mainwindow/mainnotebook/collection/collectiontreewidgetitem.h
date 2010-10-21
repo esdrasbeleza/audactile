@@ -3,6 +3,7 @@
 
 #include <QTreeWidgetItem>
 #include <QUrl>
+#include <QSqlTableModel>
 
 class CollectionTreeWidgetItem : public QTreeWidgetItem
 {
@@ -11,7 +12,7 @@ public:
     explicit CollectionTreeWidgetItem(unsigned int level, unsigned int id, QTreeWidget *parent = 0);
     unsigned int  getNodeLevel();
     unsigned int getId();
-    QList<QUrl> getUrlList();
+    QList<QUrl> getUrlList(QSqlTableModel *collectionModel);
 
 private:
     unsigned int level;

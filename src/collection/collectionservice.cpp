@@ -59,7 +59,7 @@ void CollectionService::refresh() {
  * Verify if all files in database exist.
  */
 void CollectionService::verifyFiles() {
-    QSqlTableModel *model = collectionModel();
+    QSqlTableModel *model = musicModel();
     model->select();
     while (model->canFetchMore()) model->fetchMore();
     int total = model->rowCount();
@@ -68,7 +68,7 @@ void CollectionService::verifyFiles() {
         QString path = model->record(i).value(model->fieldIndex("path")).toString();
         if (!QFileInfo(path).exists()) {
             collectionDb->removeMusic(path);
-            emit songRemoved(path);
+            emit songRemoved(model->record(i).value(model->fieldIndex("id")).toUInt());
         }
     }
 

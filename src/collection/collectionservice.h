@@ -22,7 +22,7 @@ public:
 signals:
     void listUpdated();
     void songAdded(Music *music);
-    void songRemoved(QString path);
+    void songRemoved(unsigned int id);
 
 private:
     QFileSystemWatcher *watcher;

@@ -10,7 +10,6 @@
 #include "../../../iconfactory.h"
 #include "../../../collection/collectionservice.h"
 #include "collectiontreewidgetitem.h"
-#include "collectiontreewidgetsong.h"
 
 class CollectionTreeWidget : public QTreeWidget
 {
@@ -20,10 +19,9 @@ public:
     CollectionTreeWidget();
     QTreeWidgetItem *addArtist(QString artist, unsigned int id = 0);
     QTreeWidgetItem *addAlbum(QString artist, QString album, unsigned int albumId = 0);
-    QList<CollectionTreeWidgetSong*> musicList;
+    QList<CollectionTreeWidgetItem*> musicList;
     bool removeArtist(QString artist);
     bool removeAlbum(QString artist, QString album);
-    bool removeMusic(QString artist, QString album, QString music);
     enum TreeLevel { LevelNone = 0, LevelArtist = 1, LevelAlbum = 2, LevelMusic = 3 };
 
 private:
@@ -36,8 +34,8 @@ private:
 
 
 private slots:
-    CollectionTreeWidgetSong *addMusic(Music *music,  unsigned int id = 0);
-    bool removeMusic(QString path);
+    CollectionTreeWidgetItem *addMusic(Music *music,  unsigned int id = 0);
+    bool removeMusic(unsigned int id);
     void doubleClickAt(QModelIndex);
     void showChildrenOf(QModelIndex index);
 

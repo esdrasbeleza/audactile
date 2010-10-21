@@ -89,7 +89,7 @@ void CollectionDatabase::createDatabase() {
 
     if (!views.contains("collection")) {
         db.exec("CREATE VIEW collection AS "
-                "SELECT artist.name as artist, album.title as album, music.title as music, music.track_number as track_number, music.path as path "
+                "SELECT artist.name as artist, album.title as album, music.title as music, music.track_number as track_number, music.path as path, artist.id as id_artist, album.id as id_album, music.id as id_music "
                 "FROM artist, album, music "
                 "WHERE album.id_artist = artist.id AND music.id_album = album.id "
                 "ORDER BY artist.name, album.title, music.track_number;");

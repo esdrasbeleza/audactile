@@ -35,7 +35,7 @@ CollectionTreeWidget::CollectionTreeWidget()
      * TODO: modify the slots in order to add only the artist, not the music.
      */
     connect(service, SIGNAL(songAdded(Music*)), this, SLOT(addMusic(Music*)));
-    connect(service, SIGNAL(songRemoved(QString)), this, SLOT(removeMusic(QString)));
+    connect(service, SIGNAL(songRemoved(unsigned int)), this, SLOT(removeMusic(uint)));
     connect(this, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(doubleClickAt(QModelIndex)));
     connect(this, SIGNAL(expanded(QModelIndex)), this, SLOT(showChildrenOf(QModelIndex)));
 
@@ -72,7 +72,6 @@ void CollectionTreeWidget::showChildrenOf(QModelIndex index) {
         for (int i = 0; i < total; i++) {
             QString album = albumModel->record(i).value(albumModel->fieldIndex("title")).toString();
             unsigned int id = albumModel->record(i).value(albumModel->fieldIndex("id")).toInt();
-            qDebug("Adding album " + album.toUtf8());
             addAlbum(artist, album, id);
         }
 
@@ -193,69 +192,37 @@ bool CollectionTreeWidget::removeAlbum(QString artist, QString album) {
 }
 
 
-CollectionTreeWidgetSong *CollectionTreeWidget::addMusic(Music *music, unsigned int id) {
+CollectionTreeWidgetItem *CollectionTreeWidget::addMusic(Music *music, unsigned int id) {
     // TODO: find in in database if we don't have it
 
     // Looks for the album
     QTreeWidgetItem *albumItem = addAlbum(music->getArtist(), music->getAlbum());
 
     // Create our new music node and add it if it was not found
-    removeMusic(music->getFileUrl().path());
+    removeMusic(id);
 
-    CollectionTreeWidgetSong *newMusicNode = new CollectionTreeWidgetSong(music, id, (QTreeWidget*)0);
+    CollectionTreeWidgetItem *newMusicNode = new CollectionTreeWidgetItem(LevelMusic, id, (QTreeWidget*)0);
+    newMusicNode->setText(0, music->getTitle());
+    newMusicNode->setIcon(0, IconFactory::fromTheme("sound"));
     albumItem->addChild(newMusicNode);
     musicList.append(newMusicNode);
 
     return newMusicNode;
 }
 
-bool CollectionTreeWidget::removeMusic(QString path) {
+bool CollectionTreeWidget::removeMusic(unsigned int id) {
     int total = musicList.count();
 
     if (total == 0) return false;
     for (int i = 0; i < total; i++) {
-        CollectionTreeWidgetSong *item = musicList[i];
-        if (item->getMusic().getFileUrl().path() == path) {
+        CollectionTreeWidgetItem *item = musicList[i];
+
+        if (item->getId() == id) {
             CollectionTreeWidgetItem *album = (CollectionTreeWidgetItem*)item->parent();
             musicList.removeAt(i);
             delete item;
             cleanUp(album, CollectionTreeWidget::LevelAlbum);
             return true;
-        }
-    }
-
-    return false;
-}
-
-bool CollectionTreeWidget::removeMusic(QString artist, QString album, QString music) {
-    QList<QTreeWidgetItem*> artistList = findItems(artist, Qt::MatchExactly, 0);
-    // If we have no artist, we have no album and no music.
-    if (artistList.isEmpty()) {
-        return false;
-    }
-
-    // Looks for the artist
-    QTreeWidgetItem *artistItem = artistList.first();
-    QTreeWidgetItem *albumItem = NULL;
-    // Look for album
-    for (int i = 0; i < artistItem->childCount(); i++) {
-        if (artistItem->child(i)->text(0) == album) {
-            albumItem = artistItem->child(i);
-        }
-    }
-
-    // If album is null, we have nothing to do here
-    if (albumItem != NULL) {
-        for (int i = 0; i < albumItem->childCount(); i++) {
-            if (albumItem->child(i)->text(0) == music) {
-                delete albumItem->child(i);
-
-                if (albumItem->childCount() == 0) {
-                    delete albumItem;
-                }
-
-                return true;
-            }
         }
     }
 
@@ -308,7 +275,7 @@ void CollectionTreeWidget::mouseMoveEvent(QMouseEvent *event) {
 
     foreach (QTreeWidgetItem *currentItem, selectedItems()) {
         CollectionTreeWidgetItem *collectionCurrentItem = (CollectionTreeWidgetItem *)currentItem;
-        list.append(collectionCurrentItem->getUrlList());
+        list.append(collectionCurrentItem->getUrlList(service->collectionModel()));
     }
 
     // mime stuff
@@ -322,6 +289,6 @@ void CollectionTreeWidget::mouseMoveEvent(QMouseEvent *event) {
 void CollectionTreeWidget::doubleClickAt(QModelIndex index) {
     CollectionTreeWidgetItem *item = (CollectionTreeWidgetItem *)itemFromIndex(index);
     if (item->getNodeLevel() == LevelMusic) {
-        emit askToAddItemToPlaylist(item->getUrlList());
+        emit askToAddItemToPlaylist(item->getUrlList(service->collectionModel()));
     }
 }

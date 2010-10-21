@@ -1,5 +1,4 @@
 #include "collectiontreewidgetitem.h"
-#include "collectiontreewidgetsong.h"
 #include "collectiontreewidget.h"
 
 CollectionTreeWidgetItem::CollectionTreeWidgetItem(unsigned int level, unsigned int id, QTreeWidget *parent) :
@@ -17,30 +16,29 @@ unsigned int CollectionTreeWidgetItem::getId() {
     return id;
 }
 
-QList<QUrl> CollectionTreeWidgetItem::getUrlList() {
+QList<QUrl> CollectionTreeWidgetItem::getUrlList(QSqlTableModel *collectionModel) {
     QList<QUrl> urlList;
 
-    int childrenTotal = childCount();
-
-    // If we have children, we must be at an album or artist
-    if (childrenTotal > 0) {
-        for (int i = 0; i < childrenTotal; i++) {
-            CollectionTreeWidgetItem *childNode = (CollectionTreeWidgetItem*)child(i);
-            if (childNode->getNodeLevel() > CollectionTreeWidget::LevelMusic) {
-                urlList.append(childNode->getUrlList());
-            }
-            else {
-                CollectionTreeWidgetSong *song = (CollectionTreeWidgetSong*)childNode;
-                urlList.append(song->getUrlList());
-            }
-        }
+    QString idType;
+    if (level == CollectionTreeWidget::LevelArtist) {
+        idType = "id_artist";
     }
-    // If we do not have children, maybe it's an song
-    else {
-        if (getNodeLevel() == CollectionTreeWidget::LevelMusic) {
-            CollectionTreeWidgetSong *song = (CollectionTreeWidgetSong*)this;
-            urlList.append(song->getUrlList());
-        }
+    else if (level == CollectionTreeWidget::LevelAlbum) {
+        idType = "id_album";
+    }
+    else if (level == CollectionTreeWidget::LevelMusic) {
+        idType = "id_music";
+    }
+    collectionModel->setFilter(idType + " = " + QString::number(id));
+    collectionModel->select();
+
+    while (collectionModel->canFetchMore()) collectionModel->fetchMore();
+    int total = collectionModel->rowCount();
+
+    for (int i = 0; i < total; i++) {
+        QString path = collectionModel->record(i).value(collectionModel->fieldIndex("path")).toString();
+        QUrl url(path);
+        urlList.append(url);
     }
 
     return urlList;
