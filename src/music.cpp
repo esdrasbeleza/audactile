@@ -1,5 +1,5 @@
 #include "music.h"
-
+#include <QFileInfo>
 
 /*
  * TODO:
@@ -29,14 +29,14 @@ void Music::readMetaData() {
         trackNumber = taglibFileRef.tag()->track();
 
         // Read metadata
-        artist = QString(taglibFileRef.tag()->artist().toCString()).toAscii();
-        album = QString(taglibFileRef.tag()->album().toCString()).toAscii();
-        title = QString(taglibFileRef.tag()->title().toCString()).toAscii();
+        artist = QString(taglibFileRef.tag()->artist().toCString()).toAscii().trimmed();
+        album = QString(taglibFileRef.tag()->album().toCString()).toAscii().trimmed();
+        title = QString(taglibFileRef.tag()->title().toCString()).toAscii().trimmed();
         duration = taglibFileRef.audioProperties()->length();
 
         if (artist.isEmpty()) artist = "Undefined";
         if (album.isEmpty())  album  = "Undefined";
-        if (title.isEmpty())  title  = "Undefined";
+        if (title.isEmpty())  title  = QFileInfo(fileUrl.toLocalFile()).fileName();
 
         valid = true;
     }

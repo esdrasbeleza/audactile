@@ -1,4 +1,5 @@
 #include "collectiontreewidget.h"
+#include <QSqlField>
 #include <QMimeData>
 #include <QDrag>
 
@@ -193,13 +194,32 @@ bool CollectionTreeWidget::removeAlbum(QString artist, QString album) {
 
 
 CollectionTreeWidgetItem *CollectionTreeWidget::addMusic(Music *music, unsigned int id) {
-    // TODO: find in in database if we don't have it
+    // Find id in database if we don't have it
+    if (id == 0) {
+         QSqlTableModel *model = service->collectionModel();
+
+         // FIXME problem with escaped characters...
+         QString filter = "artist = \'" + music->getArtist().replace("'","\\'") + "\' AND album=\'" + music->getAlbum().replace("'","\\'") + "\' AND music=\'" + music->getTitle().replace("'","\\'") + "\'";
+         model->setFilter(filter);
+         model->select();
+
+         while (model->canFetchMore()) model->fetchMore();
+         int total = model->rowCount();
+         if (total > 0) {
+            id = model->record(0).value(model->fieldIndex("id_music")).toInt();
+            qDebug("Music id: " + QString::number(id).toUtf8());
+         }
+         else {
+             qDebug("ERROR: no songs found! -- " + filter.toUtf8());
+             return NULL;
+         }
+    }
 
     // Looks for the album
     QTreeWidgetItem *albumItem = addAlbum(music->getArtist(), music->getAlbum());
 
     // Create our new music node and add it if it was not found
-    // removeMusic(id); FIXME: BUGGY
+    removeMusic(id);
 
     CollectionTreeWidgetItem *newMusicNode = new CollectionTreeWidgetItem(LevelMusic, id, (QTreeWidget*)0);
     newMusicNode->setText(0, music->getTitle());
