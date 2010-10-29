@@ -88,6 +88,7 @@ void MainNotebook::saveTabOrder() {
 }
 
 void MainNotebook::showCollectionProgress() {
+    // Set minimum and maximum to 0 makes the progress bar go left and right forever
     scanProgress->setMinimum(0);
     scanProgress->setMaximum(0);
     progressContainer->show();
