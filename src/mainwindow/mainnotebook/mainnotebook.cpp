@@ -88,14 +88,12 @@ void MainNotebook::saveTabOrder() {
 }
 
 void MainNotebook::showCollectionProgress() {
-    qDebug("Scanning collection");
     scanProgress->setMinimum(0);
     scanProgress->setMaximum(0);
     progressContainer->show();
 }
 
 void MainNotebook::hideCollectionProgress() {
-    qDebug("Scanning collection STOPPED");
     scanProgress->setMinimum(0);
     scanProgress->setMaximum(100);
     progressContainer->hide();
