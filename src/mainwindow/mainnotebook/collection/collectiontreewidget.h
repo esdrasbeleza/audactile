@@ -41,6 +41,8 @@ private slots:
 
 signals:
     void askToAddItemToPlaylist(QList<QUrl>);
+    void scanning();
+    void listUpdated();
 
 
 };

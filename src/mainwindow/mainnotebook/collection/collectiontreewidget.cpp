@@ -1,5 +1,4 @@
 #include "collectiontreewidget.h"
-#include <QSqlField>
 #include <QMimeData>
 #include <QDrag>
 
@@ -39,6 +38,14 @@ CollectionTreeWidget::CollectionTreeWidget()
     connect(service, SIGNAL(songRemoved(unsigned int)), this, SLOT(removeMusic(uint)));
     connect(this, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(doubleClickAt(QModelIndex)));
     connect(this, SIGNAL(expanded(QModelIndex)), this, SLOT(showChildrenOf(QModelIndex)));
+
+    /*
+     * We shall emit those signals to show or hide the widget that will
+     * give the feedback that the collection is being scanned.
+     */
+    connect(service, SIGNAL(scanning()), this, SIGNAL(scanning()));
+    connect(service, SIGNAL(listUpdated()), this, SIGNAL(listUpdated()));
+
 
     // Start service to find new songs and remove the inexistent ones
     service->start(QThread::LowestPriority);
@@ -198,8 +205,10 @@ CollectionTreeWidgetItem *CollectionTreeWidget::addMusic(Music *music, unsigned 
     if (id == 0) {
          QSqlTableModel *model = service->collectionModel();
 
-         // FIXME problem with escaped characters...
-         QString filter = "artist = \'" + music->getArtist().replace("'","\\'") + "\' AND album=\'" + music->getAlbum().replace("'","\\'") + "\' AND music=\'" + music->getTitle().replace("'","\\'") + "\'";
+         // SQLite used two single quotes to escape a single quote! :)
+         QString filter = "artist = '" + music->getArtist().replace("'","''") + "' AND "
+                          "album = '" + music->getAlbum().replace("'","''") + "' AND "
+                          "music = " + music->getTitle().replace("'","''") + "'";
          model->setFilter(filter);
          model->select();
 
@@ -207,10 +216,10 @@ CollectionTreeWidgetItem *CollectionTreeWidget::addMusic(Music *music, unsigned 
          int total = model->rowCount();
          if (total > 0) {
             id = model->record(0).value(model->fieldIndex("id_music")).toInt();
-            qDebug("Music id: " + QString::number(id).toUtf8());
+//            Debug("Music id: " + QString::number(id).toUtf8());
          }
          else {
-             qDebug("ERROR: no songs found! -- " + filter.toUtf8());
+//             qDebug("ERROR: no songs found! -- " + filter.toUtf8());
              return NULL;
          }
     }

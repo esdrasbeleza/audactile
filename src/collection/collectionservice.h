@@ -20,6 +20,7 @@ public:
     QSqlTableModel *musicModel();
 
 signals:
+    void scanning();
     void listUpdated();
     void songAdded(Music *music);
     void songRemoved(unsigned int id);

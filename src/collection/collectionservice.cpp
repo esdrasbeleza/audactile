@@ -80,11 +80,14 @@ void CollectionService::verifyFiles() {
  * all files in folders are in collection.
  */
 void CollectionService::scan() {
+    emit scanning();
+    qDebug("Beginning scan");
     QStringList directories = ApplicationSettings::collectionFolderList();
     foreach (QString path, directories) {
         scanRecursive(path);
     }
     emit listUpdated();
+    qDebug("Scan ended");
 }
 
 void CollectionService::scanRecursive(QString path) {

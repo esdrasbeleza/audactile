@@ -16,6 +16,23 @@ MainNotebook::MainNotebook(QWidget *parent, PlaylistWidget *playlistWidget)
     // Widget of the Collection tab
     collectionWidget = new CollectionTreeWidget();
     connect(collectionWidget, SIGNAL(askToAddItemToPlaylist(QList<QUrl>)), playlistWidget, SLOT(addSong(QList<QUrl>)));
+    connect(collectionWidget, SIGNAL(scanning()), this, SLOT(showCollectionProgress()));
+    connect(collectionWidget, SIGNAL(listUpdated()), this, SLOT(hideCollectionProgress()));
+    collectionContainer = new QWidget(this);
+    QVBoxLayout *collectionLayout = new QVBoxLayout(collectionContainer);
+
+    progressContainer = new QWidget(collectionContainer);
+    scanProgress = new QProgressBar(collectionContainer);
+    scanLabel = new QLabel("Scanning collection...", collectionContainer);
+    QHBoxLayout *progressHLayout = new QHBoxLayout(collectionContainer);
+    progressHLayout->addWidget(scanLabel);
+    progressHLayout->addWidget(scanProgress);
+    progressContainer->setLayout(progressHLayout);
+    progressContainer->hide();
+
+    collectionLayout->addWidget(collectionWidget);
+    collectionLayout->addWidget(progressContainer);
+    collectionContainer->setLayout(collectionLayout);
 
     // Widget of the Files tab
     FilesystemWidget *filesystemWidget = new FilesystemWidget(this);
@@ -45,7 +62,7 @@ MainNotebook::MainNotebook(QWidget *parent, PlaylistWidget *playlistWidget)
 
     // Insert tabs
     for (int i = 0; i < 4; i++) {
-        if (i == collectionPosition) { addTab(collectionWidget, IconFactory::fromTheme("audio-x-generic"), tr("Collection")); }
+        if (i == collectionPosition) { addTab(collectionContainer, IconFactory::fromTheme("audio-x-generic"), tr("Collection")); }
         else if (i == filesystemPosition) { addTab(filesystemContainer, IconFactory::fromTheme("system-file-manager"), tr("Files")); }
         else if (i == contextPosition) { addTab(contextContainer, IconFactory::fromTheme("emblem-web"), tr("Context")); }
         else if (i == playlistsPosition) { addTab(testLabel3, IconFactory::fromTheme("text-x-generic"), tr("Playlists")); }
@@ -57,7 +74,7 @@ MainNotebook::MainNotebook(QWidget *parent, PlaylistWidget *playlistWidget)
 void MainNotebook::saveTabOrder() {
 
     for (int i = 0; i < count(); i++) {
-        if (widget(i) == collectionWidget) collectionPosition = i;
+        if (widget(i) == collectionContainer) collectionPosition = i;
         else if (widget(i) == filesystemContainer) filesystemPosition = i;
         else if (widget(i) == contextContainer) contextPosition = i;
         else if (widget(i) == testLabel3) playlistsPosition = i;
@@ -68,4 +85,18 @@ void MainNotebook::saveTabOrder() {
     ApplicationSettings::setTabOrder("context", contextPosition);
     ApplicationSettings::setTabOrder("playlists", playlistsPosition);
 
+}
+
+void MainNotebook::showCollectionProgress() {
+    qDebug("Scanning collection");
+    scanProgress->setMinimum(0);
+    scanProgress->setMaximum(0);
+    progressContainer->show();
+}
+
+void MainNotebook::hideCollectionProgress() {
+    qDebug("Scanning collection STOPPED");
+    scanProgress->setMinimum(0);
+    scanProgress->setMaximum(100);
+    progressContainer->hide();
 }

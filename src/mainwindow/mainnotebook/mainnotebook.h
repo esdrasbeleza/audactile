@@ -6,6 +6,7 @@
 #include <QLabel>
 #include <QHeaderView>
 #include <QTabBar>
+#include "QProgressBar"
 #include "../../settings/applicationsettings.h"
 #include "../playlist/playlistwidget.h"
 #include "filesystem/filesystemwidget.h"
@@ -21,6 +22,8 @@ public:
 
 private slots:
     void saveTabOrder();
+    void showCollectionProgress(); // TODO: put this in a better place
+    void hideCollectionProgress(); // TODO: put this in a better place
 
 private:
     int collectionPosition;
@@ -28,8 +31,14 @@ private:
     int filesystemPosition;
     int playlistsPosition;
 
+    // Collection progressbar -- TODO: put this in a better place
+    QWidget *progressContainer;
+    QProgressBar *scanProgress;
+    QLabel *scanLabel;
+
     // Widgets
     CollectionTreeWidget *collectionWidget;
+    QWidget *collectionContainer;
     QWidget *contextContainer;
     QWidget *filesystemContainer;
     QLabel *testLabel3;
