@@ -149,7 +149,26 @@ bool CollectionTreeWidget::removeArtist(QString artist) {
 
 
 QTreeWidgetItem *CollectionTreeWidget::addAlbum(QString artist, QString album, unsigned int albumId) {
-    // TODO: find in in database if we don't have it
+    // Find id in database if we don't have it
+    if (albumId == 0) {
+         QSqlTableModel *model = service->collectionModel();
+
+         // SQLite used two single quotes to escape a single quote! :)
+         QString filter = "artist = '" + artist.replace("'","''") + "' AND "
+                          "album = '" + album.replace("'","''") + "'";
+         model->setFilter(filter);
+         model->select();
+
+         while (model->canFetchMore()) model->fetchMore();
+         int total = model->rowCount();
+         if (total > 0) {
+            albumId = model->record(0).value(model->fieldIndex("id_album")).toInt();
+         }
+         else {
+             qDebug("ERROR: no album found! -- " + model->filter().toUtf8());
+             return NULL;
+         }
+    }
 
     // Looks for the artist
     QTreeWidgetItem *newAlbumNode; // The node with the album, whether it exists or not
@@ -208,7 +227,7 @@ CollectionTreeWidgetItem *CollectionTreeWidget::addMusic(Music *music, unsigned 
          // SQLite used two single quotes to escape a single quote! :)
          QString filter = "artist = '" + music->getArtist().replace("'","''") + "' AND "
                           "album = '" + music->getAlbum().replace("'","''") + "' AND "
-                          "music = " + music->getTitle().replace("'","''") + "'";
+                          "music = '" + music->getTitle().replace("'","''") + "'";
          model->setFilter(filter);
          model->select();
 
@@ -216,10 +235,9 @@ CollectionTreeWidgetItem *CollectionTreeWidget::addMusic(Music *music, unsigned 
          int total = model->rowCount();
          if (total > 0) {
             id = model->record(0).value(model->fieldIndex("id_music")).toInt();
-//            Debug("Music id: " + QString::number(id).toUtf8());
          }
          else {
-//             qDebug("ERROR: no songs found! -- " + filter.toUtf8());
+             qDebug("ERROR: no songs found! -- " + model->filter().toUtf8());
              return NULL;
          }
     }
