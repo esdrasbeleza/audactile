@@ -7,8 +7,6 @@ LastFmContext::LastFmContext(QObject *parent) :
 }
 
 void LastFmContext::getInfo(QString artist) {
-    qDebug("LastFmContext: Requesting information for the artist " + artist.toUtf8());
-
     QUrl url("http://ws.audioscrobbler.com/2.0/");
     url.addQueryItem("method", "artist.getinfo");
     url.addQueryItem("artist", artist.toUtf8());
@@ -22,7 +20,6 @@ void LastFmContext::getInfo(QString artist) {
 }
 
 void LastFmContext::readContextReply() {
-    qDebug("LastFmContext: Got reply!");
     QString replyString = QString::fromUtf8(contextReply->readAll());
 
     if (replyString.isEmpty()) {
@@ -41,7 +38,6 @@ void LastFmContext::readContextReply() {
     query.setQuery("lfm[@status = 'ok']/count(artist)");
     query.evaluateTo(&status);
     status = status.trimmed();
-    qDebug("LastFmContext: Status: " + status.toUtf8());
 
     /*
      * If we got the data successfully, let's read it.
