@@ -24,9 +24,9 @@ CollectionDatabase::CollectionDatabase(QObject *parent) :
 QSqlTableModel *CollectionDatabase::collectionModel() {
     QSqlTableModel *model = new QSqlTableModel();
     model->setTable("collection");
-    model->setSort(model->fieldIndex("artist"), Qt::AscendingOrder);
-    model->setSort(model->fieldIndex("album"), Qt::AscendingOrder); // TODO: sort by year
     model->setSort(model->fieldIndex("track_number"), Qt::AscendingOrder);
+    model->setSort(model->fieldIndex("album"), Qt::AscendingOrder); // TODO: sort by year
+    model->setSort(model->fieldIndex("artist"), Qt::AscendingOrder);
     return model;
 }
 

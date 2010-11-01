@@ -33,6 +33,7 @@ CollectionTreeWidget::CollectionTreeWidget()
 
     /*
      * TODO: modify the slots in order to add only the artist, not the music.
+     *       The album and song must be shown only if the node is already expanded.
      */
     connect(service, SIGNAL(songAdded(Music*)), this, SLOT(addMusic(Music*)));
     connect(service, SIGNAL(songRemoved(unsigned int)), this, SLOT(removeMusic(uint)));
@@ -46,10 +47,8 @@ CollectionTreeWidget::CollectionTreeWidget()
     connect(service, SIGNAL(scanning()), this, SIGNAL(scanning()));
     connect(service, SIGNAL(listUpdated()), this, SIGNAL(listUpdated()));
 
-
     // Start service to find new songs and remove the inexistent ones
     service->start(QThread::LowestPriority);
-
 }
 
 QStringList CollectionTreeWidget::toColumns(QString string) {
@@ -111,7 +110,24 @@ void CollectionTreeWidget::showChildrenOf(QModelIndex index) {
 }
 
 QTreeWidgetItem *CollectionTreeWidget::addArtist(QString artist, unsigned int id) {
-    // TODO: find in in database if we don't have it
+    if (id == 0) {
+        QSqlTableModel *model = service->artistModel();
+
+        // SQLite uses two single quotes to escape a single quote! :)
+        QString filter = "name = '" + QString(artist).replace("'","''") + "'";
+        model->setFilter(filter);
+        model->select();
+
+        while (model->canFetchMore()) model->fetchMore();
+        int total = model->rowCount();
+        if (total > 0) {
+            id = model->record(0).value(model->fieldIndex("id")).toInt();
+        }
+        else {
+            qDebug("ERROR: no artist found! -- " + model->filter().toUtf8());
+            return NULL;
+        }
+    }
 
     QList<QTreeWidgetItem*> artistList = findItems(artist, Qt::MatchExactly, 0);
     if (artistList.isEmpty()) {
@@ -154,8 +170,8 @@ QTreeWidgetItem *CollectionTreeWidget::addAlbum(QString artist, QString album, u
          QSqlTableModel *model = service->collectionModel();
 
          // SQLite used two single quotes to escape a single quote! :)
-         QString filter = "artist = '" + artist.replace("'","''") + "' AND "
-                          "album = '" + album.replace("'","''") + "'";
+         QString filter = "artist = '" + QString(artist).replace("'","''") + "' AND "
+                          "album = '" + QString(album).replace("'","''") + "'";
          model->setFilter(filter);
          model->select();
 
