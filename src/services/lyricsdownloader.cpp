@@ -4,6 +4,7 @@ LyricsDownloader::LyricsDownloader(QObject *parent) :
     QObject(parent)
 {
     netManager = new QNetworkAccessManager(this);
+    contextReply = NULL;
 }
 
 void LyricsDownloader::getLyrics(QString artist, QString song) {
@@ -15,6 +16,8 @@ void LyricsDownloader::getLyrics(QString artist, QString song) {
 
     QNetworkRequest netRequest;
     netRequest.setUrl(url);
+
+    qDebug("Requesting lyrics...");
     contextReply = netManager->get(netRequest);
     connect(contextReply, SIGNAL(finished()), this, SLOT(readContextReply()));
     connect(contextReply, SIGNAL(error(QNetworkReply::NetworkError)), this, SIGNAL(lyricsError())); // TODO: specify which error was given
@@ -22,9 +25,11 @@ void LyricsDownloader::getLyrics(QString artist, QString song) {
 
 void LyricsDownloader::readContextReply() {
     QString replyString = QString::fromUtf8(contextReply->readAll());
+    qDebug("Answer received: " + replyString.toUtf8());
 
-    if (replyString.isEmpty()) {
+    if (replyString.trimmed().isEmpty()) {
         emit lyricsError();
+        qDebug("Empty answer!");
         return; // Avoid empty parsing of XML
     }
 
@@ -54,14 +59,16 @@ void LyricsDownloader::readContextReply() {
 }
 
 void LyricsDownloader::fetchLyrics(QUrl url) {
-    page.mainFrame()->load(url);
-    connect(&page, SIGNAL(loadFinished(bool)), this, SLOT(render()));
+    qDebug("Asking to fetch lyrics");
+    page = new QWebPage(this);
+    page->mainFrame()->load(url);
+    connect(page, SIGNAL(loadFinished(bool)), this, SLOT(render()));
 }
 
 
 // FIXME: why is this emitting the signal twice?
 void LyricsDownloader::render() {
-    QWebElement document = page.mainFrame()->documentElement();
+    QWebElement document = page->mainFrame()->documentElement();
     // TODO: remove mobile ringtone ad
     QWebElement lyricsDiv = document.findFirst("div.lyricbox");
 

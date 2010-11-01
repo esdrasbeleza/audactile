@@ -19,7 +19,7 @@ public:
     void getLyrics(QString artist, QString song);
 
 private:
-    QWebPage page;
+    QWebPage *page;
     QNetworkAccessManager *netManager;
     QNetworkReply *contextReply;
 
