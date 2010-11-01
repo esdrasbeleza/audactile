@@ -71,6 +71,6 @@ void LyricsDownloader::render() {
     QWebElement document = page->mainFrame()->documentElement();
     // TODO: remove mobile ringtone ad
     QWebElement lyricsDiv = document.findFirst("div.lyricbox");
-
+    delete page;
     emit lyricsReady(lyricsDiv);
 }
