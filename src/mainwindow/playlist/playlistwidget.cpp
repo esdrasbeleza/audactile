@@ -87,7 +87,9 @@ void PlaylistWidget::enqueueNextSong() {
 }
 
 void PlaylistWidget::removeBold() {
-    currentSong->removeBold();
+    if (currentSong != NULL) {
+        currentSong->removeBold();
+    }
 }
 
 void PlaylistWidget::fileChanged() {
