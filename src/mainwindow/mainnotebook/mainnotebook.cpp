@@ -24,7 +24,7 @@ MainNotebook::MainNotebook(QWidget *parent, PlaylistWidget *playlistWidget)
     progressContainer = new QWidget(collectionContainer);
     scanProgress = new QProgressBar(collectionContainer);
     scanLabel = new QLabel("Scanning collection...", collectionContainer);
-    QHBoxLayout *progressHLayout = new QHBoxLayout(collectionContainer);
+    QHBoxLayout *progressHLayout = new QHBoxLayout(progressContainer);
     progressHLayout->addWidget(scanLabel);
     progressHLayout->addWidget(scanProgress);
     progressContainer->setLayout(progressHLayout);
