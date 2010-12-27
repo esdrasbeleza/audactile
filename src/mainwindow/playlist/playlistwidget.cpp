@@ -340,12 +340,12 @@ void PlaylistWidget::selectAll() {
 /*
  * Handle keyboard shortcuts to playlist widget.
  *
- * Del      = Removes selected items.
- * Ctrl + A = Select all
+ * Del/Backspace  =  Removes selected items.
+ *      Ctrl + A  =  Select all
  *
  */
 void PlaylistWidget::keyPressEvent(QKeyEvent *event) {
-    if (event->key() == Qt::Key_Delete && event->modifiers() == Qt::NoModifier) {
+    if ((event->key() == Qt::Key_Delete || event->key() == Qt::Key_Backspace) && event->modifiers() == Qt::NoModifier) {
         event->accept();
         removeSelectedItems();
     }
