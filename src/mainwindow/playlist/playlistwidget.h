@@ -36,6 +36,10 @@ private slots:
     void addSong(QUrl url, int index = -1);
     void addSong(QList<QUrl> urlList);
 
+    // Keyboard / menu events
+    void selectAll();
+    void removeSelectedItems();
+
 signals:
     void songInformationUpdated(QMap<QString, QString> newSongInformation);
 
@@ -53,6 +57,8 @@ private:
     void emitSongInformationUpdated();
     void addFolder(QUrl url, int &index);
 
+    // Menu events
+    void contextMenuEvent(QContextMenuEvent *event);
 
     // Drag and drop events
     void dragEnterEvent(QDragEnterEvent *event);
@@ -63,8 +69,7 @@ private:
 
     // Keyboard events
     void keyPressEvent(QKeyEvent *event);
-    void removeSelectedItems();
-    void selectAll();
+
 
 };
 

@@ -1,6 +1,6 @@
 #include "playlistwidget.h"
-
-
+#include <QAction>
+#include <QMenu>
 
 /*
  * TODO:
@@ -18,17 +18,19 @@ PlaylistWidget::PlaylistWidget(QWidget *parent, Phonon::MediaObject *mediaObject
 
     setSelectionMode(QAbstractItemView::ExtendedSelection);
 
-    // Allow drop to use drag and drop
+    // Enable drag and drop
     setAcceptDrops(true);
     setDragEnabled(true);
     setDropIndicatorShown(true);
 
-    // Alternate row colors are good
+    // Alternating row colors are good
     setAlternatingRowColors(true);
 
-    // Phonon MediaObject
+    /*
+     * Connect our local media object to application's mediaObject
+     * It would be nice to have a global access to it... How could we do that?
+     */
     mainMediaObject = mediaObject;
-
 
     // Define titles for labels
     QStringList playlistWidgetHeaders;
@@ -44,7 +46,7 @@ PlaylistWidget::PlaylistWidget(QWidget *parent, Phonon::MediaObject *mediaObject
     headers->setDefaultAlignment(Qt::AlignCenter);
     headers->setSortIndicatorShown(true);
 
-    // Assign signals
+    // Assign signals to add items or Phonon controls
     connect(this, SIGNAL(itemDoubleClicked(QTreeWidgetItem*,int)), this, SLOT(playSong(QTreeWidgetItem*)));
     connect(mainMediaObject, SIGNAL(aboutToFinish()), this, SLOT(enqueueNextSong()));
     connect(mainMediaObject, SIGNAL(finished()), this, SLOT(removeBold()));
@@ -77,7 +79,6 @@ void PlaylistWidget::playNextSong() {
        playSong(itemFromIndex(index));
     }
 }
-
 
 void PlaylistWidget::enqueueNextSong() {
     nextSong = (PlaylistItem*)itemBelow(currentSong);
@@ -337,19 +338,35 @@ void PlaylistWidget::selectAll() {
     }
 }
 
+
 /*
+ * Add a context menu to playlist
+ */
+void PlaylistWidget::contextMenuEvent(QContextMenuEvent *event) {
+    QMenu menu(this);
+    menu.addAction("&Select all", this, SLOT(selectAll()), QKeySequence::SelectAll);
+    menu.addAction("&Remove selected songs", this, SLOT(removeSelectedItems()), QKeySequence::Delete);
+    menu.exec(event->globalPos());
+
+}
+
+/*
+ *
  * Handle keyboard shortcuts to playlist widget.
  *
- * Del/Backspace  =  Removes selected items.
- *      Ctrl + A  =  Select all
+ *    QKeySequence::Delete  =  Removes selected items.
+ * QKeySequence::SelectAll  =  Select all
+ *
+ * Qt will take the responsabily to assign the key sequences
+ * to their correspondent keyboard shorcuts, like Ctrl+A or Delete/Backspace
  *
  */
 void PlaylistWidget::keyPressEvent(QKeyEvent *event) {
-    if ((event->key() == Qt::Key_Delete || event->key() == Qt::Key_Backspace) && event->modifiers() == Qt::NoModifier) {
+    if (event->matches(QKeySequence::Delete)) {
         event->accept();
         removeSelectedItems();
     }
-    else if (event->modifiers() == Qt::ControlModifier && event->key() == Qt::Key_A) {
+    else if (event->matches(QKeySequence::SelectAll)) {
         event->accept();
         selectAll();
     }
